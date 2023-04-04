@@ -19,19 +19,19 @@ class ProductSeeder extends Seeder
         Product::create([
             'name' => 'Apron',
             'category_id' => 1,
-            'price' => 10000
+            'price' => 4000
         ]);
 
         Product::create([
             'name' => 'Kitchen Clothe',
             'category_id' => 2,
-            'price' => 10000
+            'price' => 2000
         ]);
 
         Product::create([
             'name' => 'Blouse',
             'category_id' => 3,
-            'price' => 10000
+            'price' => 7500
         ]);
     }
 }
