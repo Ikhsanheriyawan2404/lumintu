@@ -34,7 +34,7 @@ class ProductController extends Controller
         }
 
         return response()->json([
-            'message' => 'Data karyawan berhasil disimpan',
+            'message' => 'Data barang berhasil disimpan',
         ]);
     }
 
