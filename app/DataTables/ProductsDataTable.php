@@ -25,8 +25,7 @@ class ProductsDataTable extends DataTable
         return (new EloquentDataTable($query))
         ->addIndexColumn()
         ->addColumn('action', function ($row) {
-            $button = view('products.datatables.action', compact('row'))->render();
-            return $button;
+            return view('products.datatables.action', compact('row'))->render();
         })
         ->rawColumns(['action']);
     }
@@ -55,7 +54,8 @@ class ProductsDataTable extends DataTable
                     ->setTableId('products-table')
                     ->columns($this->getColumns())
                     ->minifiedAjax()
-                    //->dom('Bfrtip')
+                    ->responsive(true)
+                    ->dom('Bfrtip')
                     ->orderBy(1)
                     ->selectStyleSingle()
                     ->buttons([
@@ -82,6 +82,10 @@ class ProductsDataTable extends DataTable
                 ->searchable(false)
                 ->orderable(false)
                 ->addClass('text-center'),
+            Column::make('name')
+                ->title('Nama'),
+            Column::make('name')
+                ->title('Nama'),
             Column::make('name')
                 ->title('Nama'),
             Column::make('category.name')
