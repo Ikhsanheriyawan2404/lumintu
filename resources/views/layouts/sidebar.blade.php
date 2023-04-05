@@ -47,7 +47,7 @@
             <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Account pages</h6>
         </li>
         <li class="nav-item">
-            <a class="nav-link " href="./pages/profile.html">
+            <a class="nav-link " href="#">
                 <div
                     class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
@@ -59,7 +59,7 @@
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link " href="./pages/profile.html">
+            <a class="nav-link " href="#">
                 <div
                     class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">
@@ -71,7 +71,7 @@
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link " href="./pages/profile.html">
+            <a class="nav-link " href="/pegawai">
                 <div
                     class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">
