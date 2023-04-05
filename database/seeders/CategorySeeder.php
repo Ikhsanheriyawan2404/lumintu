@@ -17,22 +17,22 @@ class CategorySeeder extends Seeder
     {
         Category::create([
             'name' => 'Room Linen',
-            'status' => 'Active'
+            // 'status' => 'Active'
         ]);
 
         Category::create([
             'name' => 'Room Food and Beverage',
-            'status' => 'Active'
+            // 'status' => 'Active'
         ]);
 
         Category::create([
             'name' => 'Uniform',
-            'status' => 'Active'
+            // 'status' => 'Active'
         ]);
 
         Category::create([
             'name' => 'Pakaian',
-            'status' => 'Active'
+            // 'status' => 'Active'
         ]);
     }
 }

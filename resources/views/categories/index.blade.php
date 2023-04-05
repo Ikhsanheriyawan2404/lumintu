@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Product</title>
+    <title>Kategori/Jenis</title>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
@@ -27,7 +27,7 @@
         </div>
     </div>
 
-    @include('products.modals.createOrUpdate')
+    @include('categories.modals.createOrUpdate')
 
     <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
 
@@ -56,25 +56,22 @@
                 $('#saveBtn').html("Simpan");
                 $('#item_id').val('');
                 $('#itemForm').trigger("reset");
-                $('.modal-title').html("Tambah Barang");
+                $('.modal-title').html("Tambah Jenis");
                 $('#modal-md').modal('show');
             });
 
             $('body').on('click', '#editItem', function() {
                 var item_id = $(this).data('id');
-                $.get("{{ route('products.index') }}" + '/' + item_id + '/edit', function(data) {
+                $.get("{{ route('categories.index') }}" + '/' + item_id + '/edit', function(data) {
                     $('#modal-md').modal('show');
                     setTimeout(function() {
                         $('#name').focus();
                     }, 500);
-                    $('.modal-title').html("Edit Barang");
+                    $('.modal-title').html("Edit Jenis");
                     $('#saveBtn').removeAttr('disabled');
                     $('#saveBtn').html("Simpan");
                     $('#item_id').val(data.id);
                     $('#name').val(data.name);
-                    $('#unit').val(data.unit);
-                    $('#price').val(data.price);
-                    $('#category_id').val(data.category_id);
                 })
             });
 
@@ -88,18 +85,20 @@
                     $('.deleteBtn').html('...');
                     $.ajax({
                         data: formData,
-                        url: "{{ route('products.index') }}" + '/' + item_id,
+                        url: "{{ route('categories.index') }}" + '/' + item_id,
                         contentType: false,
                         processData: false,
                         type: "POST",
                         success: function(data) {
                             $('#deleteDoc').trigger("reset");
-                            $('#products-table').DataTable().draw();
+                            $('#categories-table').DataTable().draw();
                             toastr.success(data.message);
                         },
                         error: function(data) {
                             $('.deleteBtn').removeAttr('disabled');
-                            alert(data.error)
+                            $('.deleteBtn').html('Hapus');
+                            // toastr.error(data.responseJSON.message)
+                            toastr.error('Tidak bisa hapus data karena sudah digunakan')
                         }
                     });
                 }
@@ -112,14 +111,14 @@
                 var formData = new FormData($('#itemForm')[0]);
                 $.ajax({
                     data: formData,
-                    url: "{{ route('products.store') }}",
+                    url: "{{ route('categories.store') }}",
                     contentType: false,
                     processData: false,
                     type: "POST",
                     success: function(data) {
                         $('#itemForm').trigger("reset");
                         $('#modal-md').modal('hide');
-                        $('#products-table').DataTable().draw();
+                        $('#categories-table').DataTable().draw();
                         Swal.fire({
                             icon: 'success',
                             title: 'Success',
