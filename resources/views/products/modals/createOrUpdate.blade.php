@@ -22,7 +22,7 @@
             </div>
             <div class="form-group">
                 <label for="unit">Unit</label>
-                <input type="number" class="form-control form-control-sm mr-2" name="unit" id="unit">
+                <input type="text" class="form-control form-control-sm mr-2" name="unit" id="unit">
             </div>
             <div class="form-group">
                 <label for="category_id">Jenis Barang <span class="text-danger">*</span></label>
