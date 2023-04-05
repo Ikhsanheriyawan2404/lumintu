@@ -33,5 +33,14 @@ class ProductSeeder extends Seeder
             'category_id' => 3,
             'price' => 7500
         ]);
+
+        for ($i = 0; $i < 100; $i++) {
+            Product::create([
+                'name' => 'Product ' . $i,
+                'unit' => 'pcs',
+                'category_id' => Category::all()->random()->id,
+                'price' => random_int(1000, 10000)
+            ]);
+        }
     }
 }

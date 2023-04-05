@@ -39,7 +39,7 @@ class ProductsDataTable extends DataTable
     public function query(Product $model): QueryBuilder
     {
         return $model->newQuery()
-            ->orderBy('created_at', 'desc')
+            ->orderBy('products.created_at', 'desc')
             ->with('category');
     }
 
@@ -54,7 +54,7 @@ class ProductsDataTable extends DataTable
                     ->setTableId('products-table')
                     ->columns($this->getColumns())
                     ->minifiedAjax()
-                    ->dom('Bfrtip')
+                    // ->dom('Bfrtip')
                     ->orderBy(1)
                     ->selectStyleSingle()
                     ->buttons([
