@@ -39,7 +39,7 @@ class ProductsDataTable extends DataTable
     public function query(Product $model): QueryBuilder
     {
         return $model->newQuery()
-            ->orderBy('created_at', 'desc')
+            ->orderBy('products.created_at', 'desc')
             ->with('category');
     }
 

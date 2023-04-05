@@ -19,7 +19,7 @@ use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('landing.home');
 });
 
 Route::get('/login', function () {
@@ -27,10 +27,12 @@ Route::get('/login', function () {
 });
 
 Route::post('/login', [AuthController::class, 'login'])->name('login');
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
 
+Route::group(['middleware' => 'auth'], function () {
 
-Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-Route::resource('products', ProductController::class);
-Route::resource('categories', CategoryController::class);
+    Route::resource('products', ProductController::class);
+    Route::resource('categories', CategoryController::class);
+});
