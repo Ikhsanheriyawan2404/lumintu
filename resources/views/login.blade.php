@@ -14,11 +14,7 @@
   <!-- Nucleo Icons -->
   <link href="{{ asset('assets/admin/css/nucleo-icons.css') }}" rel="stylesheet" />
   <link href="{{ asset('assets/admin/css/nucleo-svg.css') }}" rel="stylesheet" />
-  <!-- Font Awesome Icons -->
-  <link rel="stylesheet" href="{{ asset('assets/icons/css/fontawesome.css') }}">
-  <link rel="stylesheet" href="{{ asset('assets/icons/css/solid.css') }}">
-  <link rel="stylesheet" href="{{ asset('assets/icons/css/brands.css') }}">
-  <link href="../assets/css/nucleo-svg.css" rel="stylesheet" />
+  <link href="{{ asset('assets/admin/css/nucleo-svg.css') }}" rel="stylesheet" />
   <!-- CSS Files -->
   <link id="pagestyle" href="{{ asset('assets/admin/css/argon-dashboard.css') }}" rel="stylesheet" />
 </head>
@@ -47,10 +43,10 @@
               <form role="form" action="{{ route('login') }}" method="POST">
                 @csrf
                 <div class="mb-3">
-                  <input type="email" class="form-control form-control-lg" placeholder="Username / Email" aria-label="Email">
+                  <input type="text" class="form-control form-control-lg" placeholder="Username / Email" id="username" name="username" required autofocus>
                 </div>
                 <div class="mb-3">
-                  <input type="password" class="form-control form-control-lg" placeholder="Password" aria-label="Password">
+                  <input type="password" class="form-control form-control-lg" placeholder="Password" id="password" name="password" required>
                 </div>
                 <div class="form-check form-switch">
                   <input class="form-check-input" type="checkbox" id="rememberMe">
