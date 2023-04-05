@@ -5,20 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Product</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <!-- DataTables -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.4.1/css/responsive.dataTables.min.css">
+
+    {{-- <link rel="stylesheet" href="{{ asset('asset') }}/plugins/sweetalert2/sweetalert2.min.css"> --}}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 </head>
 <body>
 
     <button id="createNewItem" class="btn btn-sm btn-primary">Tambah</button>
-    {{ ($dataTable->table(['class' => 'table table-sm table-bordered table-striped'])) }}
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 table-responsive">
+                {{ ($dataTable->table(['class' => 'table table-sm table-bordered table-striped', 'width' => '100%'])) }}
+            </div>
+        </div>
+    </div>
 
-        <!-- DataTables -->
-        <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap4.min.css">
-        <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.4.1/css/responsive.dataTables.min.css">
-
-        {{-- <link rel="stylesheet" href="{{ asset('asset') }}/plugins/sweetalert2/sweetalert2.min.css"> --}}
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    @include('products.modals.createOrUpdate')
 
     <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
 
@@ -28,8 +37,8 @@
     <!-- DataTables  & Plugins -->
     <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap4.min.js"></script>
-    <script src="https://cdn.datatables.net/responsive/2.4.1/js/responsive.dataTables.min.js"></script>
-
+    <script src="https://cdn.datatables.net/responsive/2.4.1/js/dataTables.responsive.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.4.1/js/responsive.bootstrap4.min.js"></script>
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
@@ -62,7 +71,38 @@
                     $('#saveBtn').removeAttr('disabled');
                     $('#saveBtn').html("Simpan");
                     $('#item_id').val(data.id);
+                    $('#name').val(data.name);
+                    $('#unit').val(data.unit);
+                    $('#price').val(data.price);
+                    $('#category_id').val(data.category_id);
                 })
+            });
+
+            $('body').on('click', '.deleteBtn', function(e) {
+                e.preventDefault();
+                var confirmation = confirm("Apakah yakin untuk menghapus?");
+                if (confirmation) {
+                    var item_id = $(this).data('id');
+                    var formData = new FormData($('#deleteDoc')[0]);
+                    $('.deleteBtn').attr('disabled', 'disabled');
+                    $('.deleteBtn').html('...');
+                    $.ajax({
+                        data: formData,
+                        url: "{{ route('products.index') }}" + '/' + item_id,
+                        contentType: false,
+                        processData: false,
+                        type: "POST",
+                        success: function(data) {
+                            $('#deleteDoc').trigger("reset");
+                            $('#products-table').DataTable().draw();
+                            toastr.success(data.message);
+                        },
+                        error: function(data) {
+                            $('.deleteBtn').removeAttr('disabled');
+                            alert(data.error)
+                        }
+                    });
+                }
             });
 
             $('#saveBtn').click(function(e) {

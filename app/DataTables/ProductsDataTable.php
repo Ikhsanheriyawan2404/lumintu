@@ -53,8 +53,8 @@ class ProductsDataTable extends DataTable
         return $this->builder()
                     ->setTableId('products-table')
                     ->columns($this->getColumns())
-                    ->minifiedAjax()
                     ->responsive(true)
+                    ->minifiedAjax()
                     ->dom('Bfrtip')
                     ->orderBy(1)
                     ->selectStyleSingle()
@@ -84,10 +84,10 @@ class ProductsDataTable extends DataTable
                 ->addClass('text-center'),
             Column::make('name')
                 ->title('Nama'),
-            Column::make('name')
-                ->title('Nama'),
-            Column::make('name')
-                ->title('Nama'),
+            Column::make('unit')
+                ->title('Unit'),
+            Column::make('price')
+                ->title('Harga'),
             Column::make('category.name')
                 ->title('Kategori'),
             Column::computed('action')

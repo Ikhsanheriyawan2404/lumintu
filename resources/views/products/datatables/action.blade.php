@@ -1,6 +1,8 @@
 <div class="div">
-    <form action="{{ route('products.destroy', $row->id) }}" method="post">
-        <a href="javascript:void()" data-id="{{ $row->id }}" class="btn btn-sm btn-primary">Edit</a>
-        <button type="submit" class="btn btn-sm btn-danger">Hapus</button>
+    <form id="deleteDoc" method="post">
+        @csrf
+        @method('DELETE')
+        <a href="javascript:void()" data-id="{{ $row->id }}" id="editItem" class="btn btn-sm btn-primary">Edit</a>
+        <button type="submit" class="btn btn-sm btn-danger deleteBtn" data-id="{{ $row->id }}">Hapus</button>
     </form>
 </div>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\Category;
 use InvalidArgumentException;
 use Illuminate\Support\Facades\DB;
 use App\DataTables\ProductsDataTable;
@@ -12,7 +13,9 @@ class ProductController extends Controller
 {
     public function index(ProductsDataTable $dataTable)
     {
-        return $dataTable->render('products.index');
+        return $dataTable->render('products.index', [
+            'categories' => Category::get()
+        ]);
     }
 
     public function store(ProductRequest $request)
@@ -42,5 +45,21 @@ class ProductController extends Controller
     {
         $product = Product::find($productId);
         return response()->json($product);
+    }
+
+
+    public function destroy($id)
+    {
+        try {
+            $product = Product::findOrFail($id);
+            $product->delete();
+        } catch (InvalidArgumentException $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+            ], 400);
+        }
+        return response()->json([
+            'message' => 'Barang berhasil dihapus',
+        ]);
     }
 }
