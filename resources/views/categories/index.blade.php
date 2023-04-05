@@ -1,31 +1,28 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Kategori/Jenis</title>
+@extends('layouts.app')
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
-    <!-- DataTables -->
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap4.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.4.1/css/responsive.dataTables.min.css">
-
-    {{-- <link rel="stylesheet" href="{{ asset('asset') }}/plugins/sweetalert2/sweetalert2.min.css"> --}}
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
-</head>
-<body>
-
-    <button id="createNewItem" class="btn btn-sm btn-primary">Tambah</button>
-
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12 table-responsive">
+@section('content')
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card h-100">
+              <div class="card-header pb-0 p-3">
+                <div class="row">
+                  <div class="col-6 d-flex align-items-center">
+                    <h6 class="mb-0">Category</h6>
+                  </div>
+                  <div class="col-6 text-end">
+                    <button id="createNewItem" class="btn btn-outline-primary btn-sm mb-0">Tambah</button>
+                  </div>
+                </div>
+              </div>
+              <div class="card-body p-3 pb-0">
                 {{ ($dataTable->table(['class' => 'table table-sm table-bordered table-striped', 'width' => '100%'])) }}
+              </div>
             </div>
-        </div>
+          </div>
     </div>
+</div>
+
 
     @include('categories.modals.createOrUpdate')
 
@@ -141,5 +138,4 @@
             });
         });
     </script>
-</body>
-</html>
+@endsection
