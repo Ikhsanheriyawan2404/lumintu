@@ -13,7 +13,7 @@ class AuthController extends Controller
         $fieldType = filter_var($request->username, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
         $data = [
             $fieldType => $request->username,
-            'password' => $request->password,1
+            'password' => $request->password,
         ];
 
         Auth::attempt($data);
