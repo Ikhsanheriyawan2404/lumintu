@@ -20,7 +20,7 @@
                             <thead class="table-light">
                             <tr>
                                 <th width="5%">No</th>
-                                <th>Nama</th>
+                                <th>Namaaa</th>
                                 <th>Unit</th>
                                 <th>Harga</th>
                                 <th>Kategori</th>
