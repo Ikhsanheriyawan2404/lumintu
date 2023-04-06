@@ -17,7 +17,7 @@
 <div class="collapse navbar-collapse w-auto h-75" id="sidenav-collapse-main">
     <ul class="navbar-nav">
         <li class="nav-item">
-            <a class="nav-link active" href="{{route('dashboard')}}">
+            <a class="nav-link active" href="{{ route('dashboard') }}">
                 <div
                     class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
                     <i class="ni ni-tv-2 text-primary text-sm opacity-10"></i>
@@ -26,7 +26,7 @@
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link " href="{{route('products.index')}}">
+            <a class="nav-link " href="{{ route('products.index') }}">
                 <div
                     class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
                     <i class="ni ni-app text-info text-sm opacity-10"></i>
@@ -35,7 +35,7 @@
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link " href="{{route('categories.index')}}">
+            <a class="nav-link " href="{{ route('categories.index') }}">
                 <div
                     class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
                     <i class="ni ni-app text-info text-sm opacity-10"></i>
@@ -93,3 +93,13 @@
         </li>
     </ul>
 </div>
+{{-- <hr class="horizontal dark mt-0">
+<div class="sidenav-footer mx-3">
+    <form action="{{ route('logout') }}" method="POST">
+        @csrf
+        <button type="submit" class="btn btn-primary btn-sm mb-0 w-100 mt-auto">
+            <i class="bi bi-box-arrow-left"></i>
+            Logout
+        </button>
+    </form>
+</div> --}}
