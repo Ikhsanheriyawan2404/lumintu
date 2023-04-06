@@ -19,9 +19,9 @@
     <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="{{ asset('assets/icons/css/solid.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/icons/css/brands.css') }}" />
-    @stack('custom-styles')
     <!-- CSS Files -->
     <link id="pagestyle" href="{{ asset('assets/admin/css/argon-dashboard.css?v=2.0.4') }}" rel="stylesheet" />
+    @stack('custom-styles')
 
 </head>
 

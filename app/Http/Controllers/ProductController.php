@@ -11,6 +11,9 @@ use App\Http\Requests\ProductRequest;
 
 class ProductController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     */
     public function index(ProductsDataTable $dataTable)
     {
         return $dataTable->render('products.index', [
@@ -18,6 +21,9 @@ class ProductController extends Controller
         ]);
     }
 
+    /**
+     * Store a newly created resource in storage.
+     */
     public function store(ProductRequest $request)
     {
         $itemId = request('item_id');
