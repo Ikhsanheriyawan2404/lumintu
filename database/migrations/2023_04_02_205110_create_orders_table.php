@@ -15,14 +15,15 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('customer_id');
+            $table->unsignedBigInteger('supervisor_id');
             $table->decimal('total_price', 15, 2);
-            $table->decimal('discount', 15, 2);
             $table->date('order_date');
             $table->date('estimate_date')->nullable();
             $table->timestamps();
 
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('restrict');
+            $table->foreign('customer_id')->references('id')->on('users')->onDelete('restrict');
+            $table->foreign('supervisor_id')->references('id')->on('users')->onDelete('restrict');
         });
     }
 

@@ -55,9 +55,22 @@ class UserSeeder extends Seeder
         ]);
 
         $user = User::create([
-            'name' => 'User',
-            'username' => 'user',
-            'email' => 'user@gmail.com',
+            'name' => 'Hotel Indah',
+            'username' => 'hotelindah',
+            'email' => 'hotel@gmail.com',
+            'email_verified_at' => now(),
+            'password' => bcrypt('123'),
+        ])->assignRole('hotel');
+
+        $user->user_detail()->create([
+            'address' => 'Jl. Raya Cibaduyut',
+            'phone_number' => '08123456789',
+        ]);
+
+        $user = User::create([
+            'name' => 'Pegawai',
+            'username' => 'pegawai',
+            'email' => 'pegawai@gmail.com',
             'email_verified_at' => now(),
             'password' => bcrypt('123'),
         ])->assignRole('pegawai');
@@ -66,5 +79,6 @@ class UserSeeder extends Seeder
             'address' => 'Jl. Raya Cibaduyut',
             'phone_number' => '08123456789',
         ]);
+
     }
 }

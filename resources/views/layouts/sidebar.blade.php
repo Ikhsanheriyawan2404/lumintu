@@ -44,7 +44,7 @@
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link " href="./pages/billing.html">
+            <a class="nav-link " href="{{ route('orders.index', []) }}">
                 <div
                     class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
                     <i class="ni ni-credit-card text-success text-sm opacity-10"></i>
@@ -92,7 +92,7 @@
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link " href="/users">
+            <a class="nav-link " href="{{ route('users.index', []) }}">
                 <div
                     class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">
