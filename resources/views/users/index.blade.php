@@ -64,6 +64,7 @@
             $('body').on('click', '#editItem', function() {
                 var item_id = $(this).data('id');
                 $.get("{{ route('users.index') }}" + '/' + item_id + '/edit', function(data) {
+                    console.log(data);
                     $('#modal-md').modal('show');
                     setTimeout(function() {
                         $('#name').focus();
@@ -73,9 +74,11 @@
                     $('#saveBtn').html("Simpan");
                     $('#item_id').val(data.id);
                     $('#name').val(data.name);
-                    $('#unit').val(data.unit);
-                    $('#price').val(data.price);
-                    $('#category_id').val(data.category_id);
+                    $('#username').val(data.username);
+                    $('#email').val(data.email);
+                    $('#role').val(data.roles[0].id);
+                    $('#phone_number').val(data.user_detail.phone_number);
+                    $('#address').html(data.user_detail.address);
                 })
             });
 

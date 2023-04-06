@@ -13,7 +13,7 @@
         <input type="hidden" name="item_id" id="item_id">
         <div class="modal-body">
             <div class="form-group">
-                <label for="name">Nama Barang <span class="text-danger">*</span></label>
+                <label for="name">Nama <span class="text-danger">*</span></label>
                 <input type="text" class="form-control form-control-sm mr-2" name="name" id="name">
             </div>
             <div class="form-group">
@@ -24,15 +24,23 @@
                 <label for="email">Email <span class="text-danger">*</span></label>
                 <input type="email" class="form-control form-control-sm mr-2" name="email" id="email">
             </div>
-            {{-- <div class="form-group">
-                <label for="category_id">Jenis Barang <span class="text-danger">*</span></label>
-                <select class="form-control form-control-sm mr-2 select2" name="category_id" id="category_id">
-                    <option selected disabled>--Pilih Jenis--</option>
-                    @foreach ($categories as $category)
-                        <option value="{{ $category->id }}">{{ $category->name }}</option>
+            <div class="form-group">
+                <label for="role">Role <span class="text-danger">*</span></label>
+                <select class="form-control form-control-sm mr-2 select2" name="role" id="role">
+                    <option selected disabled>--Pilih Role--</option>
+                    @foreach ($roles as $role)
+                        <option value="{{ $role->id }}">{{ $role->name }}</option>
                     @endforeach
-                </select> --}}
-            {{-- </div> --}}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="phone_number">Nomor HP</label>
+                <input type="number" class="form-control form-control-sm mr-2" name="phone_number" id="phone_number">
+            </div>
+            <div class="form-group">
+                <label for="address">Alamat</label>
+                <textarea class="form-control form-control-sm mr-2" name="address" id="address"></textarea>
+            </div>
         </div>
         <div class="modal-footer">
             <button type="submit" class="btn btn-sm btn-primary float-right" id="saveBtn">Simpan</button>

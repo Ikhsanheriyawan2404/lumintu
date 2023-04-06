@@ -39,7 +39,8 @@ class UserDataTable extends DataTable
     public function query(User $model): QueryBuilder
     {
         return $model->newQuery()
-            ->orderBy('users.created_at', 'desc');
+            ->orderBy('users.created_at', 'desc')
+            ->with(['user_detail', 'roles']);
     }
 
     /**
@@ -50,7 +51,7 @@ class UserDataTable extends DataTable
     public function html(): HtmlBuilder
     {
         return $this->builder()
-                    ->setTableId('user-table')
+                    ->setTableId('users-table')
                     ->columns($this->getColumns())
                     ->minifiedAjax()
                     //->dom('Bfrtip')
@@ -82,8 +83,16 @@ class UserDataTable extends DataTable
                 ->addClass('text-center'),
             Column::make('name')
                 ->title('Nama'),
-            Column::make('email')
+            Column::make('username')
+                ->title('Username'),
+                Column::make('email')
                 ->title('Email'),
+            Column::make('roles.0.name')
+                ->title('Role'),
+            Column::make('user_detail.phone_number')
+                ->title('No HP'),
+            Column::make('user_detail.address')
+                ->title('Alamat'),
             Column::computed('action')
                 ->exportable(false)
                 ->printable(false)
