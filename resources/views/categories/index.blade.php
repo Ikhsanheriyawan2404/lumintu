@@ -1,28 +1,25 @@
 @extends('layouts.app', ['title' => 'Kategori Barang'])
 
 @section('content')
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="card h-100">
-                    <div class="card-header pb-0 p-3">
-                        <div class="row">
-                            <div class="col-6 d-flex align-items-center">
-                                <h6 class="mb-0">Kategori</h6>
-                            </div>
-                            <div class="col-6 text-end">
-                                <button id="createNewItem" class="btn btn-outline-primary btn-sm mb-0">Tambah</button>
-                            </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card h-100">
+                <div class="card-header pb-0 p-3">
+                    <div class="row">
+                        <div class="col-6 d-flex align-items-center">
+                            <h6 class="mb-0">Kategori</h6>
+                        </div>
+                        <div class="col-6 text-end">
+                            <button id="createNewItem" class="btn btn-outline-primary btn-sm mb-0">Tambah</button>
                         </div>
                     </div>
-                    <div class="card-body p-3 pb-0">
-                        {{ $dataTable->table(['class' => 'table table-sm table-bordered display responsive nowrap', 'width' => '100%']) }}
-                    </div>
+                </div>
+                <div class="card-body p-3 pb-0">
+                    {{ $dataTable->table(['class' => 'table table-sm table-bordered display responsive nowrap', 'width' => '100%']) }}
                 </div>
             </div>
         </div>
     </div>
-
 @include('categories.modals.createOrUpdate')
 
 @endsection
