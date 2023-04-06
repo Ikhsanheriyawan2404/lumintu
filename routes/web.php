@@ -5,6 +5,9 @@ use App\Http\Controllers\CategoryController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\PegawaiController;
+use App\Http\Controllers\UserController;
+use App\Http\Requests\PegawaiRequest;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 /*
@@ -26,6 +29,14 @@ Route::get('/login', function () {
     return view('login');
 });
 
+Route::get('/payment_verif', function () {
+    return view('payment_verif.index');
+});
+
+Route::get('/products_stat', function () {
+    return view('products_stat.index');
+});
+
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
 
@@ -35,7 +46,8 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::resource('products', ProductController::class);
     Route::resource('categories', CategoryController::class);
-    Route::resource('valet', CategoryController::class);
-    Route::resource('hotel', CategoryController::class);
-    Route::resource('pegawai', CategoryController::class);
+    Route::resource('valet', ValetController::class);
+    Route::resource('hotel', HotelController::class);
+    Route::resource('pegawai', PegawaiController::class);
+    Route::resource('users', UserController::class);
 });
