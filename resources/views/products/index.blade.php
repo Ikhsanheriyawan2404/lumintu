@@ -15,7 +15,22 @@
                     </div>
                 </div>
                 <div class="card-body p-3 pb-0">
-                    {{ $dataTable->table(['class' => 'table table-sm table-bordered display responsive nowrap', 'width' => '100%']) }}
+                    <div class="table-responsive text-nowrap">
+                        <table class="table table-hover table-sm p-1" id="table">
+                            <thead class="table-light">
+                            <tr>
+                                <th width="5%">No</th>
+                                <th>Nama</th>
+                                <th>Unit</th>
+                                <th>Harga</th>
+                                <th>Kategori</th>
+                                <th width="10%">Aksi</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -44,7 +59,6 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
-    {{ $dataTable->scripts(attributes: ['type' => 'module']) }}
 
     <script>
         $(document).ready(function() {
