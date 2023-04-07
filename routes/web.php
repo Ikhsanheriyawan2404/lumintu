@@ -3,9 +3,10 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\HotelController;
 use App\Http\Controllers\OrderController;
-use App\Http\Controllers\ProductController;
 use App\Http\Controllers\PegawaiController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
 
@@ -39,6 +40,7 @@ Route::group(['middleware' => 'auth'], function () {
     */
 
     Route::resource('valet', ValetController::class);
+    Route::get('hotel/{userId}/price-list', [HotelController::class, 'getPriceList']);
     Route::resource('hotel', HotelController::class);
     Route::resource('pegawai', PegawaiController::class);
 
