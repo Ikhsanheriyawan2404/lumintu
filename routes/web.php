@@ -23,6 +23,8 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middl
 Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard/summary', [DashboardController::class, 'summary'])->name('dashboard.summary');
+    Route::get('/dashboard/chart', [DashboardController::class, 'chart'])->name('dashboard.chart');
 
     Route::resource('products', ProductController::class);
     Route::resource('categories', CategoryController::class);

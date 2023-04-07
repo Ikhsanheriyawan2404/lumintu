@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\Order;
 use App\Models\ProductCustomer;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class OrderSeeder extends Seeder
@@ -44,6 +43,44 @@ class OrderSeeder extends Seeder
         $order->order_details()->create([
             'product_customer_id' => 2,
             'qty' => 5,
+        ]);
+
+        $order = Order::create([
+            'customer_id' => 4,
+            'supervisor_id' => 1,
+            'total_price' => 12300,
+            'order_date' => date('Y-m-d'),
+            'estimate_date' => date('Y-m-d'),
+            'created_at' => '2023-04-06 00:00:00',
+        ]);
+
+        $order->order_details()->create([
+            'product_customer_id' => 1,
+            'qty' => 5,
+        ]);
+
+        $order->order_details()->create([
+            'product_customer_id' => 2,
+            'qty' => 5,
+        ]);
+
+        $order = Order::create([
+            'customer_id' => 4,
+            'supervisor_id' => 1,
+            'total_price' => 150000,
+            'order_date' => date('Y-m-d'),
+            'estimate_date' => date('Y-m-d'),
+            'created_at' => '2023-04-05 00:00:00',
+        ]);
+
+        $order->order_details()->create([
+            'product_customer_id' => 1,
+            'qty' => 10,
+        ]);
+
+        $order->order_details()->create([
+            'product_customer_id' => 2,
+            'qty' => 10,
         ]);
     }
 }
