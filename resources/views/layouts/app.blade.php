@@ -45,7 +45,13 @@
         <!-- End Topbar -->
         <div class="container-fluid py-4">
 
-            @yield('content')
+            @hasrole('superadmin|admin|valet|pegawai')
+                @yield('content')
+            @endhasrole
+
+            @hasrole('hotel')
+                @yield('main')
+            @endhasrole
 
             <footer class="footer pt-3">
 
