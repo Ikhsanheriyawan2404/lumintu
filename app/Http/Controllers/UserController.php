@@ -22,7 +22,6 @@ class UserController extends Controller
 
     public function store()
     {
-
         $itemId = request('item_id');
 
         try {
