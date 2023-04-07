@@ -15,6 +15,7 @@
                     </div>
                 </div>
                 <form id="itemForm" method="post">
+                @csrf
                 <div class="card-body p-3 pb-0">
                     <div class="row">
                         <div class="col-md-6">
@@ -26,6 +27,10 @@
                                         <option value="{{ $customer->id }}">{{ $customer->name }}</option>
                                     @endforeach
                                 </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="description">Catatan</label>
+                                <textarea class="form-control form-control-sm" name="description" id="description" rows="3"></textarea>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -71,9 +76,25 @@
                         </div>
                     </div>
 
+                    <div class="row justify-content-end">
+                        <div class="col-md-6">
+                            <ul class="list-group">
+                                <li class="list-group-item">Nomor Order : <i id="order_no"></i></li>
+                                <li class="list-group-item">Total : <i id="total_price"></i></li>
+                            </ul>
+                        </div>
+                    </div>
+
                 </div>
                 <div class="card-footer">
-                    <button type="submit" class="btn btn-sm btn-primary float-right" id="saveBtn">Simpan</button>
+                    <div class="d-flex justify-content-end">
+                        <button type="reset" class="btn btn-sm btn-secondary float-right">Cancel</button>
+                        <button
+                            type="submit"
+                            class="btn btn-sm btn-primary float-right"
+                            id="createOrder">Simpan
+                        </button>
+                    </div>
                 </div>
                 </form>
             </div>
@@ -149,6 +170,46 @@
                 ]
             });
 
+            $('body').on('click', '#createOrder', function(e) {
+                e.preventDefault();
+                $('#createOrder').attr('disabled', 'disabled');
+                $('#createOrder').html('Simpan Pembelian ...');
+
+                let formData = new FormData($('#itemForm')[0]);
+
+                $.ajax({
+                    data: formData,
+                    url: "{{ route('orders.store') }}",
+                    contentType: false,
+                    processData: false,
+                    type: "POST",
+                    success: function(data) {
+                        $('#createOrder').removeAttr('disabled');
+                        $('#createOrder').html("Simpan");
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success',
+                            text: data.message,
+                        });
+                        window.location.href = "{{ route('orders.index') }}";
+                    },
+                    error: function(response) {
+                        const data = response.responseJSON;
+                        $('#createOrder').removeAttr('disabled');
+                        $('#createOrder').html("Simpan");
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oppss',
+                            text: data.message,
+                        });
+                        $.each(data.errors, function(index, value) {
+                            toastr.error(value);
+                        });
+                    }
+                });
+            })
+
+            // Menampilkan info data kosong pada tabel order item
             let tr = '<tr class="empty_data"><td colspan="8" class="text-center">Belum ada data</td></tr>'
             $('#table-order tbody').append(tr);
 
@@ -158,7 +219,7 @@
                 hideProduct();
                 var id = $(this).data('id');
                 $.get("{{ route('orders.index') }}" + "/" + id + '/product', function(data) {
-                    console.log(data)
+
                     // Get All Item list record on the table orders
                     let allProductId = [];
                     $("input[name='product_id[]']").each(function() {
@@ -171,7 +232,7 @@
                     } else {
                         // Put every column input in tables
                         $('#table-order tbody tr.empty_data').remove();
-                        
+
                         // Put every column input in tables
                         var tr = $('<tr>');
                         for (var i = 0; i < 5; i++) {
@@ -179,6 +240,18 @@
                             tr.append(td);
                         }
                         $('#table-order tbody').append(tr);
+
+                        // Trigger For Update Column
+                        let qtyElement = $('.qty[data-id=' + id + ']');
+                        $(qtyElement).val(1)
+                        let qty = 1
+                        let purchasePrice = parseInt($('.price[data-id=' + id + ']')
+                            .val().replace(/,/g, ''));
+                        let subtotal = qty * purchasePrice;
+
+                        $(`.subtotal[data-id="${id}"]`).val(subtotal.toLocaleString('id-ID'));
+
+                        calculateAll();
                     }
                 });
             })
@@ -187,8 +260,58 @@
             $('body').on('click', '.removeProduct', function(e) {
                 e.preventDefault();
                 $(this).parents('tr').remove();
+
+                calculateAll()
+            });
+
+            // When Column Qty Per Item Change
+            $('body').on('input', '.qty', function() {
+                let id = $(this).data('id');
+                let qty = parseInt($(this).val());
+
+                if (qty <= 0) $(this).val(1);
+
+                let purchasePrice = parseInt($('.price[data-id=' + id + ']').val().replace(/,/g, ''));
+                let subtotal;
+                subtotal = qty * purchasePrice;
+
+                console.log(subtotal)
+                $(`.subtotal[data-id="${id}"]`).val(subtotal.toLocaleString('id-ID'));
+
+                calculateAll()
             });
         })
+
+        function calculateAll() {
+            let subtotalPrice = 0;
+            let subtotalArr = [];
+            let priceArr = [];
+            let qtyArr = [];
+
+            $('.subtotal').each(function() {
+                subtotalPrice += parseInt($(this).val().replace(/\./g, ''));
+                subtotalArr.push($(this).val().replace(/\./g, ''))
+            });
+
+            $('.qty').each(function() {
+                qtyArr.push(parseInt($(this).val()))
+            })
+
+            $('.price').each(function() {
+                priceArr.push(parseInt($(this).val().replace(/,/g, '')))
+            })
+
+            let dataArr = subtotalArr.map((subTotal, index) => {
+                let data = {
+                    price: priceArr[index],
+                    qty: qtyArr[index],
+                    subtotal: subTotal
+                };
+                return data;
+            });
+
+            $(`#total_price`).html(subtotalPrice.toLocaleString('id-ID'));
+        }
 
         function showProduct() {
             $('#modalProduct').modal('show');

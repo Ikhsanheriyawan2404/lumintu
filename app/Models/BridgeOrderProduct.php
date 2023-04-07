@@ -9,6 +9,12 @@ class BridgeOrderProduct extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'order_id',
+        'product_customer_id',
+        'qty',
+    ];
+
     public function order()
     {
         return $this->belongsTo(Order::class);

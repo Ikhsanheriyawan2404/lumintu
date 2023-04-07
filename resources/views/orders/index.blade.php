@@ -53,16 +53,16 @@
                 var item_id = $(this).data('id');
                 $.get("{{ route('orders.index') }}" + '/' + item_id, function(data) {
                     $('#modal-md').modal('show');
-                    $('#total_price').val(data.total_price);
-                    $('#order_date').val(data.order_date);
-                    $('#estimate_date').val(data.estimate_date);
-                    $('#customer').val(data.customer.name);
-                    data.forEach(value => {
+                    $('#total_price').html(`Total : ${data.total_price}`);
+                    $('#order_date').html(`Tgl Order : ${data.order_date}`);
+                    $('#estimate_date').html(`Estimasi Tgl : ${data.estimate_date}`);
+                    $('#customer').html(`Pelanggan : ${data.customer.name}`);
+                    data.order_details.forEach((value, i) => {
                         $('tbody#modal').append(`<tr class="items">
-                            <td>${value.acct_code}</td>
-                            <td>${value.acct_name}</td>
-                            <td>${value.debit}</td>
-                            <td>${value.credit}</td>
+                            <td>${i += 1}</td>
+                            <td>${value.product_customer.product.name}</td>
+                            <td>${value.product_customer.price}</td>
+                            <td>${value.qty}</td>
                         </tr>`);
                     });
                     $('.modal-title').html("Detail Order");

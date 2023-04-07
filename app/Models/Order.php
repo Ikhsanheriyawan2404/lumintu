@@ -13,8 +13,8 @@ class Order extends Model
         'customer_id',
         'supervisor_id',
         'total_price',
-        'discount',
-        'status',
+        'order_date',
+        'estimate_date',
     ];
 
     public function customer()

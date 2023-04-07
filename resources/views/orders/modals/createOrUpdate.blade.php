@@ -10,19 +10,18 @@
         </div>
         <div class="modal-body">
             <ul class="list-group">
-                <li class="list-group-item">Cras justo odio</li>
-                <li class="list-group-item">Dapibus ac facilisis in</li>
-                <li class="list-group-item">Morbi leo risus</li>
-                <li class="list-group-item">Porta ac consectetur ac</li>
-                <li class="list-group-item">Vestibulum at eros</li>
-              </ul>
+                <li class="list-group-item" id="order_date"></li>
+                <li class="list-group-item" id="estimate_date"></li>
+                <li class="list-group-item" id="customer"></li>
+                <li class="list-group-item" id="total_price"></li>
+            </ul>
             <table class="table table-sm table-bordered table-striped" id="table">
                 <thead class="bg-navy">
                     <tr>
-                        <th>Kode</th>
-                        <th>Nama</th>
-                        <th>Debit</th>
-                        <th>Kredit</th>
+                        <th>No</th>
+                        <th>Nama Barang</th>
+                        <th>Harga</th>
+                        <th>Kuantiti</th>
                     </tr>
                 </thead>
                 <tbody id="modal">
@@ -31,7 +30,7 @@
             </table>
         </div>
         <div class="modal-footer">
-            <button type="submit" class="btn btn-sm btn-primary float-right" id="saveBtn">Simpan</button>
+            <button type="button" class="btn btn-sm btn-secondary float-right" data-bs-dismiss="modal" aria-label="Close">Close</button>
         </div>
         </form>
     </div>
