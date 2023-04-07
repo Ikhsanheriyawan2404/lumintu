@@ -10,7 +10,7 @@
                             <h6 class="mb-0">Order/Pesanan</h6>
                         </div>
                         <div class="col-6 text-end">
-                            <button id="createNewItem" class="btn btn-outline-primary btn-sm mb-0">Tambah</button>
+                            <a href="{{ route('orders.create', []) }}" class="btn btn-outline-primary btn-sm mb-0">Tambah</a>
                         </div>
                     </div>
                 </div>

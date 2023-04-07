@@ -26,6 +26,8 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::resource('products', ProductController::class);
     Route::resource('categories', CategoryController::class);
+    Route::get('orders/product-datatables/{customerId}', [OrderController::class, 'productDatatables']);
+    Route::get('orders/{productId}/product', [OrderController::class, 'getProduct']);
     Route::resource('orders', OrderController::class);
     Route::resource('users', UserController::class);
 
