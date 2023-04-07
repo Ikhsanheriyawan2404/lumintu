@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
+use InvalidArgumentException;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use App\DataTables\ProductsDataTable;
 use App\Http\Requests\PegawaiRequest;
 use App\Http\Requests\ProductRequest;
-use App\Models\Product;
-use App\Models\User;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
 
 class PegawaiController extends Controller
 {

@@ -10,21 +10,26 @@ class Order extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id',
-        'product_id',
+        'customer_id',
+        'supervisor_id',
         'total_price',
-        'discount',
-        'status',
+        'order_date',
+        'estimate_date',
     ];
 
-    public function user()
+    public function customer()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'customer_id');
     }
 
-    public function product()
+    public function supervisor()
     {
-        return $this->belongsTo(Product::class);
+        return $this->belongsTo(User::class, 'supervisor_id');
+    }
+
+    public function order_details()
+    {
+        return $this->hasMany(BridgeOrderProduct::class);
     }
 
     public function order_status()

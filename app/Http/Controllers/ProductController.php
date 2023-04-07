@@ -22,12 +22,13 @@ class ProductController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     */
+     * Validasi setiap request dan simpan ke dalam variabel $product.
+     * Jika ada requset item_id maka update data, jika tidak maka buat data baru.
+    */
     public function store(ProductRequest $request)
     {
         $itemId = request('item_id');
-
+        
         try {
             DB::transaction(function () use ($itemId, $request) {
 
@@ -47,13 +48,18 @@ class ProductController extends Controller
         ]);
     }
 
-    public function edit($productId)
+    /**
+     * Return berupa json barang untuk ditampilkan datanya di dalam modal .
+     */
+    public function edit($productId): \Illuminate\Http\JsonResponse
     {
         $product = Product::find($productId);
         return response()->json($product);
     }
 
-
+    /**
+     * Hapus barang berdasarkan id.
+     */
     public function destroy($id)
     {
         try {

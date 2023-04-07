@@ -1,22 +1,13 @@
 <?php
 
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\CategoryController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\PegawaiController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
-use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
-
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
 
 Route::get('/', function () {
     return view('landing.home');
@@ -35,7 +26,21 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::resource('products', ProductController::class);
     Route::resource('categories', CategoryController::class);
-    Route::resource('valet', CategoryController::class);
-    Route::resource('hotel', CategoryController::class);
-    Route::resource('pegawai', CategoryController::class);
+    Route::get('orders/product-datatables/{customerId}', [OrderController::class, 'productDatatables']);
+    Route::get('orders/{productId}/product', [OrderController::class, 'getProduct']);
+    Route::resource('orders', OrderController::class);
+    Route::resource('users', UserController::class);
+
+    /*
+    |--------------------------------------------------------------------------
+    | Temporary Routes
+    */
+
+    Route::resource('valet', ValetController::class);
+    Route::resource('hotel', HotelController::class);
+    Route::resource('pegawai', PegawaiController::class);
+
+    /*
+    |--------------------------------------------------------------------------
+    */
 });

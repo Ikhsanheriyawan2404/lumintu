@@ -21,6 +21,8 @@ return new class extends Migration
             $table->decimal('price', 15, 2);
             $table->timestamps();
 
+            $table->softDeletes();
+
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('restrict');
         });
     }

@@ -15,7 +15,7 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        User::create([
+        $user = User::create([
             'name' => 'Super Admin',
             'username' => 'superadmin',
             'email' => 'superadmin@gmail.com',
@@ -23,7 +23,12 @@ class UserSeeder extends Seeder
             'password' => bcrypt('123'),
         ])->assignRole('superadmin');
 
-        User::create([
+        $user->user_detail()->create([
+            'address' => 'Jl. Raya Cibaduyut',
+            'phone_number' => '08123456789',
+        ]);
+
+        $user = User::create([
             'name' => 'Admin',
             'username' => 'admin',
             'email' => 'admin@gmail.com',
@@ -31,7 +36,12 @@ class UserSeeder extends Seeder
             'password' => bcrypt('123'),
         ])->assignRole('admin');
 
-        User::create([
+        $user->user_detail()->create([
+            'address' => 'Jl. Raya Cibaduyut',
+            'phone_number' => '08123456789',
+        ]);
+
+        $user = User::create([
             'name' => 'Valet',
             'username' => 'valet',
             'email' => 'valet@gmail.com',
@@ -39,12 +49,36 @@ class UserSeeder extends Seeder
             'password' => bcrypt('123'),
         ])->assignRole('valet');
 
-        User::create([
-            'name' => 'User',
-            'username' => 'user',
-            'email' => 'user@gmail.com',
+        $user->user_detail()->create([
+            'address' => 'Jl. Raya Cibaduyut',
+            'phone_number' => '08123456789',
+        ]);
+
+        $user = User::create([
+            'name' => 'Hotel Indah',
+            'username' => 'hotelindah',
+            'email' => 'hotel@gmail.com',
+            'email_verified_at' => now(),
+            'password' => bcrypt('123'),
+        ])->assignRole('hotel');
+
+        $user->user_detail()->create([
+            'address' => 'Jl. Raya Cibaduyut',
+            'phone_number' => '08123456789',
+        ]);
+
+        $user = User::create([
+            'name' => 'Pegawai',
+            'username' => 'pegawai',
+            'email' => 'pegawai@gmail.com',
             'email_verified_at' => now(),
             'password' => bcrypt('123'),
         ])->assignRole('pegawai');
+
+        $user->user_detail()->create([
+            'address' => 'Jl. Raya Cibaduyut',
+            'phone_number' => '08123456789',
+        ]);
+
     }
 }
