@@ -19,31 +19,31 @@ class OrderSeeder extends Seeder
         ProductCustomer::create([
             'product_id' => 1,
             'user_id' => 4,
-            'price' => 100,
+            'price' => 1000,
         ]);
 
         ProductCustomer::create([
             'product_id' => 2,
             'user_id' => 4,
-            'price' => 100,
+            'price' => 5000,
         ]);
 
         $order = Order::create([
             'customer_id' => 4,
             'supervisor_id' => 1,
-            'total_price' => 15000,
+            'total_price' => 30000,
             'order_date' => date('Y-m-d'),
             'estimate_date' => date('Y-m-d'),
         ]);
 
         $order->order_details()->create([
             'product_customer_id' => 1,
-            'qty' => 100,
+            'qty' => 5,
         ]);
 
         $order->order_details()->create([
             'product_customer_id' => 2,
-            'qty' => 50,
+            'qty' => 5,
         ]);
     }
 }

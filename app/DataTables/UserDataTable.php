@@ -88,6 +88,8 @@ class UserDataTable extends DataTable
                 Column::make('email')
                 ->title('Email'),
             Column::make('roles.0.name')
+                ->searchable(false)
+                ->orderable(false)
                 ->title('Role'),
             Column::make('user_detail.phone_number')
                 ->title('No HP'),

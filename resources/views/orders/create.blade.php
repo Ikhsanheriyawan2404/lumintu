@@ -80,7 +80,7 @@
                         <div class="col-md-6">
                             <ul class="list-group">
                                 <li class="list-group-item">Nomor Order : <i id="order_no"></i></li>
-                                <li class="list-group-item">Total : <i id="total_price"></i></li>
+                                <li class="list-group-item">Total : Rp <i id="total_price"></i></li>
                             </ul>
                         </div>
                     </div>
@@ -191,7 +191,9 @@
                             title: 'Success',
                             text: data.message,
                         });
-                        window.location.href = "{{ route('orders.index') }}";
+                        setInterval(() => {
+                            window.location.href = "{{ route('orders.index') }}";
+                        }, 1000);
                     },
                     error: function(response) {
                         const data = response.responseJSON;
@@ -245,9 +247,9 @@
                         let qtyElement = $('.qty[data-id=' + id + ']');
                         $(qtyElement).val(1)
                         let qty = 1
-                        let purchasePrice = parseInt($('.price[data-id=' + id + ']')
-                            .val().replace(/,/g, ''));
-                        let subtotal = qty * purchasePrice;
+                        let price = parseInt($('.price[data-id=' + id + ']')
+                            .val().replace(/\./g, ''));
+                        let subtotal = qty * price;
 
                         $(`.subtotal[data-id="${id}"]`).val(subtotal.toLocaleString('id-ID'));
 
@@ -271,11 +273,10 @@
 
                 if (qty <= 0) $(this).val(1);
 
-                let purchasePrice = parseInt($('.price[data-id=' + id + ']').val().replace(/,/g, ''));
+                let price = parseInt($('.price[data-id=' + id + ']').val().replace(/\./g, ''));
                 let subtotal;
-                subtotal = qty * purchasePrice;
+                subtotal = qty * price;
 
-                console.log(subtotal)
                 $(`.subtotal[data-id="${id}"]`).val(subtotal.toLocaleString('id-ID'));
 
                 calculateAll()
@@ -298,7 +299,7 @@
             })
 
             $('.price').each(function() {
-                priceArr.push(parseInt($(this).val().replace(/,/g, '')))
+                priceArr.push($(this).val().replace(/\./g, ''))
             })
 
             let dataArr = subtotalArr.map((subTotal, index) => {

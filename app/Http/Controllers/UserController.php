@@ -8,6 +8,8 @@ use InvalidArgumentException;
 use App\DataTables\UserDataTable;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
+use App\Http\Requests\UserStoreRequest;
+use App\Http\Requests\UserUpdateRequest;
 
 class UserController extends Controller
 {
@@ -20,17 +22,33 @@ class UserController extends Controller
 
     public function store()
     {
+
         $itemId = request('item_id');
 
         try {
             DB::transaction(function () use ($itemId) {
 
+                $validated = [
+                    'name' => 'required|string',
+                    'email' => 'required|email|unique:users,email',
+                    'username' => 'required|string|unique:users,username',
+                    'password' => 'required',
+                    'role' => 'required|string',
+                    'address' => 'required|string',
+                    'phone_number' => 'required|string',
+                ];
+
                 if ($itemId) {
+                    $validated['email'] = 'required|email|unique:users,email,' . $itemId;
+                    $validated['username'] = 'required|string|unique:users,username,' . $itemId;
+                    $validated['password'] = 'sometimes';
+                    request()->validate($validated);
+
                     $user = User::findOrFail($itemId);
                     $user->name = request('name');
                     $user->email = request('email');
                     $user->username = request('username');
-                    $user->password = password_hash(request('password'), PASSWORD_DEFAULT);
+                    $user->password = request('password') ? password_hash(request('password'), PASSWORD_DEFAULT) : $user->password;
                     $user->syncRoles(request('role'));
                     $user->save();
 
@@ -45,6 +63,8 @@ class UserController extends Controller
                     $userDetail->phone_number = request('phone_number');
                     $userDetail->save();
                 } else {
+                    request()->validate($validated);
+
                     $user = User::create([
                         'name' => request('name'),
                         'email' => request('email'),

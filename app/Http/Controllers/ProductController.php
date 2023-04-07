@@ -28,7 +28,7 @@ class ProductController extends Controller
     public function store(ProductRequest $request)
     {
         $itemId = request('item_id');
-
+        
         try {
             DB::transaction(function () use ($itemId, $request) {
 

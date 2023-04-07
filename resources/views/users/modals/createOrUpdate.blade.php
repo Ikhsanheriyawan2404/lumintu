@@ -25,6 +25,10 @@
                 <input type="email" class="form-control form-control-sm mr-2" name="email" id="email">
             </div>
             <div class="form-group">
+                <label for="password">Password <span class="text-danger">*</span></label>
+                <input type="password" class="form-control form-control-sm mr-2" name="password" id="password">
+            </div>
+            <div class="form-group">
                 <label for="role">Role <span class="text-danger">*</span></label>
                 <select class="form-control form-control-sm mr-2 select2" name="role" id="role">
                     <option selected disabled>--Pilih Role--</option>
