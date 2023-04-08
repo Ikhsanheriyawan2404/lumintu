@@ -18,8 +18,8 @@ return new class extends Migration
             $table->unsignedBigInteger('customer_id');
             $table->unsignedBigInteger('supervisor_id');
             $table->decimal('total_price', 15, 2);
-            $table->date('order_date');
             $table->date('estimate_date')->nullable();
+            $table->string('status')->default('pending');
             $table->timestamps();
 
             $table->foreign('customer_id')->references('id')->on('users')->onDelete('restrict');

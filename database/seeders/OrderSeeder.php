@@ -31,8 +31,7 @@ class OrderSeeder extends Seeder
             'customer_id' => 4,
             'supervisor_id' => 1,
             'total_price' => 30000,
-            'order_date' => date('Y-m-d'),
-            'estimate_date' => date('Y-m-d'),
+            'status' => 'approve',
         ]);
 
         $order->order_details()->create([
@@ -49,8 +48,7 @@ class OrderSeeder extends Seeder
             'customer_id' => 4,
             'supervisor_id' => 1,
             'total_price' => 12300,
-            'order_date' => date('Y-m-d'),
-            'estimate_date' => date('Y-m-d'),
+            'status' => 'approve',
             'created_at' => '2023-04-06 00:00:00',
         ]);
 
@@ -68,8 +66,7 @@ class OrderSeeder extends Seeder
             'customer_id' => 4,
             'supervisor_id' => 1,
             'total_price' => 150000,
-            'order_date' => date('Y-m-d'),
-            'estimate_date' => date('Y-m-d'),
+            'status' => 'approve',
             'created_at' => '2023-04-05 00:00:00',
         ]);
 

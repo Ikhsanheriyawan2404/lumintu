@@ -24,10 +24,13 @@ class OrderDataTable extends DataTable
     {
         return (new EloquentDataTable($query))
             ->addIndexColumn()
+            ->editColumn('created_at', function ($row) {
+                return '<a href="javascript:void()" data-id="' .$row->id. '" id="showItem">'.$row->created_at.'</a>';
+            })
             ->addColumn('action', function ($row) {
                 return view('orders.datatables.action', compact('row'))->render();
             })
-            ->rawColumns(['action']);
+            ->rawColumns(['action', 'created_at']);
     }
 
     /**
@@ -40,7 +43,7 @@ class OrderDataTable extends DataTable
     {
         return $model->newQuery()
             ->orderBy('orders.created_at', 'desc')
-            ->with('supervisor', 'customer');
+            ->with('customer');
     }
 
     /**
@@ -81,16 +84,12 @@ class OrderDataTable extends DataTable
                 ->searchable(false)
                 ->orderable(false)
                 ->addClass('text-center'),
-            Column::make('order_date')
+            Column::make('created_at')
                 ->title('Tgl Order'),
-            Column::make('estimate_date')
-                ->title('Tgl Estimasi'),
             Column::make('total_price')
                 ->title('Total'),
             Column::make('customer.name')
                 ->title('Pelanggan'),
-            Column::make('supervisor.name')
-                ->title('Supervisor'),
             Column::computed('action')
                 ->exportable(false)
                 ->printable(false)

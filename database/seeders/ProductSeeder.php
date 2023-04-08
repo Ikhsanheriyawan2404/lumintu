@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Product;
 use App\Models\Category;
+use App\Models\ProductCustomer;
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
@@ -34,12 +35,12 @@ class ProductSeeder extends Seeder
             'price' => 7500
         ]);
 
-        for ($i = 0; $i < 100; $i++) {
-            Product::create([
-                'name' => 'Product ' . $i,
-                'unit' => 'pcs',
-                'category_id' => Category::all()->random()->id,
-                'price' => random_int(1000, 10000)
+        $prodcuts = Product::get();
+        foreach ($prodcuts as $product) {
+            ProductCustomer::create([
+                'product_id' => $product->id,
+                'user_id' => 4,
+                'price' => $product->price,
             ]);
         }
     }

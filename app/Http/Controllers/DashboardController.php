@@ -11,10 +11,17 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        return view('admin.index', [
-            'categories' => Category::all(),
-            'orders' => Order::with('customer', 'order_details')->latest()->take(5)->get(),
-        ]);
+        if (auth()->user()->hasRole('hotel')) {
+            return view('home', [
+                'categories' => Category::all(),
+                'orders' => Order::with('customer', 'order_details')->latest()->take(5)->get(),
+            ]);
+        } else {
+            return view('admin.index', [
+                'categories' => Category::all(),
+                'orders' => Order::with('customer', 'order_details')->latest()->take(5)->get(),
+            ]);
+        }
     }
 
     public function summary()

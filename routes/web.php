@@ -31,6 +31,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('categories', CategoryController::class);
     Route::get('orders/product-datatables/{customerId}', [OrderController::class, 'productDatatables']);
     Route::get('orders/{productId}/product', [OrderController::class, 'getProduct']);
+    Route::get('orders/{orderId}/details', [OrderController::class, 'getOrderDetails']);
     Route::resource('orders', OrderController::class);
     Route::resource('users', UserController::class);
 
@@ -40,7 +41,7 @@ Route::group(['middleware' => 'auth'], function () {
     */
 
     Route::resource('valet', ValetController::class);
-    Route::get('hotel/{userId}/price-list', [HotelController::class, 'getPriceList']);
+    Route::get('hotel/{userId}/price-list', [HotelController::class, 'getPriceList'])->name('hotel.price-list');
     Route::resource('hotel', HotelController::class);
     Route::resource('pegawai', PegawaiController::class);
 

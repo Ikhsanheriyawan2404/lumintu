@@ -82,19 +82,25 @@ class ProductsDataTable extends DataTable
                 ->width(30)
                 ->searchable(false)
                 ->orderable(false)
+                ->addClass("text-sm font-weight-normal")
                 ->addClass('text-center'),
             Column::make('name')
+                ->addClass("text-sm font-weight-normal")
                 ->title('Nama'),
             Column::make('unit')
+                ->addClass("text-sm font-weight-normal")
                 ->title('Unit'),
             Column::make('price')
+                ->addClass("text-sm font-weight-normal")
                 ->title('Harga'),
             Column::make('category.name')
+                ->addClass("text-sm font-weight-normal")
                 ->title('Kategori'),
             Column::computed('action')
                 ->exportable(false)
                 ->printable(false)
                 ->width(30)
+                ->addClass("text-sm font-weight-normal")
                 ->addClass('text-center'),
         ];
     }

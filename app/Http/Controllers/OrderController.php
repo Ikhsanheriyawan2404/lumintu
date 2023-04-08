@@ -16,10 +16,40 @@ class OrderController extends Controller
 {
     public function index(OrderDataTable $dataTable)
     {
-        return $dataTable->render('orders.index');
+        if (auth()->user()->hasRole('hotel')) {
+            if (request()->ajax()) {
+                $orders = Order::with('customer')
+                    ->where('customer_id', auth()->user()->id)
+                    ->get();
+
+                return DataTables::of($orders)
+                    ->addIndexColumn()
+                    ->editColumn('created_at', function ($row) {
+                        return '<a href="javascript:void()" data-id="' .$row->id. '" id="showItem">'.$row->created_at.'</a>';
+                    })
+                    ->addColumn('action', function ($row) {
+                        return view('orders.datatables.actionHotel', compact('row'));
+                    })
+                    ->rawColumns(['action', 'created_at'])
+                    ->make(true);
+            }
+            return view('orders.indexHotel');
+        } else {
+            return $dataTable->render('orders.index');
+        }
     }
 
     public function show($orderId)
+    {
+        $order = Order::with('order_details.product_customer.product', 'order_status', 'customer', 'supervisor')
+            ->findOrFail($orderId);
+
+        return view('orders.show', [
+            'order' => $order,
+        ]);
+    }
+
+    public function getOrderDetails($orderId)
     {
         $order = Order::with('order_details.product_customer.product', 'order_status', 'customer', 'supervisor')
             ->findOrFail($orderId);

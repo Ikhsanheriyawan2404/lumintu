@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Product;
 use App\Models\UserDetail;
 use InvalidArgumentException;
-use App\DataTables\HotelDataTable;
-use App\Models\Product;
 use App\Models\ProductCustomer;
+use App\DataTables\HotelDataTable;
 use Illuminate\Support\Facades\DB;
 
 class HotelController extends Controller
@@ -19,7 +19,7 @@ class HotelController extends Controller
 
     public function getPriceList($userId)
     {
-        $user = ProductCustomer::with('user_detail')->where('user_id', $userId)->get();
+        $user = ProductCustomer::with('product')->where('user_id', $userId)->get();
         return response()->json($user);
     }
 
