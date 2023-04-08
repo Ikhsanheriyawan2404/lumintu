@@ -14,7 +14,7 @@ class HotelController extends Controller
 {
     public function index(HotelDataTable $dataTable)
     {
-        return $dataTable->render('hotels.index');
+        return $dataTable->render('admin.hotels.index');
     }
 
     public function getPriceList($userId)

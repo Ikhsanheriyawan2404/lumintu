@@ -28,7 +28,7 @@ class OrderDataTable extends DataTable
                 return '<a href="javascript:void()" data-id="' .$row->id. '" id="showItem">'.$row->created_at.'</a>';
             })
             ->addColumn('action', function ($row) {
-                return view('orders.datatables.action', compact('row'))->render();
+                return view('admin.orders.datatables.action', compact('row'))->render();
             })
             ->rawColumns(['action', 'created_at']);
     }

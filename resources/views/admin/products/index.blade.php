@@ -23,7 +23,7 @@
         </div>
     </div>
 
-    @include('products.modals.createOrUpdate')
+    @include('admin.products.modals.createOrUpdate')
 
 @endsection
 

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
-use Illuminate\Http\Request;
 use InvalidArgumentException;
 use Illuminate\Support\Facades\DB;
 use App\DataTables\CategoryDataTable;
@@ -13,7 +12,7 @@ class CategoryController extends Controller
 {
     public function index(CategoryDataTable $dataTable)
     {
-        return $dataTable->render('categories.index');
+        return $dataTable->render('admin.categories.index');
     }
 
     public function store(CategoryRequest $request)

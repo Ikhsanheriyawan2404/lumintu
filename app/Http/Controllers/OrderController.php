@@ -28,14 +28,14 @@ class OrderController extends Controller
                         return '<a href="javascript:void()" data-id="' .$row->id. '" id="showItem">'.$row->created_at.'</a>';
                     })
                     ->addColumn('action', function ($row) {
-                        return view('orders.datatables.actionHotel', compact('row'));
+                        return view('hotel.orders.datatables.action', compact('row'));
                     })
                     ->rawColumns(['action', 'created_at'])
                     ->make(true);
             }
-            return view('orders.indexHotel');
+            return view('hotel.orders.index');
         } else {
-            return $dataTable->render('orders.index');
+            return $dataTable->render('admin.orders.index');
         }
     }
 

@@ -25,7 +25,7 @@ class HotelDataTable extends DataTable
         return (new EloquentDataTable($query))
             ->addIndexColumn()
             ->addColumn('action', function ($row) {
-                return view('hotels.datatables.action', compact('row'))->render();
+                return view('admin.hotels.datatables.action', compact('row'))->render();
             })
             ->rawColumns(['action']);
     }

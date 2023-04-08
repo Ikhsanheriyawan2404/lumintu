@@ -16,7 +16,7 @@ class ProductController extends Controller
      */
     public function index(ProductsDataTable $dataTable)
     {
-        return $dataTable->render('products.index', [
+        return $dataTable->render('admin.products.index', [
             'categories' => Category::get()
         ]);
     }
@@ -28,7 +28,7 @@ class ProductController extends Controller
     public function store(ProductRequest $request)
     {
         $itemId = request('item_id');
-        
+
         try {
             DB::transaction(function () use ($itemId, $request) {
 

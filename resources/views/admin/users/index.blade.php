@@ -21,7 +21,7 @@
         </div>
     </div>
 
-    @include('users.modals.createOrUpdate')
+    @include('admin.users.modals.createOrUpdate')
 
 @endsection
 

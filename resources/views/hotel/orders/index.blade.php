@@ -34,7 +34,7 @@
         </div>
     </div>
 
-    @include('orders.modals.createOrUpdate')
+    @include('hotels.orders.modals.createOrUpdate')
 
 @endsection
 

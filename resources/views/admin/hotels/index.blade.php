@@ -23,7 +23,7 @@
         </div>
     </div>
 
-    @include('hotels.modals.createOrUpdate')
+    @include('admin.hotels.modals.createOrUpdate')
 @endsection
 
 @push('custom-styles')
