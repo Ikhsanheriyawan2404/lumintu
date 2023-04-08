@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('name');
             $table->decimal('price',15,2);
             $table->longText('description')->nullable();
+            $table->longText('qty')->nullable();
             $table->date('date');
             $table->foreignId('user_id')->constrained();
             $table->timestamps();
