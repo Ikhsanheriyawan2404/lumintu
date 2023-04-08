@@ -28,11 +28,6 @@ class Order extends Model
         return $this->belongsTo(User::class, 'customer_id');
     }
 
-    public function supervisor()
-    {
-        return $this->belongsTo(User::class, 'supervisor_id');
-    }
-
     public function order_details()
     {
         return $this->hasMany(BridgeOrderProduct::class);

@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Enums\OrderStatusEnum;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class OrderStatus extends Model
 {
@@ -12,6 +13,11 @@ class OrderStatus extends Model
     protected $fillable = [
         'order_id',
         'status',
+    ];
+
+    protected $casts = [
+        'status' => OrderStatusEnum::class,
+        'created_at' => 'datetime:Y-m-d H:i:s',
     ];
 
     public function order()

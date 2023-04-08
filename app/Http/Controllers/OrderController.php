@@ -7,9 +7,11 @@ use App\Models\Order;
 use InvalidArgumentException;
 use App\Models\ProductCustomer;
 use App\DataTables\OrderDataTable;
+use App\Enums\OrderStatusEnum;
 use App\Models\BridgeOrderProduct;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\OrderStoreRequest;
+use App\Models\OrderStatus;
 use Yajra\DataTables\Facades\DataTables;
 
 class OrderController extends Controller
@@ -41,17 +43,18 @@ class OrderController extends Controller
 
     public function show($orderId)
     {
-        $order = Order::with('order_details.product_customer.product', 'order_status', 'customer', 'supervisor')
+        $order = Order::with('order_details.product_customer.product', 'order_status', 'customer')
             ->findOrFail($orderId);
 
-        return view('orders.show', [
+        return view('admin.orders.show', [
             'order' => $order,
+            'order_statuses' => OrderStatus::where('order_id', $orderId)->get(),
         ]);
     }
 
     public function getOrderDetails($orderId)
     {
-        $order = Order::with('order_details.product_customer.product', 'order_status', 'customer', 'supervisor')
+        $order = Order::with('order_details.product_customer.product', 'order_status', 'customer')
             ->findOrFail($orderId);
 
         return response()->json($order);
