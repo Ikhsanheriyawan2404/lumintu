@@ -13,7 +13,7 @@ class CategoryController extends Controller
 {
     public function index(CategoryDataTable $dataTable)
     {
-        return $dataTable->render('categories.index');
+        return $dataTable->render('admin.categories.index');
     }
 
     public function store(CategoryRequest $request)

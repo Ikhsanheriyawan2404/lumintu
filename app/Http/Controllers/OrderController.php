@@ -16,7 +16,7 @@ class OrderController extends Controller
 {
     public function index(OrderDataTable $dataTable)
     {
-        return $dataTable->render('orders.index');
+        return $dataTable->render('admin.orders.index');
     }
 
     public function show($orderId)
@@ -29,7 +29,7 @@ class OrderController extends Controller
 
     public function create()
     {
-        return view('orders.create', [
+        return view('admin.orders.create', [
             'customers' => User::role('hotel')->get(),
         ]);
     }

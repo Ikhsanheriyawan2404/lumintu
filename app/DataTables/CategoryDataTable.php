@@ -25,7 +25,7 @@ class CategoryDataTable extends DataTable
         return (new EloquentDataTable($query))
         ->addIndexColumn()
         ->addColumn('action', function ($row) {
-            return view('categories.datatables.action', compact('row'))->render();
+            return view('admin.categories.datatables.action', compact('row'))->render();
         })
         ->rawColumns(['action']);
     }

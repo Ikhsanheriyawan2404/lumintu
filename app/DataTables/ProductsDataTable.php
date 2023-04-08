@@ -27,7 +27,7 @@ class ProductsDataTable extends DataTable
         return (new EloquentDataTable($query))
             ->addIndexColumn()
             ->addColumn('action', function ($row) {
-                return view('products.datatables.action', compact('row'))->render();
+                return view('admin.products.datatables.action', compact('row'))->render();
             })
             ->rawColumns(['action']);
     }
