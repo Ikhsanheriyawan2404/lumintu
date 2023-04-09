@@ -2,6 +2,7 @@
 namespace App\DataTables;
 
 use App\Models\Category;
+use App\Models\Cost;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
@@ -24,7 +25,7 @@ class CostDataTable extends DataTable
         return (new EloquentDataTable($query))
             ->addIndexColumn()
             ->addColumn('action', function ($row) {
-                return view('cost.datatables.action', compact('row'))->render();
+                return view('admin.cost.datatables.action', compact('row'))->render();
             })
             ->rawColumns(['action']);
     }
@@ -32,10 +33,10 @@ class CostDataTable extends DataTable
     /**
      * Get query source of dataTable.
      *
-     * @param \App\Models\Category $model
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @param Cost $model
+     * @return QueryBuilder
      */
-    public function query(Category $model): QueryBuilder
+    public function query(Cost $model): QueryBuilder
     {
         return $model->newQuery();
     }
@@ -85,7 +86,7 @@ class CostDataTable extends DataTable
             Column::make('qty')
                 ->title('Kwantitas'),
             Column::make('description')
-                ->title('Deskripsti'),
+                ->title('Deskripsi'),
             Column::computed('action')
                 ->exportable(false)
                 ->printable(false)
@@ -101,6 +102,6 @@ class CostDataTable extends DataTable
      */
     protected function filename(): string
     {
-        return 'Category_' . date('YmdHis');
+        return 'Cost_' . date('YmdHis');
     }
 }

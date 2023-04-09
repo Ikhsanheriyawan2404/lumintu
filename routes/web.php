@@ -34,6 +34,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('orders', OrderController::class);
     Route::resource('users', UserController::class);
 
+    require __DIR__ . '/pegawai/pegawai.php';
+
+
     /*
     |--------------------------------------------------------------------------
     | Temporary Routes
