@@ -9,6 +9,8 @@ use InvalidArgumentException;
 use App\Models\ProductCustomer;
 use App\DataTables\HotelDataTable;
 use Illuminate\Support\Facades\DB;
+use Yajra\DataTables\Facades\DataTables;
+use App\DataTables\ProductCustomerDataTable;
 
 class HotelController extends Controller
 {
@@ -19,8 +21,32 @@ class HotelController extends Controller
 
     public function getPriceList($userId)
     {
-        $user = ProductCustomer::with('product')->where('user_id', $userId)->get();
-        return response()->json($user);
+        return view('admin.hotels.price-list', [
+            'userId' => $userId,
+        ]);
+    }
+
+    public function kontol($userId)
+    {
+
+        if (request('data')) {
+            $productCustomerId = array_key_first(request('data'));
+            $productCustomer = ProductCustomer::find($productCustomerId);
+
+            $productCustomer->price = request('data')[$productCustomerId]['price'];
+
+            $productCustomer->save();
+        }
+
+        $orders = ProductCustomer::with('product')->where('user_id', $userId)->get();
+        return DataTables::of($orders)
+            ->addIndexColumn()
+            ->editColumn('price', function ($row) {
+                $numberString = number_format($row->price, 2, '.', '');
+                $numberString = str_replace('.00', '', $numberString);
+                return floatval($numberString);
+            })
+            ->make(true);
     }
 
     public function store()

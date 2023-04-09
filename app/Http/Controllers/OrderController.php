@@ -62,7 +62,7 @@ class OrderController extends Controller
 
     public function create()
     {
-        return view('orders.create', [
+        return view('admin.orders.create', [
             'customers' => User::role('hotel')->get(),
         ]);
     }
@@ -111,12 +111,10 @@ class OrderController extends Controller
             DB::transaction(function () {
 
                 $data = [
-                    'customer_id' => request('customer_id'),
-                    'order_date' => request('order_date'),
+                    'customer_id' => auth()->user()->id,
                     'estimate_date' => request('estimate_date'),
                     'description' => request('description'),
                     'total_price' => 0,
-                    'supervisor_id' => auth()->user()->id,
                 ];
 
                 $order = Order::create($data);
@@ -128,8 +126,9 @@ class OrderController extends Controller
                 } else {
                     $totalPrice = 0;
                     for ($i = 0; $i < count($totalRequestItem); $i++) {
-                        $product = ProductCustomer::where('product_id', request('product_id')[$i])
-                            ->where('user_id', request('customer_id'))
+
+                        $product = ProductCustomer::where('user_id', $order->customer_id)
+                            ->where('product_id', request('product_id')[$i])
                             ->first();
 
                         $data = [

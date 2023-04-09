@@ -16,17 +16,17 @@ class OrderSeeder extends Seeder
      */
     public function run()
     {
-        ProductCustomer::create([
-            'product_id' => 1,
-            'user_id' => 4,
-            'price' => 1000,
-        ]);
+        // ProductCustomer::create([
+        //     'product_id' => 1,
+        //     'user_id' => 4,
+        //     'price' => 1000,
+        // ]);
 
-        ProductCustomer::create([
-            'product_id' => 2,
-            'user_id' => 4,
-            'price' => 5000,
-        ]);
+        // ProductCustomer::create([
+        //     'product_id' => 2,
+        //     'user_id' => 4,
+        //     'price' => 5000,
+        // ]);
 
         $order = Order::create([
             'customer_id' => 4,

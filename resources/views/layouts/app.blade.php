@@ -45,13 +45,13 @@
         <!-- End Topbar -->
         <div class="container-fluid py-4">
 
-            @hasrole('superadmin|admin|valet|pegawai')
+            {{-- @hasrole('superadmin|admin|valet|pegawai') --}}
                 @yield('content')
-            @endhasrole
+            {{-- @endhasrole --}}
 
-            @hasrole('hotel')
+            {{-- @hasrole('hotel')
                 @yield('main')
-            @endhasrole
+            @endhasrole --}}
 
             <footer class="footer pt-3">
 

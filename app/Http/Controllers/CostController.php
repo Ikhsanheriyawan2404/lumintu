@@ -13,9 +13,7 @@ class CostController extends Controller
 {
     public function index(ProductsDataTable $dataTable)
     {
-        return $dataTable->render('products.index', [
-            'categories' => Category::get()
-        ]);
+        return $dataTable->render('Cost.index');
     }
 
     /**

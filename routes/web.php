@@ -41,9 +41,12 @@ Route::group(['middleware' => 'auth'], function () {
     */
 
     Route::resource('valet', ValetController::class);
-    Route::get('hotel/{userId}/price-list', [HotelController::class, 'getPriceList'])->name('hotel.price-list');
+    Route::get('hotel/{userId}/price-list-view', [HotelController::class, 'getPriceList']);
+    Route::post('hotel/{userId}/price-list', [HotelController::class, 'kontol'])->name('hotel.price-list');
     Route::resource('hotel', HotelController::class);
     Route::resource('pegawai', PegawaiController::class);
+
+    Route::post('hotels/price-list', [HotelController::class, 'storePriceList'])->name('hotel.price-list.store');
 
     /*
     |--------------------------------------------------------------------------
