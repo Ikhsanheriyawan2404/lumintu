@@ -1,8 +1,7 @@
 <?php
-
 namespace App\DataTables;
 
-use App\Models\Product;
+use App\Models\Category;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
@@ -11,10 +10,8 @@ use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Html\Editor\Editor;
 use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
-use Yajra\DataTables\DataTablesServiceProvider;
 
-
-class ProductsDataTable extends DataTable
+class CostDataTable extends DataTable
 {
     /**
      * Build DataTable class.
@@ -27,7 +24,7 @@ class ProductsDataTable extends DataTable
         return (new EloquentDataTable($query))
             ->addIndexColumn()
             ->addColumn('action', function ($row) {
-                return view('admin.products.datatables.action', compact('row'))->render();
+                return view('cost.datatables.action', compact('row'))->render();
             })
             ->rawColumns(['action']);
     }
@@ -35,14 +32,12 @@ class ProductsDataTable extends DataTable
     /**
      * Get query source of dataTable.
      *
-     * @param \App\Models\Product $model
+     * @param \App\Models\Category $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(Product $model): QueryBuilder
+    public function query(Category $model): QueryBuilder
     {
-        return $model->newQuery()
-            ->orderBy('products.created_at', 'desc')
-            ->with('category');
+        return $model->newQuery();
     }
 
     /**
@@ -53,20 +48,20 @@ class ProductsDataTable extends DataTable
     public function html(): HtmlBuilder
     {
         return $this->builder()
-                    ->setTableId('products-table')
-                    ->columns($this->getColumns())
-                    ->minifiedAjax()
-                    // ->dom('Bfrtip')
-                    ->orderBy(1)
-                    ->selectStyleSingle()
-                    ->buttons([
-                        Button::make('excel'),
-                        Button::make('csv'),
-                        Button::make('pdf'),
-                        Button::make('print'),
-                        Button::make('reset'),
-                        Button::make('reload')
-                    ]);
+            ->setTableId('cost-table')
+            ->columns($this->getColumns())
+            ->minifiedAjax()
+            //->dom('Bfrtip')
+            ->orderBy(1)
+            ->selectStyleSingle()
+            ->buttons([
+                Button::make('excel'),
+                Button::make('csv'),
+                Button::make('pdf'),
+                Button::make('print'),
+                Button::make('reset'),
+                Button::make('reload')
+            ]);
     }
 
     /**
@@ -85,12 +80,12 @@ class ProductsDataTable extends DataTable
                 ->addClass('text-center'),
             Column::make('name')
                 ->title('Nama'),
-            Column::make('unit')
-                ->title('Unit'),
             Column::make('price')
                 ->title('Harga'),
-            Column::make('category.name')
-                ->title('Kategori'),
+            Column::make('qty')
+                ->title('Kwantitas'),
+            Column::make('description')
+                ->title('Deskripsti'),
             Column::computed('action')
                 ->exportable(false)
                 ->printable(false)
@@ -106,6 +101,6 @@ class ProductsDataTable extends DataTable
      */
     protected function filename(): string
     {
-        return 'Products_' . date('YmdHis');
+        return 'Category_' . date('YmdHis');
     }
 }

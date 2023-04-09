@@ -25,7 +25,7 @@ class UserDataTable extends DataTable
         return (new EloquentDataTable($query))
             ->addIndexColumn()
             ->addColumn('action', function ($row) {
-                return view('users.datatables.action', compact('row'))->render();
+                return view('admin.users.datatables.action', compact('row'))->render();
             })
             ->rawColumns(['action']);
     }

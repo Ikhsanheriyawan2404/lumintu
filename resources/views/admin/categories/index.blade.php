@@ -20,7 +20,7 @@
             </div>
         </div>
     </div>
-@include('categories.modals.createOrUpdate')
+@include('admin.categories.modals.createOrUpdate')
 
 @endsection
 

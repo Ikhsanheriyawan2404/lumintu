@@ -25,7 +25,7 @@ class OrderDataTable extends DataTable
         return (new EloquentDataTable($query))
             ->addIndexColumn()
             ->addColumn('action', function ($row) {
-                return view('orders.datatables.action', compact('row'))->render();
+                return view('admin.orders.datatables.action', compact('row'))->render();
             })
             ->rawColumns(['action']);
     }

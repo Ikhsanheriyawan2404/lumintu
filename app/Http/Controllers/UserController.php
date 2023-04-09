@@ -15,7 +15,7 @@ class UserController extends Controller
 {
     public function index(UserDataTable $dataTable)
     {
-        return $dataTable->render('users.index', [
+        return $dataTable->render('admin.users.index', [
             'roles' => Role::get(),
         ]);
     }
