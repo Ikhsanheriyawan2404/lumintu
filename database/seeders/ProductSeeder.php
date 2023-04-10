@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\User;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\ProductCustomer;
@@ -35,13 +36,16 @@ class ProductSeeder extends Seeder
             'price' => 7500
         ]);
 
-        $prodcuts = Product::get();
-        foreach ($prodcuts as $product) {
-            ProductCustomer::create([
-                'product_id' => $product->id,
-                'user_id' => 4,
-                'price' => $product->price,
-            ]);
+        $products = Product::get();
+        $users = User::role('hotel')->get(['id']);
+        foreach ($users as $user) {
+            foreach ($products as $product) {
+                ProductCustomer::create([
+                    'product_id' => $product->id,
+                    'user_id' => $user->id,
+                    'price' => $product->price,
+                ]);
+            }
         }
     }
 }

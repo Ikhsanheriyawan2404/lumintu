@@ -15,7 +15,7 @@
                     </div>
                 </div>
                 <div class="card-body p-3 pb-0">
-                    {{ $dataTable->table(['class' => 'table table-sm table-bordered display responsive nowrap', 'width' => '100%']) }}
+                    {{ $dataTable->table(['class' => 'table align-items-center display responsive nowrap', 'width' => '100%']) }}
                 </div>
             </div>
         </div>
@@ -48,6 +48,20 @@
 
     <script>
         $(document).ready(function() {
+
+
+            // setInterval(() => {
+            //     let table = $('#order-table').DataTable();
+            //     let totalRowData = table.rows().count();
+            //     console.log(totalRowData)
+            //     // table.draw();
+            //     let newTable = $('#order-table').DataTable();
+            //     let newTotalRowData = newTable.rows().count();
+            //     console.log(newTotalRowData)
+            //     if (newTotalRowData > totalRowData) {
+            //         toastr.success('Data berhasil diupdate');
+            //     }
+            // }, 2000);
 
             $('body').on('click', '#showItem', function() {
                 var item_id = $(this).data('id');

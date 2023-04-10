@@ -4,14 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Order;
+use App\Models\Pickup;
+use App\Models\OrderStatus;
 use InvalidArgumentException;
 use App\Models\ProductCustomer;
-use App\DataTables\OrderDataTable;
 use App\Enums\OrderStatusEnum;
+use App\DataTables\OrderDataTable;
 use App\Models\BridgeOrderProduct;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\OrderStoreRequest;
-use App\Models\OrderStatus;
 use Yajra\DataTables\Facades\DataTables;
 
 class OrderController extends Controller
@@ -22,6 +23,36 @@ class OrderController extends Controller
             if (request()->ajax()) {
                 $orders = Order::with('customer')
                     ->where('customer_id', auth()->user()->id)
+                    ->latest()
+                    ->get();
+
+                return DataTables::of($orders)
+                    ->addIndexColumn()
+                    ->editColumn('created_at', function ($row) {
+                        return '<a href="javascript:void()" data-id="' .$row->id. '" id="showItem">'
+                        .$row->created_at.
+                        '</a>';
+                    })
+                    ->editColumn('status', function ($row) {
+                        return '<span class="badge badge-sm bg-gradient-primary">'.$row->status->value.'</span>';
+                    })
+                    ->editColumn('payment_status', function ($row) {
+                        return view('hotel.orders.datatables.payment_status', compact('row'));
+                    })
+                    ->addColumn('action', function ($row) {
+                        return view('hotel.orders.datatables.action', compact('row'));
+                    })
+                    ->rawColumns(['action', 'created_at', 'payment_status', 'status'])
+                    ->make(true);
+            }
+
+            return view('hotel.orders.index');
+
+        } elseif (auth()->user()->hasRole('valet')) {
+            if (request()->ajax()) {
+                $orders = Pickup::with('order')
+                    ->where('user_id', auth()->user()->id)
+                    ->latest()
                     ->get();
 
                 return DataTables::of($orders)
@@ -35,7 +66,9 @@ class OrderController extends Controller
                     ->rawColumns(['action', 'created_at'])
                     ->make(true);
             }
-            return view('hotel.orders.index');
+
+            return view('admin.orders.index');
+
         } else {
             return $dataTable->render('admin.orders.index');
         }
@@ -49,6 +82,17 @@ class OrderController extends Controller
         return view('admin.orders.show', [
             'order' => $order,
             'order_statuses' => OrderStatus::where('order_id', $orderId)->get(),
+            'valet' => User::role('valet')->get()
+        ]);
+    }
+
+    public function edit($orderId)
+    {
+        $order = Order::with('order_details.product_customer.product', 'order_status', 'customer')
+            ->findOrFail($orderId);
+
+        return view('admin.orders.edit', [
+            'order' => $order,
         ]);
     }
 
@@ -62,9 +106,7 @@ class OrderController extends Controller
 
     public function create()
     {
-        return view('admin.orders.create', [
-            'customers' => User::role('hotel')->get(),
-        ]);
+        return view('admin.orders.create');
     }
 
     public function productDatatables($customerId)
@@ -119,6 +161,21 @@ class OrderController extends Controller
 
                 $order = Order::create($data);
 
+                // Create Order Status
+                foreach (OrderStatusEnum::values() as $status) {
+                    if ($status == OrderStatusEnum::PENDING) {
+                        $order->order_status()->create([
+                            'order_id' => $order->id,
+                            'status' => $status,
+                        ]);
+                    } else {
+                        $order->order_status()->insert([
+                            'order_id' => $order->id,
+                            'status' => $status,
+                        ]);
+                    }
+                }
+
                 // Add new order details
                 $totalRequestItem = request('product_id');
                 if ($totalRequestItem == null) {
@@ -160,6 +217,37 @@ class OrderController extends Controller
 
         return response()->json([
             'message' => 'Berhasil Menambahkan Order Pembelian',
+        ]);
+    }
+
+    public function changeOrderStatus($orderId)
+    {
+        $order = Order::findOrFail($orderId);
+        $currentOrderStatus = $order->status;
+        $statuses = OrderStatusEnum::values();
+        $currentIndex = array_search($currentOrderStatus, $statuses);
+
+        if ($currentIndex !== false && isset($statuses[$currentIndex + 1])) {
+            $nextStatus = $statuses[$currentIndex + 1];
+        }
+
+        $order->status = $nextStatus;
+        $order->save();
+
+        $order->order_status()->where('status', $nextStatus)->update([
+            'created_at' => now(),
+        ]);
+
+        if (request('chooseValet')) {
+            Pickup::create([
+                'order_id' => $order->id,
+                'user_id' => request('chooseValet'),
+                'status' => 'pending',
+                'date' => date('Y-m-d')
+            ]);
+        }
+        return response()->json([
+            'message' => 'Berhasil Mengubah Status Order',
         ]);
     }
 }

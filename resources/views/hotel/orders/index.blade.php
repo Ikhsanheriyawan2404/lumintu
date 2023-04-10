@@ -15,14 +15,15 @@
                     </div>
                 </div>
                 <div class="card-body p-3 pb-0">
-                    <table id="orders-table" class="table table-sm table-bordered table-hover">
+                    <table id="orders-table" class="table table-sm table-hover">
                         <thead>
                             <tr>
-                                <th>No</th>
-                                <th>Tgl Order</th>
-                                <th>Total</th>
-                                <th>Status</th>
-                                <th>Aksi</th>
+                                <th class="text-sm font-weight-normal" width="5%">No</th>
+                                <th class="text-sm font-weight-normal">Tgl Order</th>
+                                <th class="text-sm font-weight-normal">Total</th>
+                                <th class="text-sm font-weight-normal">Pembayaran</th>
+                                <th class="text-sm font-weight-normal">Status</th>
+                                <th class="text-sm font-weight-normal">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -67,23 +68,35 @@
                 ajax: "{{ route('orders.index') }}",
                 columns: [{
                         data: 'DT_RowIndex',
-                        name: 'DT_RowIndex'
+                        name: 'DT_RowIndex',
+                        orderable: false,
+                        searchable: false,
+                        className: 'text-sm font-weight-normal text-center'
                     },
                     {
                         data: 'created_at',
-                        name: 'created_at'
+                        name: 'created_at',
+                        className: 'text-sm font-weight-normal'
                     },
                     {
                         data: 'total_price',
-                        name: 'total_price'
+                        name: 'total_price',
+                        className: 'text-sm font-weight-normal'
+                    },
+                    {
+                        data: 'payment_status',
+                        name: 'payment_status',
+                        className: 'text-sm font-weight-normal'
                     },
                     {
                         data: 'status',
-                        name: 'status'
+                        name: 'status',
+                        className: 'text-sm font-weight-normal'
                     },
                     {
                         data: 'action',
-                        name: 'action'
+                        name: 'action',
+                        className: 'text-sm font-weight-normal'
                     },
                 ]
             });

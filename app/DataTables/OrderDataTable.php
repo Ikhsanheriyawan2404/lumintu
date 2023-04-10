@@ -83,17 +83,25 @@ class OrderDataTable extends DataTable
                 ->width(30)
                 ->searchable(false)
                 ->orderable(false)
+                ->addClass("text-sm font-weight-normal")
                 ->addClass('text-center'),
             Column::make('created_at')
+                ->addClass("text-sm font-weight-normal")
                 ->title('Tgl Order'),
             Column::make('total_price')
+                ->addClass("text-sm font-weight-normal")
                 ->title('Total'),
             Column::make('customer.name')
+                ->addClass("text-sm font-weight-normal")
                 ->title('Pelanggan'),
+            Column::make('status')
+                ->addClass("text-sm font-weight-normal")
+                ->title('Status'),
             Column::computed('action')
                 ->exportable(false)
                 ->printable(false)
                 ->width(30)
+                ->addClass("text-sm font-weight-normal")
                 ->addClass('text-center'),
         ];
     }

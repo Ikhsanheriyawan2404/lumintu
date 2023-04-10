@@ -80,21 +80,28 @@ class HotelDataTable extends DataTable
                 ->width(30)
                 ->searchable(false)
                 ->orderable(false)
+                ->addClass("text-sm font-weight-normal")
                 ->addClass('text-center'),
             Column::make('name')
+                ->addClass("text-sm font-weight-normal")
                 ->title('Nama'),
             Column::make('username')
+                ->addClass("text-sm font-weight-normal")
                 ->title('Username'),
-                Column::make('email')
+            Column::make('email')
+                ->addClass("text-sm font-weight-normal")
                 ->title('Email'),
             Column::make('user_detail.phone_number')
+                ->addClass("text-sm font-weight-normal")
                 ->title('No HP'),
             Column::make('user_detail.address')
+                ->addClass("text-sm font-weight-normal")
                 ->title('Alamat'),
             Column::computed('action')
                 ->exportable(false)
                 ->printable(false)
                 ->width(30)
+                ->addClass("text-sm font-weight-normal")
                 ->addClass('text-center'),
         ];
     }

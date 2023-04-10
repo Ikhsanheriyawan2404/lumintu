@@ -10,7 +10,6 @@ use App\Models\ProductCustomer;
 use App\DataTables\HotelDataTable;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
-use App\DataTables\ProductCustomerDataTable;
 
 class HotelController extends Controller
 {
@@ -26,9 +25,8 @@ class HotelController extends Controller
         ]);
     }
 
-    public function kontol($userId)
+    public function updatePriceList($userId)
     {
-
         if (request('data')) {
             $productCustomerId = array_key_first(request('data'));
             $productCustomer = ProductCustomer::find($productCustomerId);

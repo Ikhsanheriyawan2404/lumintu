@@ -32,6 +32,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('orders/product-datatables/{customerId}', [OrderController::class, 'productDatatables']);
     Route::get('orders/{productId}/product', [OrderController::class, 'getProduct']);
     Route::get('orders/{orderId}/details', [OrderController::class, 'getOrderDetails']);
+    Route::post('orders/{orderId}/change-status', [OrderController::class, 'changeOrderStatus'])->name('orders.changeOrderStatus');
     Route::resource('orders', OrderController::class);
     Route::resource('users', UserController::class);
 
@@ -41,8 +42,8 @@ Route::group(['middleware' => 'auth'], function () {
     */
 
     Route::resource('valet', ValetController::class);
-    Route::get('hotel/{userId}/price-list-view', [HotelController::class, 'getPriceList']);
-    Route::post('hotel/{userId}/price-list', [HotelController::class, 'kontol'])->name('hotel.price-list');
+    Route::get('hotel/{userId}/price-list-view', [HotelController::class, 'getPriceList'])->name('hotel.price-list.view');
+    Route::post('hotel/{userId}/price-list', [HotelController::class, 'updatePriceList'])->name('hotel.price-list');
     Route::resource('hotel', HotelController::class);
     Route::resource('pegawai', PegawaiController::class);
 

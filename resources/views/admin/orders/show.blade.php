@@ -57,8 +57,11 @@
                                             @endif
                                         </span>
                                         <div class="timeline-content">
-                                            <h6 class="text-dark text-sm font-weight-bold mb-0">{{ $status->status }}</h6>
+                                            <h6 class="text-dark text-sm font-weight-bold mb-0">ORder status sedang dalam bla bla bala b{{ $status->status }}</h6>
                                             <p class="text-secondary font-weight-bold text-xs mt-1 mb-0">{{ $status?->created_at ?? 'Belum tahap ini' }}</p>
+                                            @if($status->status == $order->status && $order->status != App\Enums\OrderStatusEnum::DONE)
+                                                <button class="btn btn-sm btn-primary" id="btnProcessStatus">Proses</button>
+                                            @endif
                                         </div>
                                     </div>
                                 @endforeach
@@ -97,6 +100,9 @@
             </div>
         </div>
     </div>
+
+    @include('admin.orders.modals.processStatus')
+
 @endsection
 
 @push('custom-styles')
@@ -117,4 +123,49 @@
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            $('#btnProcessStatus').click(function() {
+                $('#modalProcessStatus').modal('show');
+                $('.modal-title').html('Apakah yakin ingin meneruskan ke proses selanjutnya?');
+            });
+
+            $('#saveBtn').click(function(e) {
+                e.preventDefault();
+                $('#saveBtn').attr('disabled', 'disabled');
+                $('#saveBtn').html('Simpan ...');
+                var formData = new FormData($('#itemForm')[0]);
+                $.ajax({
+                    data: formData,
+                    url: "{{ route('orders.changeOrderStatus', $order->id) }}",
+                    contentType: false,
+                    processData: false,
+                    type: "POST",
+                    success: function(data) {
+                        $('#itemForm').trigger("reset");
+                        $('#modalProcessStatus').modal('hide');
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success',
+                            text: data.message,
+                        });
+                        window.location.reload();
+                    },
+                    error: function(data) {
+                        $('#saveBtn').removeAttr('disabled');
+                        $('#saveBtn').html("Simpan");
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oppss',
+                            text: data.responseJSON.message,
+                        });
+                        $.each(data.responseJSON.errors, function(index, value) {
+                            toastr.error(value);
+                        });
+                    }
+                });
+            });
+        });
+    </script>
 @endpush
