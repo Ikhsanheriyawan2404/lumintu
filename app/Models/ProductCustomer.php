@@ -19,4 +19,9 @@ class ProductCustomer extends Model
     {
         return $this->belongsTo(Product::class);
     }
+
+    public function user_details()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

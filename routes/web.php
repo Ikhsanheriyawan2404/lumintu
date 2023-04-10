@@ -43,7 +43,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     require __DIR__ . '/pegawai/pegawai.php';
 
-    
+
     Route::resource('hotel', HotelController::class);
     Route::resource('pegawai', PegawaiController::class);
 
