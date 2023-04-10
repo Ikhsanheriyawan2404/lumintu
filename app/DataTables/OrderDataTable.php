@@ -30,7 +30,7 @@ class OrderDataTable extends DataTable
             ->addColumn('action', function ($row) {
                 return view('admin.orders.datatables.action', compact('row'))->render();
             })
-            ->rawColumns(['action', 'created_at']);
+            ->rawColumns(['action', 'created_at', 'check']);
     }
 
     /**
@@ -41,9 +41,7 @@ class OrderDataTable extends DataTable
      */
     public function query(Order $model): QueryBuilder
     {
-        return $model->newQuery()
-            ->orderBy('orders.created_at', 'desc')
-            ->with('customer');
+        return $this->query;
     }
 
     /**

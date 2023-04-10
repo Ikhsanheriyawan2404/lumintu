@@ -15,7 +15,7 @@
                                 Total : <b><i>Rp {{ number_format($order->total_price) }}</i></b>
                             </p>
                         </div>
-                        <a href="javascript:;" class="btn bg-gradient-secondary ms-auto mb-0">Invoice</a>
+                        <a href="{{ route('orders.index', []) }}" class="btn bg-gradient-secondary ms-auto mb-0">Kembali</a>
                     </div>
                 </div>
                 <div class="card-body p-3 pt-0">
@@ -37,9 +37,9 @@
                             </div>
                         </div>
                         <div class="col-lg-6 col-md-6 col-12 my-auto text-end">
-                            <a href="javascript:;" class="btn bg-gradient-info mb-0">Contact Us</a>
+                            {{-- <a href="javascript:;" class="btn bg-gradient-info mb-0">Contact Us</a>
                             <p class="text-sm mt-2 mb-0">Do you like the product? Leave us a review <a
-                                    href="javascript:;">here</a>.</p>
+                                    href="javascript:;">here</a>.</p> --}}
                         </div>
                     </div>
                     <hr class="horizontal dark mt-4 mb-4">
@@ -58,8 +58,10 @@
                                         </span>
                                         <div class="timeline-content">
                                             <h6 class="text-dark text-sm font-weight-bold mb-0">ORder status sedang dalam bla bla bala b{{ $status->status }}</h6>
+
                                             <p class="text-secondary font-weight-bold text-xs mt-1 mb-0">{{ $status?->created_at ?? 'Belum tahap ini' }}</p>
-                                            @if($status->status == $order->status && $order->status != App\Enums\OrderStatusEnum::DONE)
+
+                                            @if($status->status == $order->status && $order->status->value != 'done' && auth()->user()->hasRole('superadmin|admin'))
                                                 <button class="btn btn-sm btn-primary" id="btnProcessStatus">Proses</button>
                                             @endif
                                         </div>
@@ -70,29 +72,29 @@
                         <div class="col-lg-9 col-md-6 col-12">
                             <h6 class="mb-3">Barang detail</h6>
                             <div
-                                class="card card-body border card-plain border-radius-lg d-flex align-items-center flex-row">
-                               <table class="table">
+                                class="card card-body border card-plain border-radius-lg d-flex flex-row table-responsive">
+                                <table class="table">
                                     <thead>
                                         <tr>
-                                            <th>No</th>
-                                            <th>Nama</th>
-                                            <th>Harga</th>
-                                            <th>Kauntiti</th>
-                                            <th>Subtotal</th>
+                                            <th class="text-sm font-weight-normal" width="5%">No</th>
+                                            <th class="text-sm font-weight-normal">Nama</th>
+                                            <th class="text-sm font-weight-normal">Harga</th>
+                                            <th class="text-sm font-weight-normal">Kuantiti</th>
+                                            <th class="text-sm font-weight-normal">Subtotal</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach ($order->order_details as $row)
                                             <tr>
-                                                <td>{{ $loop->iteration }}</td>
-                                                <td>{{ $row->product_customer->product->name }}</td>
-                                                <td>{{ number_format($row->product_customer->price) }}</td>
-                                                <td>{{ number_format($row->qty) }}</td>
-                                                <td>{{ number_format($row->qty * $row->product_customer->price) }}</td>
+                                                <td class="text-sm font-weight-normal text-center">{{ $loop->iteration }}</td>
+                                                <td class="text-sm font-weight-normal">{{ $row->product_customer->product->name }}</td>
+                                                <td class="text-sm font-weight-normal">{{ number_format($row->product_customer->price) }}</td>
+                                                <td class="text-sm font-weight-normal">{{ number_format($row->qty) }}</td>
+                                                <td class="text-sm font-weight-normal">{{ number_format($row->qty * $row->product_customer->price) }}</td>
                                             </tr>
                                         @endforeach
                                     </tbody>
-                               </table>
+                                </table>
                             </div>
                         </div>
                     </div>

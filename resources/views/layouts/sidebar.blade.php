@@ -7,8 +7,8 @@
                 <img src="{{ asset('assets/img/logo.png') }}" class="navbar-brand-img h-100" alt="main_logo">
             </div>
             <div class="col-9">
-                <span class="font-weight-bold">Nama user</span><br>
-                <span class="font-weight-bold">Email user</span>
+                <span class="font-weight-bold">{{ auth()->user()->name }}</span><br>
+                <span class="font-weight-bold">{{ auth()->user()->email }}</span>
             </div>
         </div>
     </a>

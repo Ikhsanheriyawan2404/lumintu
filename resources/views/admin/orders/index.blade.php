@@ -9,9 +9,9 @@
                         <div class="col-6 d-flex align-items-center">
                             <h6 class="mb-0">Order/Pesanan</h6>
                         </div>
-                        <div class="col-6 text-end">
+                        {{-- <div class="col-6 text-end">
                             <a href="{{ route('orders.create', []) }}" class="btn btn-outline-primary btn-sm mb-0">Tambah</a>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
                 <div class="card-body p-3 pb-0">

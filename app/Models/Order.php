@@ -12,7 +12,7 @@ class Order extends Model
 
     protected $fillable = [
         'customer_id',
-        'supervisor_id',
+        'order_number',
         'total_price',
         'order_date',
         'estimate_date',
@@ -36,5 +36,15 @@ class Order extends Model
     public function order_status()
     {
         return $this->hasMany(OrderStatus::class);
+    }
+
+    public function pickups()
+    {
+        return $this->hasMany(Pickup::class);
+    }
+
+    public function deliveries()
+    {
+        return $this->hasMany(Delivery::class);
     }
 }

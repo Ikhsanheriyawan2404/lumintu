@@ -2,9 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Enums\OrderStatusEnum;
 use App\Models\Order;
-use App\Models\ProductCustomer;
+use App\Enums\OrderStatusEnum;
 use Illuminate\Database\Seeder;
 
 class OrderSeeder extends Seeder
@@ -16,19 +15,8 @@ class OrderSeeder extends Seeder
      */
     public function run()
     {
-        // ProductCustomer::create([
-        //     'product_id' => 1,
-        //     'user_id' => 4,
-        //     'price' => 1000,
-        // ]);
-
-        // ProductCustomer::create([
-        //     'product_id' => 2,
-        //     'user_id' => 4,
-        //     'price' => 5000,
-        // ]);
-
         $order = Order::create([
+            'order_number' => '10001',
             'customer_id' => 4,
             'total_price' => 30000,
             'status' => 'done',
@@ -52,6 +40,7 @@ class OrderSeeder extends Seeder
         }
 
         $order = Order::create([
+            'order_number' => '10002',
             'customer_id' => 4,
             'total_price' => 12300,
             'status' => 'pending',

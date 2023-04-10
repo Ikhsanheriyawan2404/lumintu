@@ -1,4 +1,4 @@
-@extends('layouts.app', ['title' => 'Order/Pesanan'])
+@extends('layouts.app', ['title' => 'Edit Order/Pesanan'])
 
 @section('content')
     <div class="row">
@@ -7,7 +7,7 @@
                 <div class="card-header pb-0 p-3">
                     <div class="row">
                         <div class="col-6 d-flex align-items-center">
-                            <h6 class="mb-0">Tambah Order/Pesanan</h6>
+                            <h6 class="mb-0">Edit Order/Pesanan</h6>
                         </div>
                         <div class="col-6 text-end">
                             <a href="{{ route('orders.index', []) }}" class="btn btn-outline-primary btn-sm mb-0">Kembali</a>
@@ -27,7 +27,7 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <textarea class="form-control form-control-sm" name="description" id="description" rows="3" placeholder="Catatan..."></textarea>
+                                <textarea class="form-control form-control-sm" name="description" id="description" rows="3" placeholder="Catatan...">{{ $order->description }}</textarea>
                             </div>
                         </div>
                     </div>
@@ -138,7 +138,7 @@
                 processing: true,
                 serverSide: true,
                 responsive: true,
-                ajax: "{{ route('orders.index') }}" + "/product-datatables/" + "{{ auth()->user()->id }}",
+                ajax: "{{ route('orders.index') }}" + "/product-datatables/" + 4,
                 columns: [
                     {data: 'DT_RowIndex', orderable: false},
                     {data: 'product.name'},
@@ -146,6 +146,44 @@
                     {data: 'action', orderable: false},
                 ]
             });
+
+            let orderId = "{{ $order->id }}"
+            $.get("{{ route('orders.index') }}" + "/" + orderId + '/product', function(data) {
+
+                // Get All Item list record on the table orders
+                let allProductId = [];
+                $("input[name='product_id[]']").each(function() {
+                    allProductId.push($(this).val());
+                });
+                // Condition if item has arrived on the list tables
+                let match = allProductId.some(productId => productId == id);
+                if (match) {
+                    alert('Barang sudah ada')
+                } else {
+                    // Put every column input in tables
+                    $('#table-order tbody tr.empty_data').remove();
+
+                    // Put every column input in tables
+                    var tr = $('<tr>');
+                    for (var i = 0; i < 5; i++) {
+                        var td = $('<td class="text-center">').html(data[i]);
+                        tr.append(td);
+                    }
+                    $('#table-order tbody').append(tr);
+
+                    // Trigger For Update Column
+                    let qtyElement = $('.qty[data-id=' + id + ']');
+                    $(qtyElement).val(1)
+                    let qty = 1
+                    let price = parseInt($('.price[data-id=' + id + ']')
+                        .val().replace(/\./g, ''));
+                    let subtotal = qty * price;
+
+                    $(`.subtotal[data-id="${id}"]`).val(subtotal.toLocaleString('id-ID'));
+
+                    calculateAll();
+                }
+                });
 
             $('body').on('click', '#createOrder', function(e) {
                 e.preventDefault();

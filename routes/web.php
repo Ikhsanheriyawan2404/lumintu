@@ -36,23 +36,19 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('orders', OrderController::class);
     Route::resource('users', UserController::class);
 
-    require __DIR__ . '/pegawai/pegawai.php';
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Temporary Routes
-    */
-
     Route::resource('valet', ValetController::class);
     Route::get('hotel/{userId}/price-list-view', [HotelController::class, 'getPriceList'])->name('hotel.price-list.view');
+
     Route::post('hotel/{userId}/price-list', [HotelController::class, 'updatePriceList'])->name('hotel.price-list');
+
+    require __DIR__ . '/pegawai/pegawai.php';
+
+    
     Route::resource('hotel', HotelController::class);
     Route::resource('pegawai', PegawaiController::class);
 
     Route::post('hotels/price-list', [HotelController::class, 'storePriceList'])->name('hotel.price-list.store');
 
-    /*
-    |--------------------------------------------------------------------------
-    */
+
+
 });

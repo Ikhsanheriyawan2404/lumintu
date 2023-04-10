@@ -49,28 +49,25 @@ class OrderController extends Controller
             return view('hotel.orders.index');
 
         } elseif (auth()->user()->hasRole('valet')) {
-            if (request()->ajax()) {
-                $orders = Pickup::with('order')
-                    ->where('user_id', auth()->user()->id)
-                    ->latest()
-                    ->get();
+            $orders = Order::with('pickups', 'deliveries', 'customer')
+                ->whereHas('pickups', function ($query) {
+                    $query->where('user_id', auth()->user()->id);
+                })
+                ->orWhereHas('deliveries', function ($query) {
+                    $query->where('user_id', auth()->user()->id);
+                })
+                ->latest();
 
-                return DataTables::of($orders)
-                    ->addIndexColumn()
-                    ->editColumn('created_at', function ($row) {
-                        return '<a href="javascript:void()" data-id="' .$row->id. '" id="showItem">'.$row->created_at.'</a>';
-                    })
-                    ->addColumn('action', function ($row) {
-                        return view('hotel.orders.datatables.action', compact('row'));
-                    })
-                    ->rawColumns(['action', 'created_at'])
-                    ->make(true);
-            }
-
-            return view('admin.orders.index');
+            return $dataTable->with([
+                'query' => $orders
+            ])->render('admin.orders.index');
 
         } else {
-            return $dataTable->render('admin.orders.index');
+            $query = Order::orderBy('orders.created_at', 'desc')
+            ->with('customer');
+            return $dataTable->with([
+                'query' => $query
+            ])->render('admin.orders.index');
         }
     }
 
@@ -116,7 +113,7 @@ class OrderController extends Controller
             return DataTables::of($productCustomer)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
-                    return '<button class="btn btn-sm btn-primary chooseProduct" data-id="' . $row->product_id . '">
+                    return '<button class="btn btn-sm btn-primary chooseProduct" data-id="' . $row->id . '">
                     Pilih <i class="fa fa-check-circle">
                     </button>';
                 })
@@ -125,9 +122,9 @@ class OrderController extends Controller
         }
     }
 
-    public function getProduct($productId)
+    public function getProduct($productCustomerId)
     {
-        $product = ProductCustomer::with('product')->findOrFail($productId);
+        $product = ProductCustomer::with('product')->findOrFail($productCustomerId);
 
         $row = [];
 
@@ -153,6 +150,7 @@ class OrderController extends Controller
             DB::transaction(function () {
 
                 $data = [
+                    'order_number' => 'ORD-' . date('Ymd') . '-' . time(),
                     'customer_id' => auth()->user()->id,
                     'estimate_date' => request('estimate_date'),
                     'description' => request('description'),
