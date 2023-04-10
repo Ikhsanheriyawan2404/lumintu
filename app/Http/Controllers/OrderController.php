@@ -13,6 +13,7 @@ use App\DataTables\OrderDataTable;
 use App\Models\BridgeOrderProduct;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\OrderStoreRequest;
+use App\Models\Delivery;
 use Yajra\DataTables\Facades\DataTables;
 
 class OrderController extends Controller
@@ -73,13 +74,22 @@ class OrderController extends Controller
 
     public function show($orderId)
     {
-        $order = Order::with('order_details.product_customer.product', 'order_status', 'customer')
+        $order = Order::with('order_details.product_customer.product', 'order_status', 'customer', 'pickups.valet', 'deliveries.valet')
             ->findOrFail($orderId);
+
+        $currentOrderStatus = $order->status;
+        $statuses = OrderStatusEnum::values();
+        $currentIndex = array_search($currentOrderStatus, $statuses);
+
+        if ($currentIndex !== false && isset($statuses[$currentIndex + 1])) {
+            $nextStatus = $statuses[$currentIndex + 1];
+        }
 
         return view('admin.orders.show', [
             'order' => $order,
             'order_statuses' => OrderStatus::where('order_id', $orderId)->get(),
-            'valet' => User::role('valet')->get()
+            'valet' => User::role('valet')->get(),
+            'nextStatus' => $nextStatus ?? null,
         ]);
     }
 
@@ -226,23 +236,34 @@ class OrderController extends Controller
         $currentIndex = array_search($currentOrderStatus, $statuses);
 
         if ($currentIndex !== false && isset($statuses[$currentIndex + 1])) {
-            $nextStatus = $statuses[$currentIndex + 1];
+            $nextOrderStatus = $statuses[$currentIndex + 1];
         }
 
-        $order->status = $nextStatus;
+        $order->status = $nextOrderStatus;
         $order->save();
 
-        $order->order_status()->where('status', $nextStatus)->update([
+        $order->order_status()->where('status', $nextOrderStatus)->update([
             'created_at' => now(),
         ]);
 
         if (request('chooseValet')) {
-            Pickup::create([
-                'order_id' => $order->id,
-                'user_id' => request('chooseValet'),
-                'status' => 'pending',
-                'date' => date('Y-m-d')
-            ]);
+            if ($nextOrderStatus == OrderStatusEnum::APPROVE) {
+
+                Pickup::create([
+                    'order_id' => $order->id,
+                    'user_id' => request('chooseValet'),
+                    'status' => 'undone',
+                    'date' => date('Y-m-d')
+                ]);
+            } elseif ($nextOrderStatus == OrderStatusEnum::DELIVERY) {
+
+                Delivery::create([
+                    'order_id' => $order->id,
+                    'user_id' => request('chooseValet'),
+                    'status' => 'undone',
+                    'date' => date('Y-m-d')
+                ]);
+            }
         }
         return response()->json([
             'message' => 'Berhasil Mengubah Status Order',

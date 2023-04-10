@@ -8,11 +8,13 @@
             </button>
         </div>
         <form id="itemForm" method="POST">
-            @csrf
+        @csrf
         <div class="modal-body">
             <div class="form-group">
-                <label for="chooseValet">Pilih Valet <span class="text-danger">*</span></label>
-                <select name="chooseValet" id="chooseValet" class="form-control form-control-sm">
+                <input type="hidden" id="currentStatus" value="{{ $order->status }}">
+                <input type="hidden" id="nextStatus" value="{{ $nextStatus }}">
+                <label for="chooseValet" id="labelValet">Pilih Valet <span class="text-danger">*</span></label>
+                <select name="chooseValet" id="chooseValet" class="form-control form-control-sm" required>
                     <option selected disabled>Pilih Valet</option>
                     @foreach ($valet as $row)
                         <option value="{{ $row->id }}">{{ $row->name }}</option>

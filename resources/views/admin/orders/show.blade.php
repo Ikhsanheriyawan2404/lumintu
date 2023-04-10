@@ -37,9 +37,8 @@
                             </div>
                         </div>
                         <div class="col-lg-6 col-md-6 col-12 my-auto text-end">
-                            {{-- <a href="javascript:;" class="btn bg-gradient-info mb-0">Contact Us</a>
-                            <p class="text-sm mt-2 mb-0">Do you like the product? Leave us a review <a
-                                    href="javascript:;">here</a>.</p> --}}
+                            <p class="text-sm mt-2 mb-0">Order Pickup oleh {{ $order->pickups?->valet?->name }}</p>
+                            <p class="text-sm mt-2 mb-0">Order Delivery oleh {{ $order->deliveries?->valet?->name }} </p>
                         </div>
                     </div>
                     <hr class="horizontal dark mt-4 mb-4">
@@ -57,7 +56,7 @@
                                             @endif
                                         </span>
                                         <div class="timeline-content">
-                                            <h6 class="text-dark text-sm font-weight-bold mb-0">ORder status sedang dalam bla bla bala b{{ $status->status }}</h6>
+                                            <h6 class="text-dark text-sm font-weight-bold mb-0">Order Status {{ $status->status }}</h6>
 
                                             <p class="text-secondary font-weight-bold text-xs mt-1 mb-0">{{ $status?->created_at ?? 'Belum tahap ini' }}</p>
 
@@ -128,9 +127,19 @@
 
     <script>
         $(document).ready(function() {
+            let status = $('#currentStatus').val();
+            let nextStatus = $('#nextStatus').val();
+
             $('#btnProcessStatus').click(function() {
+                if (status == 'approve' || status == 'done' || status == 'pickup' || status == 'delivery') {
+                    $('#chooseValet').hide();
+                    $('#labelValet').hide();
+                } else {
+                    $('#labelValet').show();
+                    $('#chooseValet').show();
+                }
                 $('#modalProcessStatus').modal('show');
-                $('.modal-title').html('Apakah yakin ingin meneruskan ke proses selanjutnya?');
+                $('.modal-title').html(`Apakah yakin ingin meneruskan ke proses ${nextStatus}?`);
             });
 
             $('#saveBtn').click(function(e) {

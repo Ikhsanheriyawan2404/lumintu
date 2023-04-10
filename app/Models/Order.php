@@ -40,11 +40,11 @@ class Order extends Model
 
     public function pickups()
     {
-        return $this->hasMany(Pickup::class);
+        return $this->hasOne(Pickup::class);
     }
 
     public function deliveries()
     {
-        return $this->hasMany(Delivery::class);
+        return $this->hasOne(Delivery::class);
     }
 }

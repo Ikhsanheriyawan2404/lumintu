@@ -15,9 +15,14 @@ class Pickup extends Model
         'status',
         'date',
     ];
-    
+
     public function order()
     {
         return $this->belongsTo(Order::class);
+    }
+
+    public function valet()
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
 }
