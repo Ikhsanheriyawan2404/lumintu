@@ -103,6 +103,16 @@ class OrderController extends Controller
         ]);
     }
 
+    public function accOrder($orderId)
+    {
+        $order = Order::with('order_details.product_customer.product', 'order_status', 'customer')
+            ->findOrFail($orderId);
+
+        return view('admin.orders.acc-order', [
+            'order' => $order,
+        ]);
+    }
+
     public function getOrderDetails($orderId)
     {
         $order = Order::with('order_details.product_customer.product', 'order_status', 'customer')
@@ -149,6 +159,29 @@ class OrderController extends Controller
         $row[] = '<a class="btn btn-sm btn-outline-danger btn-icon removeProduct"><em class="fa fa-trash"></em></a>';
 
         return response()->json($row);
+    }
+
+    public function getProductEdit($orderId)
+    {
+        $orderDetails = BridgeOrderProduct::with('product_customer.product')->where('order_id', $orderId)->get();
+
+        $data = [];
+        foreach ($orderDetails as $product) {
+            $row = [];
+
+            $row[] = '<input name="product_id[]" type="hidden" value="' . $product->product_customer_id . '" class="form-control">' . $product->product_customer->product->name;
+
+            $row[] = '<input type="text" name="price[]" data-id="' . $product->product_customer_id . '" class="form-control price" value="' . number_format($product->product_customer->price, 0, ',', '.') . '" disabled>';
+
+            $row[] = '<input type="number" name="qty[]" data-id="' . $product->product_customer_id . '" class="form-control qty" value="'.$product->qty.'">';
+
+            $row[] = '<input type="text" name="subtotal[]" class="form-control subtotal" data-id="' . $product->product_customer_id . '" value="'.number_format($product->qty * $product->product_customer->price, 0, ',', '.').'" disabled>';
+
+            $row[] = '<a class="btn btn-sm btn-outline-danger btn-icon removeProduct"><em class="fa fa-trash"></em></a>';
+            $data[] = $row;
+        }
+
+        return response()->json($data);
     }
 
     public function store(OrderStoreRequest $request)
@@ -267,6 +300,72 @@ class OrderController extends Controller
         }
         return response()->json([
             'message' => 'Berhasil Mengubah Status Order',
+        ]);
+    }
+
+    public function accOrderByValet(OrderStoreRequest $request, $orderId)
+    {
+        try {
+
+            $request->validated();
+
+            DB::transaction(function () use ($orderId) {
+
+                $order = Order::findOrFail($orderId);
+                
+                $order->update([
+                    'status' => OrderStatusEnum::PICKUP,
+                ]);
+
+                // Change Order Status
+                OrderStatus::where('order_id', $order->id)
+                    ->where('status', OrderStatusEnum::PICKUP)
+                    ->update([
+                        'created_at' => now(),
+                    ]);
+
+                // Add new order details
+                $totalRequestItem = request('product_id');
+                if ($totalRequestItem == null) {
+                    throw new InvalidArgumentException('Barang tidak boleh kosong', 400);
+                } else {
+                    $totalPrice = 0;
+                    $order->order_details()->delete();
+                    for ($i = 0; $i < count($totalRequestItem); $i++) {
+
+                        $product = ProductCustomer::where('user_id', $order->customer_id)
+                            ->where('product_id', request('product_id')[$i])
+                            ->first();
+
+                        $data = [
+                            'order_id' => $order->id,
+                            'product_customer_id' => request('product_id')[$i],
+                            'qty' => request('qty')[$i],
+                        ];
+
+                        BridgeOrderProduct::create($data);
+
+                        $totalPrice += $product->price * $data['qty'];
+                    }
+                }
+
+                /**
+                 * Update All About Accumulated from purchase details
+                 * Why this proccess on the controller? cuz to avoid manipulate input in view from users
+                 */
+                $order->total_price = $totalPrice;
+                $order->save();
+            });
+
+        } catch (InvalidArgumentException $e) {
+
+            return response()->json([
+                'message' => $e->getMessage(),
+            ], $e->getCode());
+        }
+
+        return response()->json([
+            'message' => 'Berhasil Mengubah Order',
         ]);
     }
 }

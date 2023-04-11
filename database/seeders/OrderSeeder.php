@@ -61,7 +61,7 @@ class OrderSeeder extends Seeder
         $order = Order::create([
             'order_number' => '10002',
             'customer_id' => 4,
-            'total_price' => 12300,
+            'total_price' => 30000,
             'status' => 'pending',
             'created_at' => '2023-04-06 00:00:00',
         ]);

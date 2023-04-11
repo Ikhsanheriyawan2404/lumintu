@@ -29,21 +29,31 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::resource('products', ProductController::class);
     Route::resource('categories', CategoryController::class);
+
     Route::get('orders/product-datatables/{customerId}', [OrderController::class, 'productDatatables']);
     Route::get('orders/{productId}/product', [OrderController::class, 'getProduct']);
+    Route::get('orders/{orderId}/product-edit', [OrderController::class, 'getProductEdit']);
     Route::get('orders/{orderId}/details', [OrderController::class, 'getOrderDetails']);
-    Route::post('orders/{orderId}/change-status', [OrderController::class, 'changeOrderStatus'])->name('orders.changeOrderStatus');
+    Route::post('orders/{orderId}/change-status', [OrderController::class, 'changeOrderStatus'])
+        ->name('orders.changeOrderStatus');
+
+    Route::get('orders/{orderId}/acc-order', [OrderController::class, 'accOrder'])
+        ->name('orders.acc-order');
+    Route::post('orders/{orderId}/acc-order-proccess', [OrderController::class, 'accOrderByValet'])
+        ->name('orders.acc-order-process');
+
     Route::resource('orders', OrderController::class);
     Route::resource('users', UserController::class);
 
     Route::resource('valet', ValetController::class);
-    Route::get('hotel/{userId}/price-list-view', [HotelController::class, 'getPriceList'])->name('hotel.price-list.view');
+    Route::get('hotel/{userId}/price-list-view', [HotelController::class, 'getPriceList'])
+        ->name('hotel.price-list.view');
 
     Route::post('hotel/{userId}/price-list', [HotelController::class, 'updatePriceList'])->name('hotel.price-list');
 
     require __DIR__ . '/pegawai/pegawai.php';
 
-    
+
     Route::resource('hotel', HotelController::class);
     Route::resource('pegawai', PegawaiController::class);
 
