@@ -67,6 +67,21 @@ class UserSeeder extends Seeder
             'phone_number' => '08123456789',
         ]);
 
+        for ($i = 0; $i < 10; $i++) {
+            $user = User::create([
+                'name' => 'Hotel ' . $i,
+                'username' => fake()->unique()->safeEmail(),
+                'email' => fake()->unique()->safeEmail(),
+                'email_verified_at' => now(),
+                'password' => bcrypt('123'),
+            ])->assignRole('hotel');
+
+            $user->user_detail()->create([
+                'address' => 'Jl. Raya Cibaduyut',
+                'phone_number' => '08123456789',
+            ]);
+        }
+
         $user = User::create([
             'name' => 'Pegawai',
             'username' => 'pegawai',
@@ -80,5 +95,17 @@ class UserSeeder extends Seeder
             'phone_number' => '08123456789',
         ]);
 
+        $user = User::create([
+            'name' => 'Valet 2',
+            'username' => 'valet2',
+            'email' => 'valet2@gmail.com',
+            'email_verified_at' => now(),
+            'password' => bcrypt('123'),
+        ])->assignRole('valet');
+
+        $user->user_detail()->create([
+            'address' => 'Jl. Raya Cibaduyut',
+            'phone_number' => '08123456789',
+        ]);
     }
 }

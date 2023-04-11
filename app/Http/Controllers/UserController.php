@@ -3,13 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Product;
 use App\Models\UserDetail;
 use InvalidArgumentException;
+use App\Models\ProductCustomer;
 use App\DataTables\UserDataTable;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
-use App\Http\Requests\UserStoreRequest;
-use App\Http\Requests\UserUpdateRequest;
 
 class UserController extends Controller
 {
@@ -76,6 +76,18 @@ class UserController extends Controller
                         'address' => request('address'),
                         'phone_number' => request('phone_number'),
                     ]);
+
+                    if (request('role') == 'hotel') {
+                        // Buat price list dari user hotel tersebut
+                        $products = Product::get(['id', 'price']);
+                        foreach ($products as $product) {
+                            ProductCustomer::create([
+                                'user_id' => $user->id,
+                                'product_id' => $product->id,
+                                'price' => $product->price,
+                            ]);
+                        }
+                    }
                 }
 
             });

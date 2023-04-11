@@ -18,6 +18,7 @@
             </div>
         </div>
         <div class="modal-footer">
+            <button type="button" class="btn btn-sm btn-secondary float-right" data-bs-dismiss="modal" aria-label="Close">Close</button>
             <button type="submit" class="btn btn-sm btn-primary float-right" id="saveBtn">Simpan</button>
         </div>
         </form>

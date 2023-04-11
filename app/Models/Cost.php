@@ -8,4 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class Cost extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        'name',
+        'price',
+        'qty',
+        'description',
+        'date',
+        'user_id',
+    ];
 }

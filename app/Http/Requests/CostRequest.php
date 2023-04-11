@@ -25,7 +25,7 @@ class CostRequest extends FormRequest
     {
         return [
             'name' => 'required',
-            'price' => 'required|min:1',
+            'price' => 'required',
             'qty' => 'required|min:1'
         ];
     }
@@ -36,7 +36,6 @@ class CostRequest extends FormRequest
         return [
             'name.required' => 'Nama harus diisi',
             'price.required' => 'Harga harus diisi',
-            'price.min' => 'Harga minimal 1',
             'qty.min' => 'Kwantitas minimal 1',
         ];
     }

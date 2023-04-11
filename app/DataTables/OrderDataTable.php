@@ -24,10 +24,13 @@ class OrderDataTable extends DataTable
     {
         return (new EloquentDataTable($query))
             ->addIndexColumn()
+            ->editColumn('created_at', function ($row) {
+                return '<a href="javascript:void()" data-id="' .$row->id. '" id="showItem">'.$row->created_at.'</a>';
+            })
             ->addColumn('action', function ($row) {
                 return view('admin.orders.datatables.action', compact('row'))->render();
             })
-            ->rawColumns(['action']);
+            ->rawColumns(['action', 'created_at', 'check']);
     }
 
     /**
@@ -38,9 +41,7 @@ class OrderDataTable extends DataTable
      */
     public function query(Order $model): QueryBuilder
     {
-        return $model->newQuery()
-            ->orderBy('orders.created_at', 'desc')
-            ->with('supervisor', 'customer');
+        return $this->query;
     }
 
     /**
@@ -80,21 +81,25 @@ class OrderDataTable extends DataTable
                 ->width(30)
                 ->searchable(false)
                 ->orderable(false)
+                ->addClass("text-sm font-weight-normal")
                 ->addClass('text-center'),
-            Column::make('order_date')
+            Column::make('created_at')
+                ->addClass("text-sm font-weight-normal")
                 ->title('Tgl Order'),
-            Column::make('estimate_date')
-                ->title('Tgl Estimasi'),
             Column::make('total_price')
+                ->addClass("text-sm font-weight-normal")
                 ->title('Total'),
             Column::make('customer.name')
+                ->addClass("text-sm font-weight-normal")
                 ->title('Pelanggan'),
-            Column::make('supervisor.name')
-                ->title('Supervisor'),
+            Column::make('status')
+                ->addClass("text-sm font-weight-normal")
+                ->title('Status'),
             Column::computed('action')
                 ->exportable(false)
                 ->printable(false)
                 ->width(30)
+                ->addClass("text-sm font-weight-normal")
                 ->addClass('text-center'),
         ];
     }

@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Product;
 use App\Models\Category;
 use InvalidArgumentException;
+use App\Models\ProductCustomer;
 use Illuminate\Support\Facades\DB;
 use App\DataTables\ProductsDataTable;
 use App\Http\Requests\ProductRequest;
@@ -34,7 +36,19 @@ class ProductController extends Controller
 
                 $product = $request->validated();
 
-                Product::updateOrCreate(['id' => $itemId], $product);
+                $product = Product::updateOrCreate(['id' => $itemId], $product);
+
+                // Jika tambah barang maka otomatis tambahkan ke semua hotel
+                if (! $itemId) {
+                    $users = User::role('hotel')->get(['id']);
+                    foreach ($users as $user) {
+                        ProductCustomer::create([
+                            'user_id' => $user->id,
+                            'product_id' => $product->id,
+                            'price' => $product->price,
+                        ]);
+                    }
+                }
 
             });
         } catch (InvalidArgumentException $e) {

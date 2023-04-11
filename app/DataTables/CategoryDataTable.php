@@ -78,13 +78,16 @@ class CategoryDataTable extends DataTable
                 ->width(30)
                 ->searchable(false)
                 ->orderable(false)
+                ->addClass("text-sm font-weight-normal")
                 ->addClass('text-center'),
             Column::make('name')
+                ->addClass("text-sm font-weight-normal")
                 ->title('Nama'),
             Column::computed('action')
                 ->exportable(false)
                 ->printable(false)
                 ->width(30)
+                ->addClass("text-sm font-weight-normal")
                 ->addClass('text-center'),
         ];
     }
