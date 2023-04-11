@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Order;
 use App\Enums\OrderStatusEnum;
 use App\Models\Delivery;
+use App\Models\OrderStatus;
 use App\Models\Pickup;
 use Illuminate\Database\Seeder;
 
@@ -35,12 +36,7 @@ class OrderSeeder extends Seeder
             'qty' => 5,
         ]);
 
-        foreach (OrderStatusEnum::values() as $status) {
-            $order->order_status()->create([
-                'order_id' => $order->id,
-                'status' => $status,
-            ]);
-        }
+
 
         Pickup::create([
             'order_id' => $order->id,
@@ -76,18 +72,19 @@ class OrderSeeder extends Seeder
             'qty' => 5,
         ]);
 
-        foreach (OrderStatusEnum::values() as $status) {
-            if ($status == OrderStatusEnum::PENDING) {
-                $order->order_status()->create([
-                    'order_id' => $order->id,
-                    'status' => $status,
-                ]);
-            } else {
-                $order->order_status()->insert([
-                    'order_id' => $order->id,
-                    'status' => $status,
-                ]);
-            }
-        }
+        OrderStatus::factory()->count(12)->sequence(
+            ['order_id' => 1, 'status' => 'pending'],
+            ['order_id' => 1, 'status' => 'approve'],
+            ['order_id' => 1, 'status' => 'pickup'],
+            ['order_id' => 1, 'status' => 'process'],
+            ['order_id' => 1, 'status' => 'delivery'],
+            ['order_id' => 1, 'status' => 'done'],
+            ['order_id' => 2, 'status' => 'pending'],
+            ['order_id' => 2, 'status' => 'approve'],
+            ['order_id' => 2, 'status' => 'pickup'],
+            ['order_id' => 2, 'status' => 'process'],
+            ['order_id' => 2, 'status' => 'delivery'],
+            ['order_id' => 2, 'status' => 'done'],
+        )->create();
     }
 }
