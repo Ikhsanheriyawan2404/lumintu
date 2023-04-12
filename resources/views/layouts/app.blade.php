@@ -23,6 +23,7 @@
     <!-- CSS Files -->
     <link id="pagestyle" href="{{ asset('assets/admin/css/argon-dashboard.css?v=2.0.4') }}" rel="stylesheet" />
     @stack('custom-styles')
+    @stack('print-styles')
 
 </head>
 

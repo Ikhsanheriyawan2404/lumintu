@@ -145,7 +145,7 @@
                             Valet2
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row bukti">
                         <div class="col-md-4">
                             <h6 class="card-title">Bukti Pembayaran</h6>
                         </div>
@@ -196,3 +196,33 @@
         </div>
     </div>
 @endsection
+
+@push('print-styles')
+    <style>
+        @media print {
+            .btn {
+                display: none;
+            }
+
+            .fixed-plugin {
+                display: none;
+            }
+
+            .navbar {
+                display: none;
+            }
+
+            .card-header img {
+                height: 50px;
+            }
+
+            .footer {
+                display: none;
+            }
+
+            .bukti {
+                display: none;
+            }
+        }
+    </style>
+@endpush
