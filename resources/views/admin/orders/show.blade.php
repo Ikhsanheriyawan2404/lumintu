@@ -4,12 +4,12 @@
     <div class="row">
         <div class="col-12">
             <div class="card my-5">
-                <div class="card-header p-3 pb-0">
+                <div class="card-header p-4 pb-0">
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
                             <h6>Order Details</h6>
                             <p class="text-sm mb-0">
-                                Order no. <b>241342</b> from <b>{{ $order->created_at }}</b>
+                                Order no. <b>{{ $order->order_number }}</b> from <b>{{ $order->created_at }}</b>
                             </p>
                             <p class="text-sm">
                                 Total : <b><i>Rp {{ number_format($order->total_price) }}</i></b>
@@ -18,7 +18,7 @@
                         <a href="{{ route('orders.index', []) }}" class="btn bg-gradient-secondary ms-auto mb-0">Kembali</a>
                     </div>
                 </div>
-                <div class="card-body p-3 pt-0">
+                <div class="card-body p-4 pt-0">
                     <hr class="horizontal dark mt-0 mb-4">
                     <div class="row">
                         <div class="col-lg-6 col-md-6 col-12">
@@ -29,10 +29,13 @@
                                 </div>
                                 <div>
                                     <h6 class="text-lg mb-0 mt-2">{{ $order->customer->name }}</h6>
-                                    <p class="text-sm mb-3">Order was {{ $order->status }} {{ $order->created_at->diffForHumans() }}</p>
-                                    Order Proses Status : <span class="badge badge-sm bg-gradient-success">{{ $order->status }}</span>
+                                    <p class="text-sm mb-3">Order was {{ $order->status }}
+                                        {{ $order->created_at->diffForHumans() }}</p>
+                                    Order Proses Status : <span
+                                        class="badge badge-sm bg-gradient-success">{{ $order->status }}</span>
                                     <br>
-                                    Order Pembayaran Status : <span class="badge badge-sm bg-gradient-primary">{{ $order->payment_status }}</span>
+                                    Order Pembayaran Status : <span
+                                        class="badge badge-sm bg-gradient-primary">{{ $order->payment_status }}</span>
                                 </div>
                             </div>
                         </div>
@@ -56,11 +59,16 @@
                                             @endif
                                         </span>
                                         <div class="timeline-content">
-                                            <h6 class="text-dark text-sm font-weight-bold mb-0">Order Status {{ $status->status }}</h6>
+                                            <h6 class="text-dark text-sm font-weight-bold mb-0">Order Status
+                                                {{ $status->status }}</h6>
 
-                                            <p class="text-secondary font-weight-bold text-xs mt-1 mb-0">{{ $status?->created_at ?? 'Belum tahap ini' }}</p>
+                                            <p class="text-secondary font-weight-bold text-xs mt-1 mb-0">
+                                                {{ $status?->created_at ?? 'Belum tahap ini' }}</p>
 
-                                            @if($status->status == $order->status && $order->status->value != 'done' && auth()->user()->hasRole('superadmin|admin'))
+                                            @if (
+                                                $status->status == $order->status &&
+                                                    $order->status->value != 'done' &&
+                                                    auth()->user()->hasRole('superadmin|admin'))
                                                 <button class="btn btn-sm btn-primary" id="btnProcessStatus">Proses</button>
                                             @endif
                                         </div>
@@ -70,8 +78,7 @@
                         </div>
                         <div class="col-lg-9 col-md-6 col-12">
                             <h6 class="mb-3">Barang detail</h6>
-                            <div
-                                class="card card-body border card-plain border-radius-lg d-flex flex-row table-responsive">
+                            <div class="card card-body border card-plain border-radius-lg d-flex flex-row table-responsive">
                                 <table class="table">
                                     <thead>
                                         <tr>
@@ -85,11 +92,15 @@
                                     <tbody>
                                         @foreach ($order->order_details as $row)
                                             <tr>
-                                                <td class="text-sm font-weight-normal text-center">{{ $loop->iteration }}</td>
-                                                <td class="text-sm font-weight-normal">{{ $row->product_customer->product->name }}</td>
-                                                <td class="text-sm font-weight-normal">{{ number_format($row->product_customer->price) }}</td>
+                                                <td class="text-sm font-weight-normal text-center">{{ $loop->iteration }}
+                                                </td>
+                                                <td class="text-sm font-weight-normal">
+                                                    {{ $row->product_customer->product->name }}</td>
+                                                <td class="text-sm font-weight-normal">
+                                                    {{ number_format($row->product_customer->price) }}</td>
                                                 <td class="text-sm font-weight-normal">{{ number_format($row->qty) }}</td>
-                                                <td class="text-sm font-weight-normal">{{ number_format($row->qty * $row->product_customer->price) }}</td>
+                                                <td class="text-sm font-weight-normal">
+                                                    {{ number_format($row->qty * $row->product_customer->price) }}</td>
                                             </tr>
                                         @endforeach
                                     </tbody>
@@ -103,7 +114,6 @@
     </div>
 
     @include('admin.orders.modals.processStatus')
-
 @endsection
 
 @push('custom-styles')
