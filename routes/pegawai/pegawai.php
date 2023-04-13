@@ -1,4 +1,6 @@
 <?php
+
+use App\Http\Controllers\CostController;
 use App\Http\Controllers\PegawaiController;
 use Illuminate\Support\Facades\Route;
 
@@ -8,4 +10,7 @@ Route::controller(PegawaiController::class)->prefix('pegawai')->group(function (
     Route::get('/{id}', ['edit']);
     Route::post('/{id}', ['update']);
 });
+
+Route::resource('cost', CostController::class);
+
 

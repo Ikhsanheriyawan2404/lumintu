@@ -3,8 +3,8 @@
 @section('content')
     <div class="row">
         <div class="col-12">
-            <div class="card h-100">
-                <div class="card-header pb-0 p-3">
+            <div class="card">
+                <div class="card-header">
                     <div class="row">
                         <div class="col-6 d-flex align-items-center">
                             <h6 class="mb-0">Barang</h6>
@@ -14,8 +14,10 @@
                         </div>
                     </div>
                 </div>
-                <div class="card-body p-3 pb-0">
-                    {{ $dataTable->table(['class' => 'table table-sm table-bordered display responsive nowrap', 'width' => '100%']) }}
+                <div class="card-body">
+                    <div class="table-responsive">
+                        {{ $dataTable->table(['class' => 'table align-items-center display responsive nowrap', 'width' => '100%']) }}
+                    </div>
                 </div>
             </div>
         </div>

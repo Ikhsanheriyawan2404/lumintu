@@ -15,24 +15,10 @@ class CategorySeeder extends Seeder
      */
     public function run()
     {
-        Category::create([
-            'name' => 'Room Linen',
-            // 'status' => 'Active'
-        ]);
-
-        Category::create([
-            'name' => 'Room Food and Beverage',
-            // 'status' => 'Active'
-        ]);
-
-        Category::create([
-            'name' => 'Uniform',
-            // 'status' => 'Active'
-        ]);
-
-        Category::create([
-            'name' => 'Pakaian',
-            // 'status' => 'Active'
-        ]);
+        Category::factory()->count(3)->sequence(
+            ['name' => 'ROOM LINEN PRICE LIST'],
+            ['name' => 'ROOM FOOD AND BEVERAGE PRICE LIST'],
+            ['name' => 'UNIFORM PRICE LIST'],
+        )->create();
     }
 }

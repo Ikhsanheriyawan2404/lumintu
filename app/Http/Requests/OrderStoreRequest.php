@@ -24,7 +24,6 @@ class OrderStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'customer_id' => 'required|exists:users,id',
             'product_id' => 'required|array',
             'product_id.*' => 'required|exists:products,id',
             'qty' => 'required|array',
@@ -35,16 +34,14 @@ class OrderStoreRequest extends FormRequest
     public function messages()
     {
         return [
-            'customer_id.required' => 'Customer harus diisi',
-            'customer_id.exists' => 'Customer tidak ditemukan',
             'product_id.required' => 'Produk harus diisi',
             'product_id.array' => 'Produk harus berupa array',
             'product_id.*.required' => 'Produk harus diisi',
             'product_id.*.exists' => 'Produk tidak ditemukan',
-            'qty.required' => 'Jumlah harus diisi',
-            'qty.array' => 'Jumlah harus berupa array',
-            'qty.*.required' => 'Jumlah harus diisi',
-            'qty.*.numeric' => 'Jumlah harus berupa angka',
+            'qty.required' => 'Kuantitas harus diisi',
+            'qty.array' => 'Kuantitas harus berupa array',
+            'qty.*.required' => 'Kuantitas harus diisi',
+            'qty.*.numeric' => 'Kuantitas harus berupa angka',
         ];
     }
 }

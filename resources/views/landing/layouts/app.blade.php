@@ -1,106 +1,156 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <meta name="description" content="" />
-        <meta name="author" content="" />
-        <title>Lumintu SIP</title>
-        <link rel="icon" type="image/x-icon" href="{{ asset('assets/img/logo.png') }}" />
-        <!-- Bootstrap icons-->
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
-        <!-- Font Awesome Icons -->
-        <link rel="stylesheet" href="{{ asset('assets/icons/css/fontawesome.css') }}">
-        <link rel="stylesheet" href="{{ asset('assets/icons/css/solid.css') }}">
-        <link rel="stylesheet" href="{{ asset('assets/icons/css/brands.css') }}">
-        <!-- Google fonts-->
-        <link rel="preconnect" href="https://fonts.gstatic.com" />
-        <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,600;1,600&amp;display=swap" rel="stylesheet" />
-        <link href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,300;0,500;0,600;0,700;1,300;1,500;1,600;1,700&amp;display=swap" rel="stylesheet" />
-        <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,400;1,400&amp;display=swap" rel="stylesheet" />
-        <!-- Core theme CSS (includes Bootstrap)-->
-        <link href="{{ asset('assets/landing/css/styles.css') }}" rel="stylesheet" />
-    </head>
-    <body id="page-top">
-        {{-- Navbar --}}
-        @include('landing.layouts.navbar')
+<!doctype html>
+<html class="no-js" lang="en">
 
-        {{-- Content --}}
-        @yield('content')
+<head>
+    <meta charset="utf-8">
 
-        {{-- Footer --}}
-        @include('landing.layouts.footer')
-        
-        <!-- Feedback Modal-->
-        <div class="modal fade" id="feedbackModal" tabindex="-1" aria-labelledby="feedbackModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header bg-gradient-primary-to-secondary p-4">
-                        <h5 class="modal-title font-alt text-white" id="feedbackModalLabel">Send feedback</h5>
-                        <button class="btn-close btn-close-white" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body border-0 p-4">
-                        <!-- * * * * * * * * * * * * * * *-->
-                        <!-- * * SB Forms Contact Form * *-->
-                        <!-- * * * * * * * * * * * * * * *-->
-                        <!-- This form is pre-integrated with SB Forms.-->
-                        <!-- To make this form functional, sign up at-->
-                        <!-- https://startbootstrap.com/solution/contact-forms-->
-                        <!-- to get an API token!-->
-                        <form id="contactForm" data-sb-form-api-token="API_TOKEN">
-                            <!-- Name input-->
-                            <div class="form-floating mb-3">
-                                <input class="form-control" id="name" type="text" placeholder="Enter your name..." data-sb-validations="required" />
-                                <label for="name">Full name</label>
-                                <div class="invalid-feedback" data-sb-feedback="name:required">A name is required.</div>
-                            </div>
-                            <!-- Email address input-->
-                            <div class="form-floating mb-3">
-                                <input class="form-control" id="email" type="email" placeholder="name@example.com" data-sb-validations="required,email" />
-                                <label for="email">Email address</label>
-                                <div class="invalid-feedback" data-sb-feedback="email:required">An email is required.</div>
-                                <div class="invalid-feedback" data-sb-feedback="email:email">Email is not valid.</div>
-                            </div>
-                            <!-- Phone number input-->
-                            <div class="form-floating mb-3">
-                                <input class="form-control" id="phone" type="tel" placeholder="(123) 456-7890" data-sb-validations="required" />
-                                <label for="phone">Phone number</label>
-                                <div class="invalid-feedback" data-sb-feedback="phone:required">A phone number is required.</div>
-                            </div>
-                            <!-- Message input-->
-                            <div class="form-floating mb-3">
-                                <textarea class="form-control" id="message" type="text" placeholder="Enter your message here..." style="height: 10rem" data-sb-validations="required"></textarea>
-                                <label for="message">Message</label>
-                                <div class="invalid-feedback" data-sb-feedback="message:required">A message is required.</div>
-                            </div>
-                            <!-- Submit success message-->
-                            <!---->
-                            <!-- This is what your users will see when the form-->
-                            <!-- has successfully submitted-->
-                            <div class="d-none" id="submitSuccessMessage">
-                                <div class="text-center mb-3">
-                                    <div class="fw-bolder">Form submission successful!</div>
-                                    To activate this form, sign up at
-                                    <br />
-                                    <a href="https://startbootstrap.com/solution/contact-forms">https://startbootstrap.com/solution/contact-forms</a>
-                                </div>
-                            </div>
-                            <!-- Submit error message-->
-                            <!---->
-                            <!-- This is what your users will see when there is-->
-                            <!-- an error submitting the form-->
-                            <div class="d-none" id="submitErrorMessage"><div class="text-center text-danger mb-3">Error sending message!</div></div>
-                            <!-- Submit Button-->
-                            <div class="d-grid"><button class="btn btn-primary rounded-pill btn-lg disabled" id="submitButton" type="submit">Submit</button></div>
-                        </form>
+    <!--====== Title ======-->
+    <title>CV. Lumintu SIP</title>
+
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!--====== Favicon Icon ======-->
+    <link rel="shortcut icon" href="{{ asset('assets/img/logo.png') }}" type="image/png">
+
+    <!--====== Animate CSS ======-->
+    <link rel="stylesheet" href="{{ asset('assets/landing/css/animate.css') }}">
+
+    <!--====== Magnific Popup CSS ======-->
+    <link rel="stylesheet" href="{{ asset('assets/landing/css/magnific-popup.css') }}">
+
+    <!--====== Slick CSS ======-->
+    <link rel="stylesheet" href="{{ asset('assets/landing/css/slick.css') }}">
+
+    <!--====== Line Icons CSS ======-->
+    <link rel="stylesheet" href="{{ asset('assets/landing/css/LineIcons.css') }}">
+
+    <!--====== Font Awesome CSS ======-->
+    <link rel="stylesheet" href="{{ asset('assets/landing/css/font-awesome.min.css') }}">
+
+    <!--====== Bootstrap CSS ======-->
+    <link rel="stylesheet" href="{{ asset('assets/landing/css/bootstrap.min.css') }}">
+
+    <!--====== Default CSS ======-->
+    <link rel="stylesheet" href="{{ asset('assets/landing/css/default.css') }}">
+
+    <!--====== Style CSS ======-->
+    <link rel="stylesheet" href="{{ asset('assets/landing/css/style.css') }}">
+
+</head>
+
+<body>
+    <!--[if IE]>
+    <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
+  <![endif]-->
+
+
+    <!--====== PRELOADER PART START ======-->
+
+    <div class="preloader">
+        <div class="loader">
+            <div class="ytp-spinner">
+                <div class="ytp-spinner-container">
+                    <div class="ytp-spinner-rotator">
+                        <div class="ytp-spinner-left">
+                            <div class="ytp-spinner-circle"></div>
+                        </div>
+                        <div class="ytp-spinner-right">
+                            <div class="ytp-spinner-circle"></div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- Bootstrap core JS-->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-        <!-- Core theme JS-->
-        <script src="{{ asset('assets/landing/js/scripts.js') }}"></script>
-        <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
-    </body>
+    </div>
+
+    <!--====== PRELOADER PART ENDS ======-->
+
+    <!--====== HEADER PART START ======-->
+
+    <header class="header-area">
+        <div class="navbar-area">
+            @include('landing.layouts.navbar')
+        </div>
+
+        <div id="home" class="header-hero bg_cover"
+            style="background-image: url({{ asset('assets/landing/images/banner-bg.svg') }})">
+            @include('landing.layouts.header')
+        </div> <!-- header hero -->
+    </header>
+
+    <!--====== HEADER PART ENDS ======-->
+
+    @yield('content')
+
+    <!--====== FOOTER PART START ======-->
+
+    <footer id="footer" class="footer-area pt-120">
+        @include('landing.layouts.footer')
+    </footer>
+
+    <!--====== FOOTER PART ENDS ======-->
+
+    <!--====== BACK TOP TOP PART START ======-->
+
+    <a href="#" class="back-to-top"><i class="lni-chevron-up"></i></a>
+
+    <!--====== BACK TOP TOP PART ENDS ======-->
+
+    <!--====== PART START ======-->
+
+    <!--
+    <section class="">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-"></div>
+            </div>
+        </div>
+    </section>
+-->
+
+    <!--====== PART ENDS ======-->
+
+
+
+
+    <!--====== Jquery js ======-->
+    <script src="{{ asset('assets/landing/js/vendor/jquery-1.12.4.min.js') }}"></script>
+    <script src="{{ asset('assets/landing/js/vendor/modernizr-3.7.1.min.js') }}"></script>
+
+    <!--====== Bootstrap js ======-->
+    <script src="{{ asset('assets/landing/js/popper.min.js') }}"></script>
+    <script src="{{ asset('assets/landing/js/bootstrap.min.js') }}"></script>
+
+    <!--====== Plugins js ======-->
+    <script src="{{ asset('assets/landing/js/plugins.js') }}"></script>
+
+    <!--====== Slick js ======-->
+    <script src="{{ asset('assets/landing/js/slick.min.js') }}"></script>
+
+    <!--====== Ajax Contact js ======-->
+    <script src="{{ asset('assets/landing/js/ajax-contact.js') }}"></script>
+
+    <!--====== Counter Up js ======-->
+    <script src="{{ asset('assets/landing/js/waypoints.min.js') }}"></script>
+    <script src="{{ asset('assets/landing/js/jquery.counterup.min.js') }}"></script>
+
+    <!--====== Magnific Popup js ======-->
+    <script src="{{ asset('assets/landing/js/jquery.magnific-popup.min.js') }}"></script>
+
+    <!--====== Scrolling Nav js ======-->
+    <script src="{{ asset('assets/landing/js/jquery.easing.min.js') }}"></script>
+    <script src="{{ asset('assets/landing/js/scrolling-nav.js') }}"></script>
+
+    <!--====== wow js ======-->
+    <script src="{{ asset('assets/landing/js/wow.min.js') }}"></script>
+
+    <!--====== Particles js ======-->
+    <script src="{{ asset('assets/landing/js/particles.min.js') }}"></script>
+
+    <!--====== Main js ======-->
+    <script src="{{ asset('assets/landing/js/main.js') }}"></script>
+
+</body>
+
 </html>

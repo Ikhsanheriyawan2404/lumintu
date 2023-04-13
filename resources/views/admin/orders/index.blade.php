@@ -9,13 +9,13 @@
                         <div class="col-6 d-flex align-items-center">
                             <h6 class="mb-0">Order/Pesanan</h6>
                         </div>
-                        <div class="col-6 text-end">
+                        {{-- <div class="col-6 text-end">
                             <a href="{{ route('orders.create', []) }}" class="btn btn-outline-primary btn-sm mb-0">Tambah</a>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
                 <div class="card-body p-3 pb-0">
-                    {{ $dataTable->table(['class' => 'table table-sm table-bordered display responsive nowrap', 'width' => '100%']) }}
+                    {{ $dataTable->table(['class' => 'table align-items-center display responsive nowrap', 'width' => '100%']) }}
                 </div>
             </div>
         </div>
@@ -49,9 +49,23 @@
     <script>
         $(document).ready(function() {
 
+
+            // setInterval(() => {
+            //     let table = $('#order-table').DataTable();
+            //     let totalRowData = table.rows().count();
+            //     console.log(totalRowData)
+            //     // table.draw();
+            //     let newTable = $('#order-table').DataTable();
+            //     let newTotalRowData = newTable.rows().count();
+            //     console.log(newTotalRowData)
+            //     if (newTotalRowData > totalRowData) {
+            //         toastr.success('Data berhasil diupdate');
+            //     }
+            // }, 2000);
+
             $('body').on('click', '#showItem', function() {
                 var item_id = $(this).data('id');
-                $.get("{{ route('orders.index') }}" + '/' + item_id, function(data) {
+                $.get("{{ route('orders.index') }}" + '/' + item_id + '/details', function(data) {
                     $('#modal-md').modal('show');
                     $('#total_price').html(`Total : ${data.total_price}`);
                     $('#order_date').html(`Tgl Order : ${data.order_date}`);
