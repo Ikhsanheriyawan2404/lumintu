@@ -48,7 +48,7 @@ class PaymentController extends Controller
         ]);
     }
 
-    public function accPayment(Order $order)
+    public function approvePayment(Order $order)
     {
         $order->update([
             'payment_status' => 'paid'

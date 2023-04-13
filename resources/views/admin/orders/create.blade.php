@@ -177,7 +177,7 @@
                             title: 'Success',
                             text: data.message,
                         });
-                        // window.location.href = "{{ route('orders.index') }}";
+                        window.location.href = "{{ route('orders.index') }}";
                     },
                     error: function(response) {
                         const data = response.responseJSON;

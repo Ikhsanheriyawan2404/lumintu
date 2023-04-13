@@ -15,11 +15,14 @@ use App\DataTables\OrderDataTable;
 use App\Models\BridgeOrderProduct;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use App\Notifications\OrderStatusNotif;
 use App\Http\Requests\OrderStoreRequest;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Facades\Notification;
 
 class OrderController extends Controller
 {
+    // Data order berdasarkan user login
     public function index(OrderDataTable $dataTable)
     {
         if (auth()->user()->hasRole('hotel')) {
@@ -105,6 +108,7 @@ class OrderController extends Controller
         ]);
     }
 
+    // Halaman acc order dari valet
     public function accOrder($orderId)
     {
         $order = Order::with('order_details.product_customer.product', 'order_status', 'customer')
@@ -115,6 +119,7 @@ class OrderController extends Controller
         ]);
     }
 
+    // Halaman detail order
     public function getOrderDetails($orderId)
     {
         $order = Order::with('order_details.product_customer.product', 'order_status', 'customer')
@@ -123,11 +128,13 @@ class OrderController extends Controller
         return response()->json($order);
     }
 
+    // Halaman create order dari user hotel
     public function create()
     {
         return view('admin.orders.create');
     }
 
+    // list barang dari setiap customer/user hotel
     public function productDatatables($customerId)
     {
         if (request()->ajax()) {
@@ -144,6 +151,7 @@ class OrderController extends Controller
         }
     }
 
+    // POST membuat order
     public function store(OrderStoreRequest $request)
     {
         try {
@@ -210,8 +218,22 @@ class OrderController extends Controller
                 $order->total_price = $totalPrice;
                 $order->save();
 
-                // Send Email OrderCreated
-                $order = Order::find($order->id);
+
+                // Send Email OrderCreated And Norificacation Via database
+                $order = Order::with('order_status')->find($order->id);
+                $listUsersWhoGetNotifications = [];
+                foreach (User::whereHas('roles', function ($q) {
+                        $q->where('name', 'superadmin');
+                        $q->orWhere('name', 'admin');
+                    })->get() as $user) {
+                    $listUsersWhoGetNotifications[] = $user;
+                }
+
+                $listUsersWhoGetNotifications[] = User::find($order->customer_id);
+
+                $users = collect($listUsersWhoGetNotifications);
+
+                Notification::send($users, new OrderStatusNotif($order));
                 Mail::to('ikhsanheriyawan2404@gmail.com')->queue(new OrderNotification($order));
             });
 
@@ -227,48 +249,78 @@ class OrderController extends Controller
         ]);
     }
 
+    // Merubah order status by admin
     public function changeOrderStatus($orderId)
     {
-        $order = Order::findOrFail($orderId);
-        $currentOrderStatus = $order->status;
-        $statuses = OrderStatusEnum::values();
-        $currentIndex = array_search($currentOrderStatus, $statuses);
+        try {
 
-        if ($currentIndex !== false && isset($statuses[$currentIndex + 1])) {
-            $nextOrderStatus = $statuses[$currentIndex + 1];
+            DB::transaction(function () use ($orderId) {
+
+                $order = Order::with('order_status')->findOrFail($orderId);
+                $currentOrderStatus = $order->status;
+                $statuses = OrderStatusEnum::values();
+                $currentIndex = array_search($currentOrderStatus, $statuses);
+
+                if ($currentIndex !== false && isset($statuses[$currentIndex + 1])) {
+                    $nextOrderStatus = $statuses[$currentIndex + 1];
+                }
+
+                $order->status = $nextOrderStatus;
+                $order->save();
+
+                $order->order_status()->where('status', $nextOrderStatus)->update([
+                    'created_at' => now(),
+                ]);
+
+                $listUsersWhoGetNotifications = [];
+                foreach (User::whereHas('roles', function ($q) {
+                        $q->where('name', 'superadmin');
+                        $q->orWhere('name', 'admin');
+                    })->get() as $user) {
+                    $listUsersWhoGetNotifications[] = $user;
+                }
+
+                $listUsersWhoGetNotifications[] = User::find($order->customer_id);
+
+                if (request('chooseValet')) {
+                    if ($nextOrderStatus == OrderStatusEnum::APPROVE) {
+
+                        Pickup::create([
+                            'order_id' => $order->id,
+                            'user_id' => request('chooseValet'),
+                            'status' => 'undone',
+                            'date' => date('Y-m-d')
+                        ]);
+                    } elseif ($nextOrderStatus == OrderStatusEnum::DELIVERY) {
+
+                        Delivery::create([
+                            'order_id' => $order->id,
+                            'user_id' => request('chooseValet'),
+                            'status' => 'undone',
+                            'date' => date('Y-m-d')
+                        ]);
+                    }
+                    $listUsersWhoGetNotifications[] = User::find(request('chooseValet'));
+                    Mail::to(User::find(request('chooseValet'))->email)->queue(new OrderNotification($order));
+                }
+
+                $order = Order::with('order_status')->find($order->id);
+                $users = collect($listUsersWhoGetNotifications);
+                Notification::send($users, new OrderStatusNotif($order));
+                Mail::to(request($order->customer_id))->queue(new OrderNotification($order));
+            });
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+            ], $e->getCode());
         }
 
-        $order->status = $nextOrderStatus;
-        $order->save();
-
-        $order->order_status()->where('status', $nextOrderStatus)->update([
-            'created_at' => now(),
-        ]);
-
-        if (request('chooseValet')) {
-            if ($nextOrderStatus == OrderStatusEnum::APPROVE) {
-
-                Pickup::create([
-                    'order_id' => $order->id,
-                    'user_id' => request('chooseValet'),
-                    'status' => 'undone',
-                    'date' => date('Y-m-d')
-                ]);
-            } elseif ($nextOrderStatus == OrderStatusEnum::DELIVERY) {
-
-                Delivery::create([
-                    'order_id' => $order->id,
-                    'user_id' => request('chooseValet'),
-                    'status' => 'undone',
-                    'date' => date('Y-m-d')
-                ]);
-            }
-        }
         return response()->json([
             'message' => 'Berhasil Mengubah Status Order',
         ]);
     }
 
+    // Cek order/Update order by Valet
     public function accOrderByValet(OrderStoreRequest $request, $orderId)
     {
         try {
@@ -322,7 +374,20 @@ class OrderController extends Controller
                 $order->total_price = $totalPrice;
                 $order->save();
 
-                $order = Order::find($order->id);
+                $order = Order::with('order_status')->find($order->id);
+                $listUsersWhoGetNotifications = [];
+                foreach (User::whereHas('roles', function ($q) {
+                        $q->where('name', 'superadmin');
+                        $q->orWhere('name', 'admin');
+                    })->get() as $user) {
+                    $listUsersWhoGetNotifications[] = $user;
+                }
+
+                $listUsersWhoGetNotifications[] = User::find($order->customer_id);
+
+                $users = collect($listUsersWhoGetNotifications);
+
+                Notification::send($users, new OrderStatusNotif($order));
                 Mail::to($order->customer->email)->queue(new OrderNotification($order));
             });
 
@@ -339,6 +404,7 @@ class OrderController extends Controller
     }
 
 
+    // Json response list input product
     public function getProduct($productCustomerId)
     {
         $product = ProductCustomer::with('product')->findOrFail($productCustomerId);
@@ -358,6 +424,7 @@ class OrderController extends Controller
         return response()->json($row);
     }
 
+    // Json response list input product with the data
     public function getProductEdit($orderId)
     {
         $orderDetails = BridgeOrderProduct::with('product_customer.product')->where('order_id', $orderId)->get();
