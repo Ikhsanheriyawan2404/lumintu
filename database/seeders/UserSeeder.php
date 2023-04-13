@@ -57,7 +57,7 @@ class UserSeeder extends Seeder
         $user = User::create([
             'name' => 'Hotel Indah',
             'username' => 'hotelindah',
-            'email' => 'hotel@gmail.com',
+            'email' => 'ikhsanheriyawan2404@gmail.com',
             'email_verified_at' => now(),
             'password' => bcrypt('123'),
         ])->assignRole('hotel');
