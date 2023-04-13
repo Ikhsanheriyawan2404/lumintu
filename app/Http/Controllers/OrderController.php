@@ -5,15 +5,17 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Order;
 use App\Models\Pickup;
+use App\Models\Delivery;
 use App\Models\OrderStatus;
 use InvalidArgumentException;
-use App\Models\ProductCustomer;
 use App\Enums\OrderStatusEnum;
+use App\Mail\OrderNotification;
+use App\Models\ProductCustomer;
 use App\DataTables\OrderDataTable;
 use App\Models\BridgeOrderProduct;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use App\Http\Requests\OrderStoreRequest;
-use App\Models\Delivery;
 use Yajra\DataTables\Facades\DataTables;
 
 class OrderController extends Controller
@@ -142,48 +144,6 @@ class OrderController extends Controller
         }
     }
 
-    public function getProduct($productCustomerId)
-    {
-        $product = ProductCustomer::with('product')->findOrFail($productCustomerId);
-
-        $row = [];
-
-        $row[] = '<input name="product_id[]" type="hidden" value="' . $product->product_id . '" class="form-control">' . $product->product->name;
-
-        $row[] = '<input type="text" name="price[]" data-id="' . $product->product_id . '" class="form-control price" value="' . number_format($product->price, 0, ',', '.') . '" disabled>';
-
-        $row[] = '<input type="number" name="qty[]" data-id="' . $product->product_id . '" class="form-control qty" value="0">';
-
-        $row[] = '<input type="text" name="subtotal[]" class="form-control subtotal" data-id="' . $product->product_id . '" value="0" disabled>';
-
-        $row[] = '<a class="btn btn-sm btn-outline-danger btn-icon removeProduct"><em class="fa fa-trash"></em></a>';
-
-        return response()->json($row);
-    }
-
-    public function getProductEdit($orderId)
-    {
-        $orderDetails = BridgeOrderProduct::with('product_customer.product')->where('order_id', $orderId)->get();
-
-        $data = [];
-        foreach ($orderDetails as $product) {
-            $row = [];
-
-            $row[] = '<input name="product_id[]" type="hidden" value="' . $product->product_customer_id . '" class="form-control">' . $product->product_customer->product->name;
-
-            $row[] = '<input type="text" name="price[]" data-id="' . $product->product_customer_id . '" class="form-control price" value="' . number_format($product->product_customer->price, 0, ',', '.') . '" disabled>';
-
-            $row[] = '<input type="number" name="qty[]" data-id="' . $product->product_customer_id . '" class="form-control qty" value="'.$product->qty.'">';
-
-            $row[] = '<input type="text" name="subtotal[]" class="form-control subtotal" data-id="' . $product->product_customer_id . '" value="'.number_format($product->qty * $product->product_customer->price, 0, ',', '.').'" disabled>';
-
-            $row[] = '<a class="btn btn-sm btn-outline-danger btn-icon removeProduct"><em class="fa fa-trash"></em></a>';
-            $data[] = $row;
-        }
-
-        return response()->json($data);
-    }
-
     public function store(OrderStoreRequest $request)
     {
         try {
@@ -241,12 +201,18 @@ class OrderController extends Controller
                     }
                 }
 
+
+
                 /**
                  * Update All About Accumulated from purchase details
                  * Why this proccess on the controller? cuz to avoid manipulate input in view from users
                  */
                 $order->total_price = $totalPrice;
                 $order->save();
+
+                // Send Email OrderCreated
+                $order = Order::find($order->id);
+                Mail::to('ikhsanheriyawan2404@gmail.com')->queue(new OrderNotification($order));
             });
 
         } catch (InvalidArgumentException $e) {
@@ -312,7 +278,7 @@ class OrderController extends Controller
             DB::transaction(function () use ($orderId) {
 
                 $order = Order::findOrFail($orderId);
-                
+
                 $order->update([
                     'status' => OrderStatusEnum::PICKUP,
                 ]);
@@ -355,6 +321,9 @@ class OrderController extends Controller
                  */
                 $order->total_price = $totalPrice;
                 $order->save();
+
+                $order = Order::find($order->id);
+                Mail::to($order->customer->email)->queue(new OrderNotification($order));
             });
 
         } catch (InvalidArgumentException $e) {
@@ -367,5 +336,48 @@ class OrderController extends Controller
         return response()->json([
             'message' => 'Berhasil Mengubah Order',
         ]);
+    }
+
+
+    public function getProduct($productCustomerId)
+    {
+        $product = ProductCustomer::with('product')->findOrFail($productCustomerId);
+
+        $row = [];
+
+        $row[] = '<input name="product_id[]" type="hidden" value="' . $product->product_id . '" class="form-control">' . $product->product->name;
+
+        $row[] = '<input type="text" name="price[]" data-id="' . $product->product_id . '" class="form-control price" value="' . number_format($product->price, 0, ',', '.') . '" disabled>';
+
+        $row[] = '<input type="number" name="qty[]" data-id="' . $product->product_id . '" class="form-control qty" value="0">';
+
+        $row[] = '<input type="text" name="subtotal[]" class="form-control subtotal" data-id="' . $product->product_id . '" value="0" disabled>';
+
+        $row[] = '<a class="btn btn-sm btn-outline-danger btn-icon removeProduct"><em class="fa fa-trash"></em></a>';
+
+        return response()->json($row);
+    }
+
+    public function getProductEdit($orderId)
+    {
+        $orderDetails = BridgeOrderProduct::with('product_customer.product')->where('order_id', $orderId)->get();
+
+        $data = [];
+        foreach ($orderDetails as $product) {
+            $row = [];
+
+            $row[] = '<input name="product_id[]" type="hidden" value="' . $product->product_customer_id . '" class="form-control">' . $product->product_customer->product->name;
+
+            $row[] = '<input type="text" name="price[]" data-id="' . $product->product_customer_id . '" class="form-control price" value="' . number_format($product->product_customer->price, 0, ',', '.') . '" disabled>';
+
+            $row[] = '<input type="number" name="qty[]" data-id="' . $product->product_customer_id . '" class="form-control qty" value="'.$product->qty.'">';
+
+            $row[] = '<input type="text" name="subtotal[]" class="form-control subtotal" data-id="' . $product->product_customer_id . '" value="'.number_format($product->qty * $product->product_customer->price, 0, ',', '.').'" disabled>';
+
+            $row[] = '<a class="btn btn-sm btn-outline-danger btn-icon removeProduct"><em class="fa fa-trash"></em></a>';
+            $data[] = $row;
+        }
+
+        return response()->json($data);
     }
 }

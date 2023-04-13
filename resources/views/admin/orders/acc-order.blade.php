@@ -125,19 +125,6 @@
 
         $(document).ready(function () {
 
-            let table2 = $('#table-product').DataTable({
-                processing: true,
-                serverSide: true,
-                responsive: true,
-                ajax: "{{ route('orders.index') }}" + "/product-datatables/" + "{{auth()->user()->id}}",
-                columns: [
-                    {data: 'DT_RowIndex', orderable: false},
-                    {data: 'product.name'},
-                    {data: 'price'},
-                    {data: 'action', orderable: false},
-                ]
-            });
-
             let orderId = "{{ $order->id }}"
             $.get("{{ route('orders.index') }}" + "/" + orderId + '/product-edit', function(data) {
 

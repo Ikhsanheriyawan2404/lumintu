@@ -168,9 +168,7 @@
                             title: 'Success',
                             text: data.message,
                         });
-                        setInterval(() => {
-                            window.location.href = "{{ route('orders.index') }}";
-                        }, 1000);
+                        // window.location.href = "{{ route('orders.index') }}";
                     },
                     error: function(response) {
                         const data = response.responseJSON;

@@ -24,10 +24,6 @@
                         <div class="col-lg-6 col-md-6 col-12">
                             <div class="d-flex">
                                 <div>
-                                    <img src="https://raw.githubusercontent.com/creativetimofficial/public-assets/master/argon-dashboard-pro/assets/img/smartwatch.jpg"
-                                        class="avatar avatar-xxl me-3" alt="product image">
-                                </div>
-                                <div>
                                     <h6 class="text-lg mb-0 mt-2">{{ $order->customer->name }}</h6>
                                     <p class="text-sm mb-3">Order was {{ $order->status }} {{ $order->created_at->diffForHumans() }}</p>
                                     Order Proses Status : <span class="badge badge-sm bg-gradient-success">{{ $order->status }}</span>
@@ -41,6 +37,7 @@
                             <p class="text-sm mt-2 mb-0">Order Delivery oleh {{ $order->deliveries?->valet?->name }} </p>
                         </div>
                     </div>
+
                     <hr class="horizontal dark mt-4 mb-4">
                     <div class="row">
                         <div class="col-lg-3 col-md-6 col-12">
@@ -95,6 +92,27 @@
                                     </tbody>
                                 </table>
                             </div>
+
+                            <hr>
+
+                            @if(auth()->user()->hasRole('hotel'))
+                                <button type="submit" class="btn btn-sm btn-primary" id="uploadVerifPayment">Upload Bukti Pembayaran</button>
+                            @else
+                            <form action="{{ route('orders.paid', $order->id) }}" method="post">
+                                <button type="submit" class="btn btn-sm btn-primary" >Approve Pembayaran</button>
+                            </form>
+                            @endif
+                            <table class="table table-sm" id="datatables-payment">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Bukti</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -103,7 +121,9 @@
     </div>
 
     @include('admin.orders.modals.processStatus')
-
+    <!-- Modal Upload Agreement Document -->
+    @include('admin.orders.modals.uploadPayment')
+    <!-- /.modal -->
 @endsection
 
 @push('custom-styles')
@@ -127,6 +147,23 @@
 
     <script>
         $(document).ready(function() {
+            let tableDocs = $('#datatables-payment').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: "{{ route('payments.datatables', $order->id) }}",
+                columns: [
+                    {
+                        data: 'DT_RowIndex',
+                        name: 'DT_RowIndex'
+                    },
+                    {
+                        data: 'path',
+                        name: 'path',
+                        orderable: false, searchable: false, className: 'dt-body-center'
+                    },
+                ]
+            });
+
             let status = $('#currentStatus').val();
             let nextStatus = $('#nextStatus').val();
 
@@ -172,6 +209,48 @@
                             text: data.responseJSON.message,
                         });
                         $.each(data.responseJSON.errors, function(index, value) {
+                            toastr.error(value);
+                        });
+                    }
+                });
+            });
+
+            $('#uploadVerifPayment').on('click', function() {
+                setTimeout(function() {
+                    $('#name').focus();
+                }, 500);
+                $('#modal-upload-docs').modal('show');
+                $('#btnUploadDoc').removeAttr('disabled');
+                $('#btnUploadDoc').html("Upload");
+                $('#uploadForm').trigger("reset");
+            });
+
+            $('#btnUploadDoc').click(function(e) {
+                e.preventDefault();
+                var formData = new FormData($('#uploadForm')[0]);
+                $('#btnUploadDoc').attr('disabled', 'disabled');
+                $('#btnUploadDoc').html('Loading ...');
+                $.ajax({
+                    data: formData,
+                    url: "{{ route('payments.upload') }}",
+                    contentType: false,
+                    processData: false,
+                    type: "POST",
+                    success: function(data) {
+                        $('#uploadForm').trigger("reset");
+                        $('#modal-upload-docs').modal('hide');
+                        tableDocs.draw();
+                        toastr.success(data.message);
+                    },
+                    error: function(data) {
+                        $('#btnUploadDoc').removeAttr('disabled');
+                        $('#btnUploadDoc').html("Upload");
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oppss',
+                            text: data.responseJSON.message,
+                        });
+                        $.each(data.responseJSON.errors, function (index, value) {
                             toastr.error(value);
                         });
                     }
