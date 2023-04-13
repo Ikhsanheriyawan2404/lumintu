@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Laporan Pengeluaran Harian</title>
+    <title>Laporan Transaksi Harian</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
@@ -46,7 +46,7 @@
 <body class="A4">
     <section class="sheet padding-10mm">
         <div class="text-center">
-            <h2>Laporan Pengeluaran Harian</h2>
+            <h2>Laporan Transaksi Harian</h2>
             <h2>CV. LUMINTU SIP</h2>
         </div>
 
@@ -58,26 +58,26 @@
             <thead>
                 <tr>
                     <th>NO.</th>
-                    <th>ITEM</th>
-                    <th>BIAYA</th>
+                    <th>HOTEL</th>
+                    <th>PENDAPATAN</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
                     <td class="text-center" width="20">1</td>
-                    <td>Kayu</td>
-                    <td class="text-center">Rp. 70.000</td>
+                    <td>Hotel Alam Sari</td>
+                    <td class="text-center">Rp. 200.000</td>
                 </tr>
                 <tr>
                     <td class="text-center" width="20">2</td>
-                    <td>Bensin Hangkel</td>
+                    <td>Hotel Indah</td>
                     <td class="text-center">Rp. 130.000</td>
                 </tr>
             </tbody>
             <tfoot>
                 <tr>
                     <th colspan="2">Total</th>
-                    <th class="text-center">Rp. 200.000</th>
+                    <th class="text-center">Rp. 330.000</th>
                 </tr>
             </tfoot>
         </table>
