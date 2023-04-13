@@ -55,10 +55,7 @@ return array(
     'App\\Http\\Requests\\UserStoreRequest' => $baseDir . '/app/Http/Requests/UserStoreRequest.php',
     'App\\Http\\Requests\\UserUpdateRequest' => $baseDir . '/app/Http/Requests/UserUpdateRequest.php',
     'App\\Kernel' => $vendorDir . '/laravel/pint/app/Kernel.php',
-<<<<<<< HEAD
     'App\\Mail\\OrderNotification' => $baseDir . '/app/Mail/OrderNotification.php',
-=======
->>>>>>> 172017d084437325392de59889f0a13acd3cc6b2
     'App\\Models\\BridgeOrderProduct' => $baseDir . '/app/Models/BridgeOrderProduct.php',
     'App\\Models\\Category' => $baseDir . '/app/Models/Category.php',
     'App\\Models\\Cost' => $baseDir . '/app/Models/Cost.php',
@@ -71,6 +68,7 @@ return array(
     'App\\Models\\ProductCustomer' => $baseDir . '/app/Models/ProductCustomer.php',
     'App\\Models\\User' => $baseDir . '/app/Models/User.php',
     'App\\Models\\UserDetail' => $baseDir . '/app/Models/UserDetail.php',
+    'App\\Notifications\\OrderStatusNotif' => $baseDir . '/app/Notifications/OrderStatusNotif.php',
     'App\\Output\\Concerns\\InteractsWithSymbols' => $vendorDir . '/laravel/pint/app/Output/Concerns/InteractsWithSymbols.php',
     'App\\Output\\ProgressOutput' => $vendorDir . '/laravel/pint/app/Output/ProgressOutput.php',
     'App\\Output\\SummaryOutput' => $vendorDir . '/laravel/pint/app/Output/SummaryOutput.php',

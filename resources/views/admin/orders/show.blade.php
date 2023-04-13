@@ -108,22 +108,14 @@
 
                             @if(auth()->user()->hasRole('hotel'))
                                 <button type="submit" class="btn btn-sm btn-primary" id="uploadVerifPayment">Upload Bukti Pembayaran</button>
+                                @include('admin.orders.partials.table-payments')
                             @else
-                            <form action="{{ route('orders.paid', $order->id) }}" method="post">
-                                <button type="submit" class="btn btn-sm btn-primary" >Approve Pembayaran</button>
-                            </form>
+                                <form action="{{ route('orders.paid', $order->id) }}" method="post">
+                                    @csrf
+                                    <button type="submit" class="btn btn-sm btn-primary" >Approve Pembayaran</button>
+                                </form>
+                                @include('admin.orders.partials.table-payments')
                             @endif
-                            <table class="table table-sm" id="datatables-payment">
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Bukti</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-
-                                </tbody>
-                            </table>
                         </div>
                     </div>
                 </div>
