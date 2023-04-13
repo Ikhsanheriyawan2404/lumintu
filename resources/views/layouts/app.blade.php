@@ -10,6 +10,7 @@
     </title>
     <!--     Fonts and icons     -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.4/font/bootstrap-icons.css">
     <!-- Nucleo Icons -->
     <link href="{{ asset('assets/admin/css/nucleo-icons.css') }}" rel="stylesheet" />
     <link href="{{ asset('assets/admin/css/nucleo-svg.css') }}" rel="stylesheet" />
@@ -22,6 +23,7 @@
     <!-- CSS Files -->
     <link id="pagestyle" href="{{ asset('assets/admin/css/argon-dashboard.css?v=2.0.4') }}" rel="stylesheet" />
     @stack('custom-styles')
+    @stack('print-styles')
 
 </head>
 
@@ -46,7 +48,7 @@
         <div class="container-fluid py-4">
 
             {{-- @hasrole('superadmin|admin|valet|pegawai') --}}
-                @yield('content')
+            @yield('content')
             {{-- @endhasrole --}}
 
             {{-- @hasrole('hotel')

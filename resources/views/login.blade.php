@@ -22,7 +22,7 @@
 <body class="">
     <main class="main-content  mt-0">
         <div class="page-header align-items-start min-vh-50 pt-5 pb-11 m-3 border-radius-lg"
-            style="background-image: url('{{ asset('assets/img/galeri/8.JPG') }}'); background-position: top;">
+            style="background-image: url('{{ asset('assets/landing/images/galeri/8.JPG') }}'); background-position: top;">
             <span class="mask bg-gradient-dark opacity-6"></span>
             <div class="container">
                 <div class="row justify-content-center">

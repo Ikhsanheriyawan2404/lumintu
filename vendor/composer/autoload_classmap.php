@@ -55,7 +55,10 @@ return array(
     'App\\Http\\Requests\\UserStoreRequest' => $baseDir . '/app/Http/Requests/UserStoreRequest.php',
     'App\\Http\\Requests\\UserUpdateRequest' => $baseDir . '/app/Http/Requests/UserUpdateRequest.php',
     'App\\Kernel' => $vendorDir . '/laravel/pint/app/Kernel.php',
+<<<<<<< HEAD
     'App\\Mail\\OrderNotification' => $baseDir . '/app/Mail/OrderNotification.php',
+=======
+>>>>>>> 172017d084437325392de59889f0a13acd3cc6b2
     'App\\Models\\BridgeOrderProduct' => $baseDir . '/app/Models/BridgeOrderProduct.php',
     'App\\Models\\Category' => $baseDir . '/app/Models/Category.php',
     'App\\Models\\Cost' => $baseDir . '/app/Models/Cost.php',
