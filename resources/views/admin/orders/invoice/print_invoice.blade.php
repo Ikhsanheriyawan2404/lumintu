@@ -10,11 +10,21 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+        rel="stylesheet">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/paper-css/0.4.1/paper.css">
 
     <style>
         @page {
-            size: A4
+            size: A5
+        }
+
+        body {
+            font-size: 9px;
+            font-family: 'PT Serif', serif;
         }
 
         table {
@@ -23,27 +33,29 @@
         }
 
         .table th {
-            padding: 8px 8px;
             border: 1px solid #000000;
             text-align: center;
         }
 
         .table td {
-            padding: 3px 3px;
             border: 1px solid #000000;
+        }
+
+        .padding {
+            padding: 5mm;
         }
     </style>
 </head>
 
-<body class="A4">
-    <section class="sheet padding-10mm">
+<body class="A5">
+    <section class="sheet padding">
         <div class="row">
-            <div class="col-2">
+            <div class="col-3">
                 <img src="{{ asset('assets/img/logo2.png') }}" class="img-fluid rounded-start p-2">
             </div>
-            <div class="col-10">
+            <div class="col-9">
                 <div class="row">
-                    <div class="col-6 ps-3">
+                    <div class="col-5 ps-3">
                         <div class="row mb-2">
                             <h6 class="card-title">Email</h6>
                             <p class="card-text">lumintu.laundry123@gmail.com</p>
@@ -53,7 +65,7 @@
                             <p class="card-text">+6282110271556</p>
                         </div>
                     </div>
-                    <div class="col-6">
+                    <div class="col-7">
                         <div class="row mb-2">
                             <h6 class="card-title">Alamat</h6>
                             <p class="card-text">Kampung Baru No. 1A RT.007 RW.003 Dangdang Cisauk Kab. Tangerang,
@@ -71,36 +83,36 @@
 
         <div class="d-flex flex-row">
             <div class="ps-4">
-                <h3>INVOICE</h3>
+                <h4 class="fw-bold">INVOICE</h4>
             </div>
             <div class="pe-4 ps-4 flex-grow-1">
                 <hr>
             </div>
         </div>
 
-        <div class="row mb-3">
+        <div class="row">
             <div class="col-6">
                 <div class="row mb-2">
-                    <div class="col-4">
-                        <h6 class="card-title">Nomor Order</h6>
+                    <div class="col-5">
+                        <p class="fw-bold card-title">Nomor Order</p>
                     </div>
-                    <div class="col-8">
+                    <div class="col-7">
                         <p class="card-text">ORD-643542532432</p>
                     </div>
                 </div>
                 <div class="row mb-2">
-                    <div class="col-4">
-                        <h6 class="card-title">Tanggal Order</h6>
+                    <div class="col-5">
+                        <p class="fw-bold card-title">Tanggal Order</p>
                     </div>
-                    <div class="col-8">
+                    <div class="col-7">
                         <p class="card-text">12 Januari 2023</p>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-4">
-                        <h6 class="card-title">Tujuan</h6>
+                    <div class="col-5">
+                        <p class="fw-bold card-title">Tujuan</p>
                     </div>
-                    <div class="col-8">
+                    <div class="col-7">
                         <p class="card-text">Hotel Alam Sari</p>
                     </div>
                 </div>
@@ -108,7 +120,7 @@
             <div class="col-6">
                 <div class="row mb-2">
                     <div class="col-4">
-                        <h6 class="card-title">Alamat</h6>
+                        <p class="fw-bold">Alamat</p>
                     </div>
                     <div class="col-8">
                         <p class="card-text">Kampung Baru No. 1A RT.007 RW.003 Dangdang Cisauk Kab. Tangerang, Banten.
@@ -117,7 +129,7 @@
                 </div>
                 <div class="row">
                     <div class="col-4">
-                        <h6 class="card-title">Nomor Telepon</h6>
+                        <p class="fw-bold">Nomor Telepon</p>
                     </div>
                     <div class="col-8">
                         <p class="card-text">+6287839736104</p>
@@ -126,115 +138,117 @@
             </div>
         </div>
 
-        <table class="table">
-            <thead>
-                <tr>
-                    <th class="text-center">ITEM</th>
-                    <th class="text-center">HARGA</th>
-                    <th class="text-center">KUANTITI</th>
-                    <th class="text-center">SUB TOTAL</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <th scope="row">Apron</th>
-                    <td class="text-center">4.000</td>
-                    <td class="text-center">3</td>
-                    <td class="text-center">12.000</td>
-                </tr>
-                <tr>
-                    <th scope="row">Food & Beverage</th>
-                    <td class="text-center">7.000</td>
-                    <td class="text-center">5</td>
-                    <td class="text-center">35.000</td>
-                </tr>
-                <tr>
-                    <th scope="row">Food & Beverage</th>
-                    <td class="text-center">7.000</td>
-                    <td class="text-center">5</td>
-                    <td class="text-center">35.000</td>
-                </tr>
-                <tr>
-                    <th scope="row">Food & Beverage</th>
-                    <td class="text-center">7.000</td>
-                    <td class="text-center">5</td>
-                    <td class="text-center">35.000</td>
-                </tr>
-                <tr>
-                    <th scope="row">Food & Beverage</th>
-                    <td class="text-center">7.000</td>
-                    <td class="text-center">5</td>
-                    <td class="text-center">35.000</td>
-                </tr>
-                <tr>
-                    <th scope="row">Food & Beverage</th>
-                    <td class="text-center">7.000</td>
-                    <td class="text-center">5</td>
-                    <td class="text-center">35.000</td>
-                </tr>
-                <tr>
-                    <th scope="row">Food & Beverage</th>
-                    <td class="text-center">7.000</td>
-                    <td class="text-center">5</td>
-                    <td class="text-center">35.000</td>
-                </tr>
-                <tr>
-                    <th scope="row">Food & Beverage</th>
-                    <td class="text-center">7.000</td>
-                    <td class="text-center">5</td>
-                    <td class="text-center">35.000</td>
-                </tr>
-                <tr>
-                    <th scope="row">Food & Beverage</th>
-                    <td class="text-center">7.000</td>
-                    <td class="text-center">5</td>
-                    <td class="text-center">35.000</td>
-                </tr>
-                <tr>
-                    <th scope="row">Food & Beverage</th>
-                    <td class="text-center">7.000</td>
-                    <td class="text-center">5</td>
-                    <td class="text-center">35.000</td>
-                </tr>
-                <tr>
-                    <th scope="row">Food & Beverage</th>
-                    <td class="text-center">7.000</td>
-                    <td class="text-center">5</td>
-                    <td class="text-center">35.000</td>
-                </tr>
-                <tr>
-                    <th scope="row">Food & Beverage</th>
-                    <td class="text-center">7.000</td>
-                    <td class="text-center">5</td>
-                    <td class="text-center">35.000</td>
-                </tr>
-                <tr>
-                    <th scope="row">Food & Beverage</th>
-                    <td class="text-center">7.000</td>
-                    <td class="text-center">5</td>
-                    <td class="text-center">35.000</td>
-                </tr>
-                <tr>
-                    <th scope="row">Food & Beverage</th>
-                    <td class="text-center">7.000</td>
-                    <td class="text-center">5</td>
-                    <td class="text-center">35.000</td>
-                </tr>
-                <tr>
-                    <th scope="row">Food & Beverage</th>
-                    <td class="text-center">7.000</td>
-                    <td class="text-center">5</td>
-                    <td class="text-center">35.000</td>
-                </tr>
-                <tr>
-                    <th scope="row" colspan="3" class="text-center">TOTAL</th>
-                    <th scope="row" class="text-center">47.000</th>
-                </tr>
-            </tbody>
-        </table>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th class="text-center">ITEM</th>
+                        <th class="text-center">HARGA</th>
+                        <th class="text-center">KUANTITI</th>
+                        <th class="text-center">SUB TOTAL</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="row">Apron</th>
+                        <td class="text-center">4.000</td>
+                        <td class="text-center">3</td>
+                        <td class="text-center">12.000</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Food & Beverage</th>
+                        <td class="text-center">7.000</td>
+                        <td class="text-center">5</td>
+                        <td class="text-center">35.000</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Food & Beverage</th>
+                        <td class="text-center">7.000</td>
+                        <td class="text-center">5</td>
+                        <td class="text-center">35.000</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Food & Beverage</th>
+                        <td class="text-center">7.000</td>
+                        <td class="text-center">5</td>
+                        <td class="text-center">35.000</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Food & Beverage</th>
+                        <td class="text-center">7.000</td>
+                        <td class="text-center">5</td>
+                        <td class="text-center">35.000</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Food & Beverage</th>
+                        <td class="text-center">7.000</td>
+                        <td class="text-center">5</td>
+                        <td class="text-center">35.000</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Food & Beverage</th>
+                        <td class="text-center">7.000</td>
+                        <td class="text-center">5</td>
+                        <td class="text-center">35.000</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Food & Beverage</th>
+                        <td class="text-center">7.000</td>
+                        <td class="text-center">5</td>
+                        <td class="text-center">35.000</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Food & Beverage</th>
+                        <td class="text-center">7.000</td>
+                        <td class="text-center">5</td>
+                        <td class="text-center">35.000</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Food & Beverage</th>
+                        <td class="text-center">7.000</td>
+                        <td class="text-center">5</td>
+                        <td class="text-center">35.000</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Food & Beverage</th>
+                        <td class="text-center">7.000</td>
+                        <td class="text-center">5</td>
+                        <td class="text-center">35.000</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Food & Beverage</th>
+                        <td class="text-center">7.000</td>
+                        <td class="text-center">5</td>
+                        <td class="text-center">35.000</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Food & Beverage</th>
+                        <td class="text-center">7.000</td>
+                        <td class="text-center">5</td>
+                        <td class="text-center">35.000</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Food & Beverage</th>
+                        <td class="text-center">7.000</td>
+                        <td class="text-center">5</td>
+                        <td class="text-center">35.000</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Food & Beverage</th>
+                        <td class="text-center">7.000</td>
+                        <td class="text-center">5</td>
+                        <td class="text-center">35.000</td>
+                    </tr>
+                    <tr>
+                        <th scope="row" colspan="3" class="text-center">TOTAL</th>
+                        <th scope="row" class="text-center">47.000</th>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
 
-        <div class="mt-3">
-            <p class="h6">Catatan:</p>
+        {{-- <div class="mt-0">
+            <p class="h6 lh-1">Catatan:</p>
             <ul class="text-justify">
                 <li>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quam nobis voluptatem vel numquam voluptas
                     vero veritatis aut molestias laborum autem.</li>
@@ -242,13 +256,13 @@
                     Iste sed, non nam tempora beatae dolorem similique unde, doloribus mollitia eligendi sit quos
                     architecto eveniet?</li>
             </ul>
-        </div>
+        </div> --}}
 
         <div class="row">
             <div class="col-6">
                 <div class="row">
                     <div class="col-5">
-                        <h6 class="card-title">Penanggungjawab Valet</h6>
+                        <p class="fw-bold">Valet</p>
                     </div>
                     <div class="col-7">
                         Valet2
@@ -258,7 +272,7 @@
             <div class="col-6">
                 <div class="row">
                     <div class="col-5">
-                        <h6 class="card-title">Penerima</h6>
+                        <p class="fw-bold">Penerima</p>
                     </div>
                     <div class="col-7">
                         Thoriqul Hafidz Prahanto
@@ -267,14 +281,14 @@
             </div>
         </div>
 
-        <div class="row mt-3">
+        <div class="row">
             <div class="col-6">
-                <h5 class="card-title">
+                <p class="h6">
                     INFO PEMBAYARAN
-                </h5>
+                </p>
                 <div class="row">
                     <div class="col-4">
-                        <h6 class="card-title">Transfer</h6>
+                        <p class="fw-bold lh-1">Transfer</p>
                     </div>
                     <div class="col-8">
                         <ul>
@@ -285,7 +299,7 @@
                 </div>
                 <div class="row">
                     <div class="col-4">
-                        <h6 class="card-title">Contact Person</h6>
+                        <p class="fw-bold lh-1">Contact Person</p>
                     </div>
                     <div class="col-8">
                         <ul>
@@ -297,8 +311,8 @@
             </div>
             <div class="col-6">
                 <div class="row justify-content-center">
-                    <img src="{{ asset('assets/img/logo.png') }}" class="img-fluid rounded-start p-2"
-                        style="height: 100px; width: auto;">
+                    <img src="{{ asset('assets/img/logo.png') }}" class="img-fluid rounded-start"
+                        style="height: 80px; width: auto;">
                 </div>
                 <div class="row">
                     <h4 class="card-title text-center">CV. Lumintu SIP</h4>

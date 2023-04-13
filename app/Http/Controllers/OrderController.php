@@ -309,7 +309,7 @@ class OrderController extends Controller
                 Notification::send($users, new OrderStatusNotif($order));
                 Mail::to(request($order->customer_id))->queue(new OrderNotification($order));
             });
-        } catch (\Exception $e) {
+        } catch (\InvalidArgumentException $e) {
             return response()->json([
                 'message' => $e->getMessage(),
             ], $e->getCode());

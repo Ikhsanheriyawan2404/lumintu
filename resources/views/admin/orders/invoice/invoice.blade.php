@@ -1,6 +1,6 @@
 @extends('layouts.app', ['title' => 'Invoice'])
 
-@section('main')
+@section('content')
     <div class="card mb-3">
         <div class="d-flex flex-row-reverse">
             <div class="px-5 py-3">

@@ -10,11 +10,21 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+        rel="stylesheet">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/paper-css/0.4.1/paper.css">
 
     <style>
         @page {
-            size: A3 landscape
+            size: legal landscape
+        }
+
+        body {
+            font-size: 11px;
+            font-family: 'PT Serif', serif;
         }
 
         table {
@@ -30,11 +40,15 @@
         .table td {
             border: 1px solid #000000;
         }
+
+        .padding {
+            padding: 5mm;
+        }
     </style>
 </head>
 
-<body class="A3 landscape">
-    <section class="sheet padding-10mm">
+<body class="legal landscape">
+    <section class="sheet padding">
         <div class="text-center">
             <h2>Laporan Pengeluaran Bulanan</h2>
             <h2>CV. LUMINTU SIP</h2>
@@ -77,84 +91,84 @@
                 <tbody>
                     <tr>
                         <td class="text-center" width="20">1</td>
-                        <td class="text-center">Rp. 70.000</td>
-                        <td class="text-center">Rp. 70.000</td>
-                        <td class="text-center">Rp. 70.000</td>
-                        <td class="text-center">Rp. 70.000</td>
-                        <td class="text-center">Rp. 70.000</td>
-                        <td class="text-center">Rp. 70.000</td>
-                        <td class="text-center">Rp. 70.000</td>
-                        <td class="text-center">Rp. 70.000</td>
-                        <td class="text-center">Rp. 70.000</td>
-                        <td class="text-center">Rp. 70.000</td>
-                        <td class="text-center">Rp. 70.000</td>
-                        <td class="text-center">Rp. 70.000</td>
-                        <td class="text-center">Rp. 70.000</td>
-                        <td class="text-center">Rp. 70.000</td>
-                        <td class="text-center">Rp. 70.000</td>
-                        <td class="text-center">Rp. 70.000</td>
-                        <td class="text-center">Rp. 70.000</td>
-                        <td class="text-center">Rp. 70.000</td>
-                        <td class="text-center">Rp. 70.000</td>
-                        <td class="text-center">Rp. 70.000</td>
+                        <td class="text-center">70.000</td>
+                        <td class="text-center">70.000</td>
+                        <td class="text-center">70.000</td>
+                        <td class="text-center">70.000</td>
+                        <td class="text-center">70.000</td>
+                        <td class="text-center">70.000</td>
+                        <td class="text-center">70.000</td>
+                        <td class="text-center">70.000</td>
+                        <td class="text-center">70.000</td>
+                        <td class="text-center">70.000</td>
+                        <td class="text-center">70.000</td>
+                        <td class="text-center">70.000</td>
+                        <td class="text-center">70.000</td>
+                        <td class="text-center">70.000</td>
+                        <td class="text-center">70.000</td>
+                        <td class="text-center">70.000</td>
+                        <td class="text-center">70.000</td>
+                        <td class="text-center">70.000</td>
+                        <td class="text-center">70.000</td>
+                        <td class="text-center">70.000</td>
                     </tr>
                     <tr>
                         <td class="text-center" width="20">2</td>
-                        <td class="text-center">Rp. 70.000</td>
-                        <td class="text-center">Rp. 70.000</td>
-                        <td class="text-center">Rp. 70.000</td>
-                        <td class="text-center">Rp. 70.000</td>
-                        <td class="text-center">Rp. 70.000</td>
-                        <td class="text-center">Rp. 70.000</td>
-                        <td class="text-center">Rp. 70.000</td>
-                        <td class="text-center">Rp. 70.000</td>
-                        <td class="text-center">Rp. 70.000</td>
-                        <td class="text-center">Rp. 70.000</td>
-                        <td class="text-center">Rp. 70.000</td>
-                        <td class="text-center">Rp. 70.000</td>
-                        <td class="text-center">Rp. 70.000</td>
-                        <td class="text-center">Rp. 70.000</td>
-                        <td class="text-center">Rp. 70.000</td>
-                        <td class="text-center">Rp. 70.000</td>
-                        <td class="text-center">Rp. 70.000</td>
-                        <td class="text-center">Rp. 70.000</td>
-                        <td class="text-center">Rp. 70.000</td>
-                        <td class="text-center">Rp. 70.000</td>
+                        <td class="text-center">70.000</td>
+                        <td class="text-center">70.000</td>
+                        <td class="text-center">70.000</td>
+                        <td class="text-center">70.000</td>
+                        <td class="text-center">70.000</td>
+                        <td class="text-center">70.000</td>
+                        <td class="text-center">70.000</td>
+                        <td class="text-center">70.000</td>
+                        <td class="text-center">70.000</td>
+                        <td class="text-center">70.000</td>
+                        <td class="text-center">70.000</td>
+                        <td class="text-center">70.000</td>
+                        <td class="text-center">70.000</td>
+                        <td class="text-center">70.000</td>
+                        <td class="text-center">70.000</td>
+                        <td class="text-center">70.000</td>
+                        <td class="text-center">70.000</td>
+                        <td class="text-center">70.000</td>
+                        <td class="text-center">70.000</td>
+                        <td class="text-center">70.000</td>
                     </tr>
                 </tbody>
                 <tfoot>
                     <tr>
                         <th>Sub Total</th>
-                        <th class="text-center">Rp. 140.000</th>
-                        <th class="text-center">Rp. 140.000</th>
-                        <th class="text-center">Rp. 140.000</th>
-                        <th class="text-center">Rp. 140.000</th>
-                        <th class="text-center">Rp. 140.000</th>
-                        <th class="text-center">Rp. 140.000</th>
-                        <th class="text-center">Rp. 140.000</th>
-                        <th class="text-center">Rp. 140.000</th>
-                        <th class="text-center">Rp. 140.000</th>
-                        <th class="text-center">Rp. 140.000</th>
-                        <th class="text-center">Rp. 140.000</th>
-                        <th class="text-center">Rp. 140.000</th>
-                        <th class="text-center">Rp. 140.000</th>
-                        <th class="text-center">Rp. 140.000</th>
-                        <th class="text-center">Rp. 140.000</th>
-                        <th class="text-center">Rp. 140.000</th>
-                        <th class="text-center">Rp. 140.000</th>
-                        <th class="text-center">Rp. 140.000</th>
-                        <th class="text-center">Rp. 140.000</th>
-                        <th class="text-center">Rp. 140.000</th>
+                        <th class="text-center">140.000</th>
+                        <th class="text-center">140.000</th>
+                        <th class="text-center">140.000</th>
+                        <th class="text-center">140.000</th>
+                        <th class="text-center">140.000</th>
+                        <th class="text-center">140.000</th>
+                        <th class="text-center">140.000</th>
+                        <th class="text-center">140.000</th>
+                        <th class="text-center">140.000</th>
+                        <th class="text-center">140.000</th>
+                        <th class="text-center">140.000</th>
+                        <th class="text-center">140.000</th>
+                        <th class="text-center">140.000</th>
+                        <th class="text-center">140.000</th>
+                        <th class="text-center">140.000</th>
+                        <th class="text-center">140.000</th>
+                        <th class="text-center">140.000</th>
+                        <th class="text-center">140.000</th>
+                        <th class="text-center">140.000</th>
+                        <th class="text-center">140.000</th>
                     </tr>
                     <tr>
-                        <th>GRAND TOTAL</th>
-                        <th colspan="20">Rp. 2.800.000</th>
+                        <th style="background-color: yellow;">GRAND TOTAL</th>
+                        <th colspan="20" style="background-color: yellow;">Rp. 2.800.000</th>
                     </tr>
                 </tfoot>
             </table>
         </div>
 
-        <div class="mt-3">
+        <div class="mt-0">
             <p class="h6">Catatan:</p>
             <ul class="text-justify">
                 <li>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quam nobis voluptatem vel numquam voluptas

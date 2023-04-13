@@ -38,7 +38,7 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::resource('users', UserController::class);
 
-        Route::post('orders/{order:id}/approve-payment', [PaymentController::class, 'approvePayment'])
+        Route::post('orders/{order:id}/approve-payment', [PaymentControllerb::class, 'approvePayment'])
             ->name('orders.paid');
 
         Route::post('orders/{orderId}/change-status', [OrderController::class, 'changeOrderStatus'])
@@ -93,4 +93,20 @@ Route::group(['middleware' => 'auth'], function () {
 
 
     Route::post('hotels/price-list', [HotelController::class, 'storePriceList'])->name('hotel.price-list.store');
+
+    Route::get('invoice/data', function () {
+        return view('admin.orders.invoice.invoice');
+    });
+
+    Route::get('invoice/print', function () {
+        return view('admin.orders.invoice.print_invoice');
+    });
+
+    Route::get('reports/bulanan', function () {
+        return view('admin.orders.report.bulanan');
+    });
+
+    Route::get('reports/harian', function () {
+        return view('admin.orders.report.harian');
+    });
 });
