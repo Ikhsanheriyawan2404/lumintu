@@ -234,7 +234,7 @@ class OrderController extends Controller
                 $users = collect($listUsersWhoGetNotifications);
 
                 Notification::send($users, new OrderStatusNotif($order));
-                Mail::to('ikhsanheriyawan2404@gmail.com')->queue(new OrderNotification($order));
+                Mail::to('sutio.mudiarno@gmail.com')->queue(new OrderNotification($order));
             });
 
         } catch (InvalidArgumentException $e) {
