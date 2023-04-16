@@ -19,13 +19,12 @@ Route::get('/', function () {
 
 Route::get('/login', function () {
     return view('login');
-});
+})->middleware('guest');
 
 Route::post('/login', [AuthController::class, 'login'])->name('login');
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
 
 Route::group(['middleware' => 'auth'], function () {
-
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/dashboard/summary', [DashboardController::class, 'summary'])->name('dashboard.summary');
     Route::get('/dashboard/chart', [DashboardController::class, 'chart'])->name('dashboard.chart');
@@ -46,6 +45,10 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::post('orders/{orderId}/change-status', [OrderController::class, 'changeOrderStatus'])
             ->name('orders.changeOrderStatus');
+        Route::get('hotel/{userId}/price-list-view', [HotelController::class, 'getPriceList'])
+            ->name('hotel.price-list.view');
+
+        Route::post('hotel/{userId}/price-list', [HotelController::class, 'updatePriceList'])->name('hotel.price-list');
     });
 
     Route::group(['middleware' => 'role:valet'], function () {
