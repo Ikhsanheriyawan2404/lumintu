@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\MasterCostController;
+use App\Http\Controllers\TestController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
@@ -100,15 +101,18 @@ Route::group(['middleware' => 'auth'], function () {
         return view('admin.orders.invoice.invoice');
     });
 
-    Route::get('invoice/print', function () {
-        return view('admin.orders.invoice.print_invoice');
-    });
 
-    Route::get('reports/bulanan', function () {
-        return view('admin.orders.report.bulanan');
-    });
+
+//    Route::get('invoice/print', function () {
+//        return view('admin.orders.invoice.print_invoice');
+//    });
+//
+//    Route::get('reports/bulanan', function () {
+//        return view('admin.orders.report.bulanan');
+//    });
 
     Route::get('reports/harian', function () {
         return view('admin.orders.report.harian');
     });
 });
+Route::get('reports/bulanan', [TestController::class, 'test']);
