@@ -68,14 +68,14 @@ class OrderController extends Controller
                 ->latest();
 
             return $dataTable->with([
-                'query' => $orders
-            ])->render('admin.orders.index');
-        } else {
-            $query = Order::orderBy('orders.created_at', 'desc')
-            ->with('customer');
-            return $dataTable->with([
-                'query' => $query
-            ])->render('admin.orders.index');
+                ])->render('admin.orders.index');
+            } else {
+                $query = Order::orderBy('orders.created_at', 'desc')
+                ->with('customer');
+                return $dataTable->with([
+                    'query' => $query
+                    ])->render('admin.orders.index');
+                    'query' => $orders
         }
     }
 

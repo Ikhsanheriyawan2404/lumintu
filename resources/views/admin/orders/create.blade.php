@@ -251,7 +251,7 @@
 
                         // Put every column input in tables
                         var tr = $('<tr>');
-                        for (var i = 0; i < 5; i++) {
+                        for (var i = 0; i < length.data; i++) {
                             var td = $('<td class="text-center">').html(data[i]);
                             tr.append(td);
                         }
