@@ -73,7 +73,31 @@
             });
         });
 
+
+        let table2 = $('#table-product').DataTable({
+            processing: true,
+            serverSide: true,
+            responsive: true,
+            ajax: "{{ route('cost.index') }}" + "/product-datatables/" + "{{ auth()->user()->id }}",
+            columns: [{
+                data: 'DT_RowIndex',
+                orderable: false
+            },
+                {
+                    data: 'product.name'
+                },
+                {
+                    data: 'price'
+                },
+                {
+                    data: 'action',
+                    orderable: false
+                },
+            ]
+        });
+
         $(document).ready(function() {
+
             $('#createNewItem').click(function() {
                 setTimeout(function() {
                     $('#name').focus();
@@ -168,5 +192,13 @@
                 });
             });
         });
+
+        function showProduct() {
+            $('#modalProduct').modal('show');
+        }
+
+        function hideProduct() {
+            $('#modalProduct').modal('hide');
+        }
     </script>
 @endpush

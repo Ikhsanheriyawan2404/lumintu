@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\MasterCostController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
@@ -35,10 +36,11 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::resource('hotel', HotelController::class);
         Route::resource('pegawai', PegawaiController::class);
+        Route::resource('mastercost', MasterCostController::class);
 
         Route::resource('users', UserController::class);
 
-        Route::post('orders/{order:id}/approve-payment', [PaymentControllerb::class, 'approvePayment'])
+        Route::post('orders/{order:id}/approve-payment', [PaymentController::class, 'approvePayment'])
             ->name('orders.paid');
 
         Route::post('orders/{orderId}/change-status', [OrderController::class, 'changeOrderStatus'])
@@ -87,7 +89,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('orders/{orderId}/edit', [OrderController::class, 'edit'])->name('orders.edit');
 
-    Route::resource('valet', ValetController::class);
+//    Route::resource('valet', ValetController::class);
 
     require __DIR__ . '/pegawai/pegawai.php';
 
