@@ -15,13 +15,9 @@
     <link href="https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&display=swap"
         rel="stylesheet">
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/paper-css/0.4.1/paper.css">
+    {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/paper-css/0.4.1/paper.css"> --}}
 
     <style>
-        @page {
-            size: A4
-        }
-
         body {
             font-size: 11px;
             font-family: 'PT Serif', serif;
@@ -40,59 +36,274 @@
         .table td {
             border: 1px solid #000000;
         }
+
+        .page-header,
+        .page-header-space {
+            height: 100px;
+        }
+
+        .page-footer,
+        .page-footer-space {
+            height: 50px;
+
+        }
+
+        .page-footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            border-top: 1px solid black;
+        }
+
+        .page-header {
+            position: fixed;
+            top: 0mm;
+            width: 100%;
+            border-bottom: 1px solid black;
+            background: white;
+        }
+
+        .page {
+            page-break-after: always;
+        }
+
+        .content {
+            width: 100%;
+            margin-top: 0;
+        }
+
+        @media print {
+            thead {
+                display: table-header-group;
+            }
+
+            tfoot {
+                display: table-footer-group;
+            }
+
+            button {
+                display: none;
+            }
+
+            body {
+                margin: 0;
+                font-size: 11px;
+                font-family: 'PT Serif', serif;
+            }
+        }
     </style>
 </head>
 
-<body class="A4">
-    <section class="sheet padding-10mm">
+<body>
+    <div class="page-header" style="text-align: center">
         <div class="text-center">
             <h2>Laporan Pengeluaran Harian</h2>
             <h2>CV. LUMINTU SIP</h2>
         </div>
 
-        <div class="mt-4 mb-3">
+        <div class="d-flex justify-content-between mt-3">
+            <p><strong>Penanggungjawab :</strong> Thoriqul Hafidz Prahanto</p>
             <p><strong>Tanggal :</strong> 13 Januari 2023</p>
         </div>
+        {{-- <button type="button" onClick="window.print()" style="background: pink">
+            PRINT ME!
+        </button> --}}
+    </div>
 
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>NO.</th>
-                    <th>ITEM</th>
-                    <th>BIAYA</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class="text-center" width="20">1</td>
-                    <td>Kayu</td>
-                    <td class="text-center">Rp. 70.000</td>
-                </tr>
-                <tr>
-                    <td class="text-center" width="20">2</td>
-                    <td>Bensin Hangkel</td>
-                    <td class="text-center">Rp. 130.000</td>
-                </tr>
-            </tbody>
-            <tfoot>
-                <tr>
-                    <th colspan="2">Total</th>
-                    <th class="text-center">Rp. 200.000</th>
-                </tr>
-            </tfoot>
-        </table>
+    <table class="content">
 
-        <div class="mt-3">
-            <p class="h6">Catatan:</p>
-            <ul class="text-justify">
-                <li>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quam nobis voluptatem vel numquam voluptas
-                    vero veritatis aut molestias laborum autem.</li>
-                <li>Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit dolorem culpa eos quos assumenda.
-                    Iste sed, non nam tempora beatae dolorem similique unde, doloribus mollitia eligendi sit quos
-                    architecto eveniet?</li>
-            </ul>
-        </div>
-    </section>
+        <thead>
+            <tr>
+                <td>
+                    <div class="page-header-space"></div>
+                </td>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td>
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>NO.</th>
+                                    <th>ITEM</th>
+                                    <th>BIAYA</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="text-center" width="20">1</td>
+                                    <td>Kayu</td>
+                                    <td class="text-center">Rp. 70.000</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-center" width="20">2</td>
+                                    <td>Bensin Hangkel</td>
+                                    <td class="text-center">Rp. 130.000</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-center" width="20">2</td>
+                                    <td>Bensin Hangkel</td>
+                                    <td class="text-center">Rp. 130.000</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-center" width="20">2</td>
+                                    <td>Bensin Hangkel</td>
+                                    <td class="text-center">Rp. 130.000</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-center" width="20">2</td>
+                                    <td>Bensin Hangkel</td>
+                                    <td class="text-center">Rp. 130.000</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-center" width="20">2</td>
+                                    <td>Bensin Hangkel</td>
+                                    <td class="text-center">Rp. 130.000</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-center" width="20">2</td>
+                                    <td>Bensin Hangkel</td>
+                                    <td class="text-center">Rp. 130.000</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-center" width="20">2</td>
+                                    <td>Bensin Hangkel</td>
+                                    <td class="text-center">Rp. 130.000</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-center" width="20">2</td>
+                                    <td>Bensin Hangkel</td>
+                                    <td class="text-center">Rp. 130.000</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-center" width="20">2</td>
+                                    <td>Bensin Hangkel</td>
+                                    <td class="text-center">Rp. 130.000</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-center" width="20">2</td>
+                                    <td>Bensin Hangkel</td>
+                                    <td class="text-center">Rp. 130.000</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-center" width="20">2</td>
+                                    <td>Bensin Hangkel</td>
+                                    <td class="text-center">Rp. 130.000</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-center" width="20">2</td>
+                                    <td>Bensin Hangkel</td>
+                                    <td class="text-center">Rp. 130.000</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-center" width="20">2</td>
+                                    <td>Bensin Hangkel</td>
+                                    <td class="text-center">Rp. 130.000</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-center" width="20">2</td>
+                                    <td>Bensin Hangkel</td>
+                                    <td class="text-center">Rp. 130.000</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-center" width="20">2</td>
+                                    <td>Bensin Hangkel</td>
+                                    <td class="text-center">Rp. 130.000</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-center" width="20">2</td>
+                                    <td>Bensin Hangkel</td>
+                                    <td class="text-center">Rp. 130.000</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-center" width="20">2</td>
+                                    <td>Bensin Hangkel</td>
+                                    <td class="text-center">Rp. 130.000</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-center" width="20">2</td>
+                                    <td>Bensin Hangkel</td>
+                                    <td class="text-center">Rp. 130.000</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-center" width="20">2</td>
+                                    <td>Bensin Hangkel</td>
+                                    <td class="text-center">Rp. 130.000</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-center" width="20">2</td>
+                                    <td>Bensin Hangkel</td>
+                                    <td class="text-center">Rp. 130.000</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-center" width="20">2</td>
+                                    <td>Bensin Hangkel</td>
+                                    <td class="text-center">Rp. 130.000</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-center" width="20">2</td>
+                                    <td>Bensin Hangkel</td>
+                                    <td class="text-center">Rp. 130.000</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-center" width="20">2</td>
+                                    <td>Bensin Hangkel</td>
+                                    <td class="text-center">Rp. 130.000</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-center" width="20">2</td>
+                                    <td>Bensin Hangkel</td>
+                                    <td class="text-center">Rp. 130.000</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-center" width="20">2</td>
+                                    <td>Bensin Hangkel</td>
+                                    <td class="text-center">Rp. 130.000</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-center" width="20">2</td>
+                                    <td>Bensin Hangkel</td>
+                                    <td class="text-center">Rp. 130.000</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-center" width="20">2</td>
+                                    <td>Bensin Hangkel</td>
+                                    <td class="text-center">Rp. 130.000</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-center" width="20">2</td>
+                                    <td>Bensin Hangkel</td>
+                                    <td class="text-center">Rp. 130.000</td>
+                                </tr>
+                                <tr>
+                                    <th colspan="2">Total</th>
+                                    <th class="text-center">Rp. 200.000</th>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="mt-3">
+                        <p class="h6">Catatan:</p>
+                        <ul class="text-justify">
+                            <li>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quam nobis voluptatem vel
+                                numquam voluptas
+                                vero veritatis aut molestias laborum autem.</li>
+                            <li>Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit dolorem culpa eos quos
+                                assumenda.
+                                Iste sed, non nam tempora beatae dolorem similique unde, doloribus mollitia eligendi sit
+                                quos
+                                architecto eveniet?</li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+
+    </table>
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"
         integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous">

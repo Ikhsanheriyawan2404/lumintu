@@ -56,7 +56,8 @@ class OrderController extends Controller
 
             return view('hotel.orders.index');
 
-        } elseif (auth()->user()->hasRole('valet')) {
+        }
+        elseif (auth()->user()->hasRole('valet')) {
             $orders = Order::with('pickups', 'deliveries', 'customer')
                 ->whereHas('pickups', function ($query) {
                     $query->where('user_id', auth()->user()->id);
@@ -69,7 +70,6 @@ class OrderController extends Controller
             return $dataTable->with([
                 'query' => $orders
             ])->render('admin.orders.index');
-
         } else {
             $query = Order::orderBy('orders.created_at', 'desc')
             ->with('customer');

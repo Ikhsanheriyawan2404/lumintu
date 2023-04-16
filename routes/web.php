@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\MasterCostController;
+use App\Http\Controllers\TestController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
@@ -17,16 +19,11 @@ Route::get('/', function () {
 
 Route::get('/login', function () {
     return view('login');
-});
+})->middleware('guest');
 
 Route::post('/login', [AuthController::class, 'login'])->name('login');
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
 
 Route::group(['middleware' => 'auth'], function () {
-
-    Route::group(['middleware' => 'role:manager'], function () {
-        //
-    });
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/dashboard/summary', [DashboardController::class, 'summary'])->name('dashboard.summary');
@@ -39,6 +36,7 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::resource('hotel', HotelController::class);
         Route::resource('pegawai', PegawaiController::class);
+        Route::resource('mastercost', MasterCostController::class);
 
         Route::resource('users', UserController::class);
 
@@ -47,9 +45,6 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::post('orders/{orderId}/change-status', [OrderController::class, 'changeOrderStatus'])
             ->name('orders.changeOrderStatus');
-
-        Route::post('orders/export-excel', [OrderController::class, 'exportExcel'])
-            ->name('orders.export-excel');
     });
 
     Route::group(['middleware' => 'role:valet'], function () {
@@ -95,7 +90,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('orders/{orderId}/edit', [OrderController::class, 'edit'])->name('orders.edit');
 
-    Route::resource('valet', ValetController::class);
+//    Route::resource('valet', ValetController::class);
 
     require_once __DIR__ . '/pegawai/pegawai.php';
 
@@ -116,15 +111,18 @@ Route::group(['middleware' => 'auth'], function () {
         return view('admin.orders.invoice.invoice');
     });
 
-    Route::get('invoice/print', function () {
-        return view('admin.orders.invoice.print_invoice');
-    });
 
-    Route::get('reports/bulanan', function () {
-        return view('admin.orders.report.bulanan');
-    });
+
+//    Route::get('invoice/print', function () {
+//        return view('admin.orders.invoice.print_invoice');
+//    });
+//
+//    Route::get('reports/bulanan', function () {
+//        return view('admin.orders.report.bulanan');
+//    });
 
     Route::get('reports/harian', function () {
         return view('admin.orders.report.harian');
     });
 });
+Route::get('reports/bulanan', [TestController::class, 'test']);
