@@ -24,6 +24,10 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middl
 
 Route::group(['middleware' => 'auth'], function () {
 
+    Route::group(['middleware' => 'role:manager'], function () {
+        //
+    });
+
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/dashboard/summary', [DashboardController::class, 'summary'])->name('dashboard.summary');
     Route::get('/dashboard/chart', [DashboardController::class, 'chart'])->name('dashboard.chart');
@@ -38,11 +42,14 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::resource('users', UserController::class);
 
-        Route::post('orders/{order:id}/approve-payment', [PaymentControllerb::class, 'approvePayment'])
+        Route::post('orders/{order:id}/approve-payment', [PaymentController::class, 'approvePayment'])
             ->name('orders.paid');
 
         Route::post('orders/{orderId}/change-status', [OrderController::class, 'changeOrderStatus'])
             ->name('orders.changeOrderStatus');
+
+        Route::post('orders/export-excel', [OrderController::class, 'exportExcel'])
+            ->name('orders.export-excel');
     });
 
     Route::group(['middleware' => 'role:valet'], function () {
@@ -59,17 +66,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::group(['middleware' => 'role:hotel'], function () {
 
-        Route::get('orders/create', [OrderController::class, 'create'])->name('orders.create');
-        Route::post('orders', [OrderController::class, 'store'])->name('orders.store');
-
-        Route::get('hotel/{userId}/price-list-view', [HotelController::class, 'getPriceList'])
-            ->name('hotel.price-list.view');
-
-        Route::post('hotel/{userId}/price-list', [HotelController::class, 'updatePriceList'])->name('hotel.price-list');
-
-        Route::get('orders/product-datatables/{customerId}', [OrderController::class, 'productDatatables']);
-
-        Route::get('orders/{productId}/product', [OrderController::class, 'getProduct']);
+        Route::get('orders/{productId}/product', [OrderController::class, 'getProductToPutOnListOrderTable'])->middleware(['role:superadmin|admin']);
 
         Route::get('orders/{orderId}/details', [OrderController::class, 'getOrderDetails']);
 
@@ -77,6 +74,17 @@ Route::group(['middleware' => 'auth'], function () {
             ->name('payments.upload');
 
     });
+
+    Route::get('orders/product-datatables/{customerId}', [OrderController::class, 'listProductDatatables'])
+        ->middleware(['role:superadmin|admin|hotel']);
+
+    // Halaman create order dan membuat order
+    Route::get('orders/create', [OrderController::class, 'create'])
+        ->name('orders.create')
+        ->middleware(['role:superadmin|admin|hotel']);
+    Route::post('orders', [OrderController::class, 'store'])
+        ->name('orders.store')
+        ->middleware(['role:superadmin|admin|hotel']);
 
     Route::get('payments/{orderId}/payment-documents', [PaymentController::class, 'datatables'])
         ->name('payments.datatables')->middleware(['role:superadmin|admin|hotel']);
@@ -89,11 +97,21 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::resource('valet', ValetController::class);
 
-    require __DIR__ . '/pegawai/pegawai.php';
+    require_once __DIR__ . '/pegawai/pegawai.php';
 
+    // Route price list hotel
+    Route::get('hotel/{userId}/price-list-view', [HotelController::class, 'getPriceList'])
+        ->name('hotel.price-list.view')
+        ->middleware('role:superadmin|admin|hotel');
+
+    Route::post('hotel/{userId}/price-list', [HotelController::class, 'updatePriceList'])
+        ->name('hotel.price-list')
+        ->middleware('role:superadmin|admin|hotel');
 
     Route::post('hotels/price-list', [HotelController::class, 'storePriceList'])->name('hotel.price-list.store');
 
+
+    // Temp Route
     Route::get('invoice/data', function () {
         return view('admin.orders.invoice.invoice');
     });

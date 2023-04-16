@@ -8,6 +8,7 @@ use App\Models\Pickup;
 use App\Models\Delivery;
 use App\Models\OrderStatus;
 use InvalidArgumentException;
+use App\Exports\OrdersExport;
 use App\Enums\OrderStatusEnum;
 use App\Mail\OrderNotification;
 use App\Models\ProductCustomer;
@@ -15,6 +16,7 @@ use App\DataTables\OrderDataTable;
 use App\Models\BridgeOrderProduct;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use Maatwebsite\Excel\Facades\Excel;
 use App\Notifications\OrderStatusNotif;
 use App\Http\Requests\OrderStoreRequest;
 use Yajra\DataTables\Facades\DataTables;
@@ -131,11 +133,16 @@ class OrderController extends Controller
     // Halaman create order dari user hotel
     public function create()
     {
-        return view('admin.orders.create');
+        return view('admin.orders.create', [
+            'customers' => User::role('hotel')->get(),
+        ]);
     }
 
-    // list barang dari setiap customer/user hotel
-    public function productDatatables($customerId)
+    /**
+     * list barang dari setiap customer/user hotel berdasarkan user id
+     * data dibutuhkan untuk menampilkan list barang yang bisa dipilih pada modal
+     */
+    public function listProductDatatables($customerId)
     {
         if (request()->ajax()) {
             $productCustomer = ProductCustomer::with('product')->where('user_id', $customerId)->get();
@@ -162,7 +169,7 @@ class OrderController extends Controller
 
                 $data = [
                     'order_number' => 'ORD-' . date('Ymd') . '-' . time(),
-                    'customer_id' => auth()->user()->id,
+                    'customer_id' => request('customer') ?? auth()->user()->id,
                     'estimate_date' => request('estimate_date'),
                     'description' => request('description'),
                     'total_price' => 0,
@@ -405,7 +412,7 @@ class OrderController extends Controller
 
 
     // Json response list input product
-    public function getProduct($productCustomerId)
+    public function getProductToPutOnListOrderTable($productCustomerId)
     {
         $product = ProductCustomer::with('product')->findOrFail($productCustomerId);
 
@@ -446,5 +453,10 @@ class OrderController extends Controller
         }
 
         return response()->json($data);
+    }
+
+    public function exportExcel()
+    {
+        return Excel::download(new OrdersExport, date('Ymd-His') . 'orders.xlsx');
     }
 }

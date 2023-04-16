@@ -161,9 +161,14 @@
                             <tr>
                                 <td class="w-30">
                                     <div class="d-flex px-2 py-1 align-items-center">
-                                        <div>
-                                            <img src="./assets/img/icons/flags/US.png" alt="Profil">
+                                        <div class="ms-5">
+                                            <p class="text-xs font-weight-bold mb-0">Waktu:</p>
+                                            <h6 class="text-sm mb-0">{{ $order->created_at }}</h6>
                                         </div>
+                                    </div>
+                                </td>
+                                <td class="w-30">
+                                    <div class="d-flex px-2 py-1 align-items-center">
                                         <div class="ms-5">
                                             <p class="text-xs font-weight-bold mb-0">Pelanggan:</p>
                                             <h6 class="text-sm mb-0">{{ $order->customer->name }}</h6>

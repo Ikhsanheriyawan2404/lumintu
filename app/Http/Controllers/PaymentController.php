@@ -12,7 +12,7 @@ class PaymentController extends Controller
     public function datatables($orderId)
     {
         if (request()->ajax()) {
-            $company = Payment::get();
+            $company = Payment::where('order_id', $orderId)->get();
             return DataTables::of($company)
                 ->addIndexColumn()
                 ->editColumn('path', function ($row) {

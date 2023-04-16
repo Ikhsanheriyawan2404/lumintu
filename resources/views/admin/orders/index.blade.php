@@ -3,15 +3,34 @@
 @section('content')
     <div class="row">
         <div class="col-12">
+            <div>
+                <form action="{{ route('orders.export-excel') }}" method="POST">
+                    @csrf
+                    {{-- <div class="form-group">
+                        <select name="status" id="status" class="form-control form-control-sm">
+                            <option value="">Semua</option>
+                            <option value="1">Belum Dibayar</option>
+                            <option value="2">Sudah Dibayar</option>
+                            <option value="3">Sudah Dikirim</option>
+                            <option value="4">Selesai</option>
+                            <option value="5">Batal</option>
+                        </select>
+                    </div> --}}
+                    <button type="submit" class="btn btn-sm btn-success">Export Excel</button>
+                    <button class="btn btn-sm btn-danger">Export PDF</button>
+                </form>
+            </div>
             <div class="card h-100">
                 <div class="card-header pb-0 p-3">
                     <div class="row">
                         <div class="col-6 d-flex align-items-center">
                             <h6 class="mb-0">Order/Pesanan</h6>
                         </div>
-                        {{-- <div class="col-6 text-end">
-                            <a href="{{ route('orders.create', []) }}" class="btn btn-outline-primary btn-sm mb-0">Tambah</a>
-                        </div> --}}
+                        <div class="col-6 text-end">
+                            @hasrole('superadmin|hotel')
+                                <a href="{{ route('orders.create', []) }}" class="btn btn-outline-primary btn-sm mb-0">Tambah</a>
+                            @endhasrole()
+                        </div>
                     </div>
                 </div>
                 <div class="card-body p-3 pb-0">
