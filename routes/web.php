@@ -31,13 +31,14 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/dashboard/chart', [DashboardController::class, 'chart'])->name('dashboard.chart');
 
     Route::group(['middleware' => 'role:superadmin|admin'], function () {
+        require __DIR__ . '/admin/masterPembayaran.php';
+
 
         Route::resource('products', ProductController::class);
         Route::resource('categories', CategoryController::class);
 
         Route::resource('hotel', HotelController::class);
         Route::resource('pegawai', PegawaiController::class);
-        Route::resource('mastercost', MasterCostController::class);
 
         Route::resource('users', UserController::class);
 
