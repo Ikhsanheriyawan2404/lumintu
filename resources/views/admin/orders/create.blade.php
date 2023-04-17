@@ -154,15 +154,20 @@
                 placeholder: 'Pilih Pelanggan',
                 width: '100%'
             });
-
             let loggedInUser = "{{ auth()->user()->id }}"
             let selectedUser = $('#customer').val();
+            if (selectedUser == null) {
+                userId = loggedInUser
+            } else {
+                userId = selectedUser
+            }
+
 
             let tableListProductOnModal = $('#table-product').DataTable({
                 processing: true,
                 serverSide: true,
                 responsive: true,
-                ajax: "{{ route('orders.index') }}" + "/product-datatables/" + selectedUser ?? loggedInUser,
+                ajax: "{{ route('orders.index') }}" + "/product-datatables/" + userId,
                 columns: [{
                         data: 'DT_RowIndex',
                         orderable: false
@@ -180,10 +185,19 @@
                 ]
             });
 
+            // Menampilkan info data kosong pada tabel order item
+            let tr = '<tr class="empty_data"><td colspan="8" class="text-center">Belum ada data</td></tr>'
+            
             $('#customer').on('change', function() {
                 selectedUser = $(this).val();
                 tableListProductOnModal.ajax.
                     url("{{ route('orders.index') }}" + "/product-datatables/" + selectedUser).load();
+
+                $('.removeProduct').parents('tr').remove();
+
+                $('#table-order tbody').append(tr);
+
+                calculateAll()
             });
 
             $('body').on('click', '#createOrder', function(e) {
@@ -225,8 +239,7 @@
                 });
             })
 
-            // Menampilkan info data kosong pada tabel order item
-            let tr = '<tr class="empty_data"><td colspan="8" class="text-center">Belum ada data</td></tr>'
+
             $('#table-order tbody').append(tr);
 
             // Choose item on modals to select in table orders
@@ -251,7 +264,7 @@
 
                         // Put every column input in tables
                         var tr = $('<tr>');
-                        for (var i = 0; i < length.data; i++) {
+                        for (var i = 0; i < data.length; i++) {
                             var td = $('<td class="text-center">').html(data[i]);
                             tr.append(td);
                         }

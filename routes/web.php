@@ -22,6 +22,7 @@ Route::get('/login', function () {
 })->middleware('guest');
 
 Route::post('/login', [AuthController::class, 'login'])->name('login');
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::group(['middleware' => 'auth'], function () {
 
@@ -45,6 +46,9 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::post('orders/{orderId}/change-status', [OrderController::class, 'changeOrderStatus'])
             ->name('orders.changeOrderStatus');
+
+        Route::post('orders/export-excel', [OrderController::class, 'exportExcel'])
+            ->name('orders.export-excel');
     });
 
     Route::group(['middleware' => 'role:valet'], function () {
@@ -61,14 +65,15 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::group(['middleware' => 'role:hotel'], function () {
 
-        Route::get('orders/{productId}/product', [OrderController::class, 'getProductToPutOnListOrderTable'])->middleware(['role:superadmin|admin']);
-
         Route::get('orders/{orderId}/details', [OrderController::class, 'getOrderDetails']);
 
         Route::post('payments/payment-documents', [PaymentController::class, 'uploadPayment'])
             ->name('payments.upload');
 
     });
+
+    Route::get('orders/{productId}/product', [OrderController::class, 'getProductToPutOnListOrderTable'])
+        ->middleware(['role:superadmin|admin|hotel']);
 
     Route::get('orders/product-datatables/{customerId}', [OrderController::class, 'listProductDatatables'])
         ->middleware(['role:superadmin|admin|hotel']);

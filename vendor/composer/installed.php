@@ -3,11 +3,7 @@
         'name' => 'laravel/laravel',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-<<<<<<< HEAD
-        'reference' => '464e7cca8a3991491bd23e10ec9255e0e277ea87',
-=======
         'reference' => 'c7cabceac46efdf1ec5c7833ac17c2be0435d3fe',
->>>>>>> 95a1c92d6d33b58a930d9252744879d7f48ec28e
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -416,11 +412,7 @@
         'laravel/laravel' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-<<<<<<< HEAD
-            'reference' => '464e7cca8a3991491bd23e10ec9255e0e277ea87',
-=======
             'reference' => 'c7cabceac46efdf1ec5c7833ac17c2be0435d3fe',
->>>>>>> 95a1c92d6d33b58a930d9252744879d7f48ec28e
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -561,8 +553,6 @@
             'aliases' => array(),
             'dev_requirement' => false,
         ),
-<<<<<<< HEAD
-=======
         'masterminds/html5' => array(
             'pretty_version' => '2.7.6',
             'version' => '2.7.6.0',
@@ -572,7 +562,6 @@
             'aliases' => array(),
             'dev_requirement' => false,
         ),
->>>>>>> 95a1c92d6d33b58a930d9252744879d7f48ec28e
         'mockery/mockery' => array(
             'pretty_version' => '1.5.1',
             'version' => '1.5.1.0',
@@ -687,8 +676,6 @@
             'aliases' => array(),
             'dev_requirement' => true,
         ),
-<<<<<<< HEAD
-=======
         'phenx/php-font-lib' => array(
             'pretty_version' => '0.5.4',
             'version' => '0.5.4.0',
@@ -707,7 +694,6 @@
             'aliases' => array(),
             'dev_requirement' => false,
         ),
->>>>>>> 95a1c92d6d33b58a930d9252744879d7f48ec28e
         'phpoffice/phpspreadsheet' => array(
             'pretty_version' => '1.28.0',
             'version' => '1.28.0.0',
