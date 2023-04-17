@@ -2,10 +2,11 @@
 
 namespace Database\Factories;
 
+use App\Models\MasterCost;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\MasterCost>
+ * @extends Factory<MasterCost>
  */
 class MasterCostFactory extends Factory
 {
@@ -14,10 +15,10 @@ class MasterCostFactory extends Factory
      *
      * @return array<string, mixed>
      */
-    public function definition()
+    public function definition(): array
     {
         return [
-            //
+            'name' => fake()->name(),
         ];
     }
 }
