@@ -86,7 +86,7 @@ class CostDataTable extends DataTable
             Column::make('qty')
                 ->title('Kwantitas'),
             Column::make('date')
-                ->title('Tanggal'),
+                ->title('Tanggalqq'),
             Column::make('description')
                 ->title('Deskripsi'),
             Column::computed('action')

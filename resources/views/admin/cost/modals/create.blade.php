@@ -1,4 +1,5 @@
 <!-- Modal Create -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/js/bootstrap-select.js"></script>
 <div class="modal fade" id="modal-create">
     <div class="modal-dialog modal-lg">
     <div class="modal-content">
@@ -27,7 +28,13 @@
                     <tbody>
                         <tr>
                             <td>
-                                <input type="text" name="name[]" class="form-control form-control-sm" placeholder="Nama">
+                                <select class="form-control form-control-sm select2" name="name[]">
+                                    <option selected disabled>Pilih Pelanggan</option>
+                                    
+                                    @foreach ($master_cost as $item)
+                                        <option value="{{ $item->name }}">{{ $item->name }}</option>
+                                    @endforeach
+                                </select>
                             </td>
                             <td>
                                 <input type="text" name="harga[]" class="form-control form-control-sm" placeholder="Harga">

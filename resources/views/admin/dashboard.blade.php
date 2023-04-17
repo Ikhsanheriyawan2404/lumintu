@@ -16,7 +16,7 @@
                                     </div>
                                 </h5>
                                 <p class="mb-0">
-                                    <span class="text-success text-sm font-weight-bolder">Cek</span>
+                                    <span class="text-success text-sm font-weight-bolder"><a href="{{ route('orders.index', []) }}">Cek</a></span>
                                 </p>
                             </div>
                         </div>

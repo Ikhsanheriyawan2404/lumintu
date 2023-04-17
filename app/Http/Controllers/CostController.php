@@ -6,13 +6,16 @@ use App\Models\Cost;
 use InvalidArgumentException;
 use App\DataTables\CostDataTable;
 use App\Http\Requests\CostRequest;
+use App\Models\MasterCost;
 use Illuminate\Support\Facades\DB;
 
 class CostController extends Controller
 {
     public function index(CostDataTable $dataTable)
     {
-        return $dataTable->render('admin.cost.index');
+        return $dataTable->render('admin.cost.index', [
+            'master_cost' => MasterCost::get(['name']),
+        ]);
     }
 
     /**

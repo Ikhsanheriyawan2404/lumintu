@@ -72,11 +72,35 @@ class OrderController extends Controller
 
         } else {
             $query = Order::orderBy('orders.created_at', 'desc')
+                ->when(request('filterStatus'), function ($query, $status) {
+                    return $query->where('payment_status', $status);
+                })
+                ->when(request('filterCustomer'), function ($query, $customerId) {
+                    return $query->where('customer_id', $customerId);
+                })
+                ->when(request('filterMonth'), function ($query, $month) {
+                    $year = now()->year; // set tahun saat ini
+                    return $query->whereYear('created_at', $year)
+                        ->whereMonth('created_at', $month);
+                })
                 ->with('customer');
+
+            $months = [];
+
+            for ($m = 1; $m <= 12; $m++) {
+                $month = [
+                    'key' => $m,
+                    'name' => date('F', mktime(0, 0, 0, $m, 1, date('Y')))
+                ];
+                $months[] = $month;
+            }
 
             return $dataTable->with([
                 'query' => $query
-            ])->render('admin.orders.index');
+            ])->render('admin.orders.index', [
+                'customers' => User::role('hotel')->get(),
+                'months' => $months,
+            ]);
         }
     }
 
@@ -168,8 +192,13 @@ class OrderController extends Controller
 
             DB::transaction(function () {
 
+                $lastOrder = Order::orderBy('id', 'desc')
+                ->first();
+
+                $orderNumber = $lastOrder ? ++$lastOrder->order_number : 10001;
+
                 $data = [
-                    'order_number' => 'ORD-' . date('Ymd') . '-' . time(),
+                    'order_number' => $orderNumber,
                     'customer_id' => request('customer') ?? auth()->user()->id,
                     'estimate_date' => request('estimate_date'),
                     'description' => request('description'),
@@ -458,6 +487,10 @@ class OrderController extends Controller
 
     public function exportExcel()
     {
-        return Excel::download(new OrdersExport, date('Ymd-His') . 'orders.xlsx');
+        $customerId = request('filterCustomer');
+        $paymentStatus = request('filterStatus');
+        $month = request('filterMonth');
+
+        return Excel::download(new OrdersExport($customerId, $paymentStatus, $month), date('Ymd-His') . 'orders.xlsx');
     }
 }

@@ -65,12 +65,12 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::group(['middleware' => 'role:hotel'], function () {
 
-        Route::get('orders/{orderId}/details', [OrderController::class, 'getOrderDetails']);
-
         Route::post('payments/payment-documents', [PaymentController::class, 'uploadPayment'])
             ->name('payments.upload');
 
     });
+
+    Route::get('orders/{orderId}/details', [OrderController::class, 'getOrderDetails'])->middleware(['role:superadmin|admin|hotel']);
 
     Route::get('orders/{productId}/product', [OrderController::class, 'getProductToPutOnListOrderTable'])
         ->middleware(['role:superadmin|admin|hotel']);

@@ -4,19 +4,44 @@
     <div class="row">
         <div class="col-12">
             <div>
-                <form action="{{ route('orders.export-excel') }}" method="POST">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="filterStatus">Status Pembayaran</label>
+                            <select name="filterStatus" id="filterStatus" class="form-control form-control-sm">
+                                <option selected disabled>Pilih Status Pembayaran</option>
+                                <option value="unpaid">Belum Dibayar</option>
+                                <option value="paid">Sudah Dibayar</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="filterCustomer">Customer</label>
+                            <select name="filterCustomer" id="filterCustomer" class="form-control form-control-sm">
+                                <option selected disabled>Pilih Customer</option>
+                                @foreach ($customers as $customer)
+                                    <option value="{{ $customer->id }}">{{ $customer->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="filterMonth">Bulan</label>
+                            <select name="filterMonth" id="filterMonth" class="form-control form-control-sm">
+                                <option selected disabled>Pilih Bulan</option>
+                                @foreach ($months as $month)
+                                    <option value="{{ $month['key'] }}">{{ $month['name'] }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <form id="formExport" method="POST">
                     @csrf
-                    {{-- <div class="form-group">
-                        <select name="status" id="status" class="form-control form-control-sm">
-                            <option value="">Semua</option>
-                            <option value="1">Belum Dibayar</option>
-                            <option value="2">Sudah Dibayar</option>
-                            <option value="3">Sudah Dikirim</option>
-                            <option value="4">Selesai</option>
-                            <option value="5">Batal</option>
-                        </select>
-                    </div> --}}
-                    <button type="submit" class="btn btn-sm btn-success">Export Excel</button>
+                    <button type="submit" class="btn btn-sm btn-success" id="btnExportExcel">Export Excel</button>
                     <button class="btn btn-sm btn-danger">Export PDF</button>
                 </form>
             </div>
@@ -68,6 +93,54 @@
     <script>
         $(document).ready(function() {
 
+            $('#filterMonth, #filterStatus, #filterCustomer').on('change', function() {
+                let table = $('#order-table').DataTable();
+                table.ajax.url(`
+                    {{ route('orders.index') }}?filterMonth=${$('#filterMonth').val()}&filterStatus=${$('#filterStatus').val()}&filterCustomer=${$('#filterCustomer').val()}
+                `).draw();
+            });
+
+            $('#btnExportExcel').on('click', function(e) {
+                e.preventDefault();
+
+                $('#btnExportExcel').attr('disabled', 'disabled');
+                $('#btnExportExcel').html('Loading ...');
+
+                var formData = new FormData($('#formExport')[0]);
+                formData.append('filterMonth', $('#filterMonth').val());
+                formData.append('filterStatus', $('#filterStatus').val());
+                formData.append('filterCustomer', $('#filterCustomer').val());
+
+                $.ajax({
+                    data: formData,
+                    url: "{{ route('orders.export-excel') }}",
+                    contentType: false,
+                    processData: false,
+                    type: "POST",
+                    success: function(data) {
+                        $('#formExport').trigger("reset");
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success',
+                            text: data.message,
+                        });
+                        $('#btnExportExcel').removeAttr('disabled');
+                        $('#btnExportExcel').html('Export Excel');
+                    },
+                    error: function(data) {
+                        $('#btnExportExcel').removeAttr('disabled');
+                        $('#btnExportExcel').html('Export Excel');
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oppss',
+                            text: data.responseJSON.message,
+                        });
+                        $.each(data.responseJSON.errors, function (index, value) {
+                            toastr.error(value);
+                        });
+                    }
+                });
+            });
 
             // setInterval(() => {
             //     let table = $('#order-table').DataTable();
