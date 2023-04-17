@@ -72,13 +72,13 @@ class OrderController extends Controller
 
         } else {
             $query = Order::orderBy('orders.created_at', 'desc')
-                ->when(request('filterStatus'), function ($query, $status) {
+                ->when(request('filterStatus') && request('filterStatus') != 'all', function ($query, $status) {
                     return $query->where('payment_status', $status);
                 })
-                ->when(request('filterCustomer'), function ($query, $customerId) {
+                ->when(request('filterCustomer') && request('filterCustomer') != 'all', function ($query, $customerId) {
                     return $query->where('customer_id', $customerId);
                 })
-                ->when(request('filterMonth'), function ($query, $month) {
+                ->when(request('filterMonth') && request('filterMonth') != 'all', function ($query, $month) {
                     $year = now()->year; // set tahun saat ini
                     return $query->whereYear('created_at', $year)
                         ->whereMonth('created_at', $month);
