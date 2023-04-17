@@ -8,8 +8,10 @@ use App\Http\Requests\CategoryRequest;
 use App\Http\Requests\CostMasterRequest;
 use App\Models\Category;
 use App\Models\MasterCost;
+use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Yajra\DataTables\Facades\DataTables;
 
 class MasterCostController extends Controller
 {
@@ -47,8 +49,6 @@ class MasterCostController extends Controller
         $category = MasterCost::findOrFail($categoryId);
         return response()->json($category);
     }
-
-
     public function destroy($id)
     {
         try {
@@ -62,5 +62,31 @@ class MasterCostController extends Controller
         return response()->json([
             'message' => 'Jenis barang berhasil dihapus',
         ]);
+    }
+
+    public function dataTables()
+    {
+        $orders = MasterCost::all();
+
+        return datatables()
+            ->of($orders)
+            ->addIndexColumn()
+            ->make(true);
+    }
+
+    public function show()
+    {
+        $orders = MasterCost::all();
+
+        return datatables()
+            ->of($orders)
+            ->addIndexColumn()
+            ->addColumn('action', function ($row) {
+                return '<button class="btn btn-sm btn-primary chooseProduct" data-id="' . $row->id . '">
+                    Pilih <i class="fa fa-check-circle">
+                    </button>';
+            })
+            ->rawColumns(['action', 'path'])
+            ->make(true);
     }
 }
