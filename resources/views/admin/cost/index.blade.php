@@ -20,7 +20,8 @@
             </div>
         </div>
     </div>
-    @include('admin.cost.modals.createOrUpdate')
+    @include('admin.cost.modals.create')
+    @include('admin.cost.modals.edit')
 
 @endsection
 
@@ -34,11 +35,16 @@
 
 @push('custom-scripts')
 
+    <!-- Select2 -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css"
     <!-- DataTables  & Plugins -->
     <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.4.1/js/dataTables.responsive.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.4.1/js/responsive.bootstrap4.min.js"></script>
+
+     <!-- Select2 -->
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -67,36 +73,18 @@
             formatted = output.reverse().join("");
             return ("" + formatted + ((parts) ? "." + parts[1].substr(0, 2) : ""));
         };
+
         $(function () {
-            $("#harga").keyup(function (e) {
+            $('body').on('keyup', '#harga', function(e) {
                 $(this).val(format($(this).val()));
             });
         });
 
-
-        let table2 = $('#table-product').DataTable({
-            processing: true,
-            serverSide: true,
-            responsive: true,
-            ajax: "{{ route('cost.index') }}" + "/product-datatables/" + "{{ auth()->user()->id }}",
-            columns: [{
-                data: 'DT_RowIndex',
-                orderable: false
-            },
-                {
-                    data: 'product.name'
-                },
-                {
-                    data: 'price'
-                },
-                {
-                    data: 'action',
-                    orderable: false
-                },
-            ]
-        });
-
         $(document).ready(function() {
+
+            $('.select2').select2({
+                
+            });
 
             $('#createNewItem').click(function() {
                 setTimeout(function() {
@@ -106,7 +94,7 @@
                 $('#saveBtn').html("Simpan");
                 $('#itemForm').trigger("reset");
                 $('.modal-title').html("Tambah Data Pengeluaran");
-                $('#modal-md').modal('show');
+                $('#modal-create').modal('show');
             });
 
             $('body').on('click', '#editItem', function() {
@@ -123,6 +111,7 @@
                     $('#name').val(data.name);
                     $('#harga').val(data.price);
                     $('#kwantitas').val(data.qty);
+                    $('#date').val(data.date);
                     $('#description').val(data.description);
                 })
             });
@@ -169,8 +158,7 @@
                     type: "POST",
                     success: function(data) {
                         $('#itemForm').trigger("reset");
-                        $('#modal-md').modal('hide');
-                        $('#cost-table').DataTable().draw();
+                        $('#modal-create').modal('hide');
                         Swal.fire({
                             icon: 'success',
                             title: 'Success',
@@ -191,14 +179,40 @@
                     }
                 });
             });
+
+            $('body').on('click', '.removeRow', function(e) {
+                e.preventDefault();
+                $(this).parents('tr').remove();
+            });
+
+            $('body').on('click', '#createRow', function(e) {
+                e.preventDefault();
+
+                let row = `
+                    <tr>
+                        <td>
+                            <input type="text" name="name[]" id="name" class="form-control form-control-sm" placeholder="Nama">
+                        </td>
+                        <td>
+                            <input type="text" name="harga[]" id="harga" class="form-control form-control-sm" placeholder="Harga">
+                        </td>
+                        <td>
+                            <input type="text" name="qty[]" id="qty" class="form-control form-control-sm" placeholder="Kuantitas">
+                        </td>
+                        <td>
+                            <input type="date" name="date[]" id="date" class="form-control form-control-sm" placeholder="Tanggal">
+                        </td>
+                        <td>
+                            <input type="text" name="description[]" id="description" class="form-control form-control-sm" placeholder="Deskripsi">
+                        </td>
+                        <td>
+                            <a class="btn btn-sm btn-danger removeRow"><i class="fa fa-trash"></i></a>
+                        </td>
+                    </tr>
+                `
+
+                $('#list-costs tbody').append(row);
+            });
         });
-
-        function showProduct() {
-            $('#modalProduct').modal('show');
-        }
-
-        function hideProduct() {
-            $('#modalProduct').modal('hide');
-        }
     </script>
 @endpush

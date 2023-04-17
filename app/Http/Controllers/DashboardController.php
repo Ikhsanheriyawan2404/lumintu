@@ -17,7 +17,7 @@ class DashboardController extends Controller
                 'orders' => Order::with('customer', 'order_details')->latest()->take(5)->get(),
             ]);
         } else {
-            return view('admin.index', [
+            return view('admin.dashboard', [
                 'categories' => Category::all(),
                 'orders' => Order::with('customer', 'order_details')->latest()->take(5)->get(),
             ]);

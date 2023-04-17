@@ -2,11 +2,12 @@
 
 namespace Database\Seeders;
 
+use Carbon\Carbon;
 use App\Models\Order;
-use App\Enums\OrderStatusEnum;
+use App\Models\Pickup;
 use App\Models\Delivery;
 use App\Models\OrderStatus;
-use App\Models\Pickup;
+use App\Enums\OrderStatusEnum;
 use Illuminate\Database\Seeder;
 
 class OrderSeeder extends Seeder
@@ -20,7 +21,7 @@ class OrderSeeder extends Seeder
     {
         // Order DONE
         $order = Order::create([
-            'order_number' => '10001',
+            'order_number' => 10001,
             'customer_id' => 4,
             'total_price' => 30000,
             'status' => 'done',
@@ -35,8 +36,6 @@ class OrderSeeder extends Seeder
             'product_customer_id' => 2,
             'qty' => 5,
         ]);
-
-
 
         Pickup::create([
             'order_id' => $order->id,
@@ -55,7 +54,7 @@ class OrderSeeder extends Seeder
         // ============================
 
         $order = Order::create([
-            'order_number' => '10002',
+            'order_number' => 10002,
             'customer_id' => 4,
             'total_price' => 30000,
             'status' => 'pending',
@@ -86,5 +85,42 @@ class OrderSeeder extends Seeder
             ['order_id' => 2, 'status' => 'delivery'],
             ['order_id' => 2, 'status' => 'done'],
         )->create();
+
+        for ($i = 0; $i < 100; $i++) {
+            $lastOrder = Order::orderBy('id', 'desc')
+                ->first();
+
+            $orderNumber = $lastOrder ? ++$lastOrder->order_number : 10001;
+
+            $order = Order::create([
+                'order_number' => $orderNumber,
+                'customer_id' => random_int(4, 10),
+                'total_price' => 200000,
+                'status' => OrderStatusEnum::PENDING,
+                'created_at' => Carbon::createFromTimestamp(rand(
+                    Carbon::now()->subDays(360)->timestamp,
+                    Carbon::now()->timestamp
+                ))
+            ]);
+
+            $order->order_details()->create([
+                'product_customer_id' => 1,
+                'qty' => random_int(1, 10),
+            ]);
+
+            $order->order_details()->create([
+                'product_customer_id' => 2,
+                'qty' => random_int(1, 10),
+            ]);
+
+            OrderStatus::create(
+                ['order_id' => $order->id, 'status' => 'pending'],
+                ['order_id' => $order->id, 'status' => 'approve'],
+                ['order_id' => $order->id, 'status' => 'pickup'],
+                ['order_id' => $order->id, 'status' => 'process'],
+                ['order_id' => $order->id, 'status' => 'delivery'],
+                ['order_id' => $order->id, 'status' => 'done'],
+            );
+        }
     }
 }

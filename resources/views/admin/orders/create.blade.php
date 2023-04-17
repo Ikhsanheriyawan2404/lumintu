@@ -24,6 +24,17 @@
                                     <li class="list-group-item">Nomor Order : <i id="order_no"></i></li>
                                     <li class="list-group-item">Total : Rp <i id="total_price"></i></li>
                                 </ul>
+                                @hasrole('superadmin|admin')
+                                    <div class="form-group">
+                                        <label for="customer">Pelanggan <span class="text-danger">*</span></label>
+                                        <select class="form-control form-control-sm select2" name="customer" id="customer">
+                                            <option selected disabled>Pilih Pelanggan</option>
+                                            @foreach ($customers as $customer)
+                                                <option value="{{ $customer->id }}">{{ $customer->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                @endhasrole
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
@@ -113,6 +124,8 @@
 @endsection
 
 @push('custom-styles')
+    <!-- Select2 -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <!-- DataTables -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.4.1/css/responsive.bootstrap5.min.css">
@@ -127,6 +140,9 @@
     <script src="https://cdn.datatables.net/responsive/2.4.1/js/dataTables.responsive.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.4.1/js/responsive.bootstrap4.min.js"></script>
 
+    <!-- Select2 -->
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
@@ -134,11 +150,24 @@
     <script>
         $(document).ready(function() {
 
-            let table2 = $('#table-product').DataTable({
+            $('#customer').select2({
+                placeholder: 'Pilih Pelanggan',
+                width: '100%'
+            });
+            let loggedInUser = "{{ auth()->user()->id }}"
+            let selectedUser = $('#customer').val();
+            if (selectedUser == null) {
+                userId = loggedInUser
+            } else {
+                userId = selectedUser
+            }
+
+
+            let tableListProductOnModal = $('#table-product').DataTable({
                 processing: true,
                 serverSide: true,
                 responsive: true,
-                ajax: "{{ route('orders.index') }}" + "/product-datatables/" + "{{ auth()->user()->id }}",
+                ajax: "{{ route('orders.index') }}" + "/product-datatables/" + userId,
                 columns: [{
                         data: 'DT_RowIndex',
                         orderable: false
@@ -154,6 +183,16 @@
                         orderable: false
                     },
                 ]
+            });
+
+            $('#customer').on('change', function() {
+                selectedUser = $(this).val();
+                tableListProductOnModal.ajax.
+                    url("{{ route('orders.index') }}" + "/product-datatables/" + selectedUser).load();
+
+                $('.removeProduct').parents('tr').remove();
+
+                calculateAll()
             });
 
             $('body').on('click', '#createOrder', function(e) {
@@ -196,8 +235,8 @@
             })
 
             // Menampilkan info data kosong pada tabel order item
-            let tr = '<tr class="empty_data"><td colspan="8" class="text-center">Belum ada data</td></tr>'
-            $('#table-order tbody').append(tr);
+            let dataKosong = '<tr class="empty_data"><td colspan="8" class="text-center">Belum ada data</td></tr>'
+            $('#table-order tbody').append(dataKosong);
 
             // Choose item on modals to select in table orders
             $('body').on('click', '.chooseProduct', function(e) {
@@ -221,7 +260,7 @@
 
                         // Put every column input in tables
                         var tr = $('<tr>');
-                        for (var i = 0; i < 5; i++) {
+                        for (var i = 0; i < data.length; i++) {
                             var td = $('<td class="text-center">').html(data[i]);
                             tr.append(td);
                         }

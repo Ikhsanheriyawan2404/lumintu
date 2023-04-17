@@ -1,4 +1,4 @@
-<!-- Modal Create And Edit -->
+<!-- Modal Create -->
 <div class="modal fade" id="modal-md">
     <div class="modal-dialog">
     <div class="modal-content">
@@ -12,13 +12,6 @@
         @csrf
         <input type="hidden" name="item_id" id="item_id">
         <div class="modal-body">
-            <div class="col-md-6">
-                <div class="input-group mb-3">
-                    <input type="text" class="form-control" placeholder="Pilih Category" disabled>
-                    <button type="button" class="btn btn-primary mb-0" onclick="showProduct()"><i
-                            class="fa fa-search"></i></button>
-                </div>
-            </div>
             <div class="form-group">
                 <label for="name">Nama Pengeluran<span class="text-danger">*</span></label>
                 <input type="text" class="form-control form-control-sm mr-2" name="name" id="name">
@@ -30,6 +23,10 @@
             <div class="form-group">
                 <label for="kwantitas">Kwantitas<span class="text-danger">*</span></label>
                 <input type="number" min="1" class="form-control form-control-sm mr-2" name="qty" id="kwantitas">
+            </div>
+            <div class="form-group">
+                <label for="date">Tanggal<span class="text-danger">*</span></label>
+                <input type="date" class="form-control form-control-sm mr-2" name="date" id="date">
             </div>
             <div class="form-group">
                 <label for="description">Deskripsi</label>
@@ -46,35 +43,3 @@
     <!-- /.modal-dialog -->
 </div>
 <!-- /.modal -->
-
-<div class="modal fade" id="modalProduct" tabindex="-1" role="dialog" aria-labelledby="detailsModalLabel"
-     style="display: none;" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="detailsModalLabel">Product Modal</h5>
-                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="table-responsive">
-                    <table class="table table-sm table-hover table-striped table-bordered" id="table-product"
-                           width="100%">
-                        <thead>
-                        <tr>
-                            <th width="5%">No</th>
-                            <th>Nama</th>
-                            <th>Harga</th>
-                            <th><i class="fa fa-cogs"></i></th>
-                        </tr>
-                        </thead>
-                        <tbody>
-
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>

@@ -8,6 +8,7 @@ use App\Models\Pickup;
 use App\Models\Delivery;
 use App\Models\OrderStatus;
 use InvalidArgumentException;
+use App\Exports\OrdersExport;
 use App\Enums\OrderStatusEnum;
 use App\Mail\OrderNotification;
 use App\Models\ProductCustomer;
@@ -15,6 +16,7 @@ use App\DataTables\OrderDataTable;
 use App\Models\BridgeOrderProduct;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use Maatwebsite\Excel\Facades\Excel;
 use App\Notifications\OrderStatusNotif;
 use App\Http\Requests\OrderStoreRequest;
 use Yajra\DataTables\Facades\DataTables;
@@ -54,8 +56,7 @@ class OrderController extends Controller
 
             return view('hotel.orders.index');
 
-        }
-        elseif (auth()->user()->hasRole('valet')) {
+        } elseif (auth()->user()->hasRole('valet')) {
             $orders = Order::with('pickups', 'deliveries', 'customer')
                 ->whereHas('pickups', function ($query) {
                     $query->where('user_id', auth()->user()->id);
@@ -68,12 +69,38 @@ class OrderController extends Controller
             return $dataTable->with([
                 'query' => $orders
             ])->render('admin.orders.index');
+
         } else {
             $query = Order::orderBy('orders.created_at', 'desc')
-            ->with('customer');
+                ->when(request('filterStatus'), function ($query, $status) {
+                    return $query->where('payment_status', $status);
+                })
+                ->when(request('filterCustomer'), function ($query, $customerId) {
+                    return $query->where('customer_id', $customerId);
+                })
+                ->when(request('filterMonth'), function ($query, $month) {
+                    $year = now()->year; // set tahun saat ini
+                    return $query->whereYear('created_at', $year)
+                        ->whereMonth('created_at', $month);
+                })
+                ->with('customer');
+
+            $months = [];
+
+            for ($m = 1; $m <= 12; $m++) {
+                $month = [
+                    'key' => $m,
+                    'name' => date('F', mktime(0, 0, 0, $m, 1, date('Y')))
+                ];
+                $months[] = $month;
+            }
+
             return $dataTable->with([
                 'query' => $query
-            ])->render('admin.orders.index');
+            ])->render('admin.orders.index', [
+                'customers' => User::role('hotel')->get(),
+                'months' => $months,
+            ]);
         }
     }
 
@@ -131,11 +158,16 @@ class OrderController extends Controller
     // Halaman create order dari user hotel
     public function create()
     {
-        return view('admin.orders.create');
+        return view('admin.orders.create', [
+            'customers' => User::role('hotel')->get(),
+        ]);
     }
 
-    // list barang dari setiap customer/user hotel
-    public function productDatatables($customerId)
+    /**
+     * list barang dari setiap customer/user hotel berdasarkan user id
+     * data dibutuhkan untuk menampilkan list barang yang bisa dipilih pada modal
+     */
+    public function listProductDatatables($customerId)
     {
         if (request()->ajax()) {
             $productCustomer = ProductCustomer::with('product')->where('user_id', $customerId)->get();
@@ -160,9 +192,14 @@ class OrderController extends Controller
 
             DB::transaction(function () {
 
+                $lastOrder = Order::orderBy('id', 'desc')
+                ->first();
+
+                $orderNumber = $lastOrder ? ++$lastOrder->order_number : 10001;
+
                 $data = [
-                    'order_number' => 'ORD-' . date('Ymd') . '-' . time(),
-                    'customer_id' => auth()->user()->id,
+                    'order_number' => $orderNumber,
+                    'customer_id' => request('customer') ?? auth()->user()->id,
                     'estimate_date' => request('estimate_date'),
                     'description' => request('description'),
                     'total_price' => 0,
@@ -405,7 +442,7 @@ class OrderController extends Controller
 
 
     // Json response list input product
-    public function getProduct($productCustomerId)
+    public function getProductToPutOnListOrderTable($productCustomerId)
     {
         $product = ProductCustomer::with('product')->findOrFail($productCustomerId);
 
@@ -446,5 +483,14 @@ class OrderController extends Controller
         }
 
         return response()->json($data);
+    }
+
+    public function exportExcel()
+    {
+        $customerId = request('filterCustomer');
+        $paymentStatus = request('filterStatus');
+        $month = request('filterMonth');
+
+        return Excel::download(new OrdersExport($customerId, $paymentStatus, $month), date('Ymd-His') . 'orders.xlsx');
     }
 }

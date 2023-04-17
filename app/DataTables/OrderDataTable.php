@@ -24,13 +24,13 @@ class OrderDataTable extends DataTable
     {
         return (new EloquentDataTable($query))
             ->addIndexColumn()
-            ->editColumn('created_at', function ($row) {
-                return '<a href="javascript:void()" data-id="' .$row->id. '" id="showItem">'.$row->created_at.'</a>';
+            ->editColumn('order_number', function ($row) {
+                return '<a href="javascript:void()" data-id="' .$row->id. '" id="showItem">ORD#'.$row->order_number.'</a>';
             })
             ->addColumn('action', function ($row) {
                 return view('admin.orders.datatables.action', compact('row'))->render();
             })
-            ->rawColumns(['action', 'created_at', 'check']);
+            ->rawColumns(['action', 'order_number', 'check']);
     }
 
     /**
@@ -83,6 +83,9 @@ class OrderDataTable extends DataTable
                 ->orderable(false)
                 ->addClass("text-sm font-weight-normal")
                 ->addClass('text-center'),
+            Column::make('order_number')
+                ->addClass("text-sm font-weight-normal")
+                ->title('No Order'),
             Column::make('created_at')
                 ->addClass("text-sm font-weight-normal")
                 ->title('Tgl Order'),
