@@ -2,15 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\DataTables\CostDataTable;
-use App\DataTables\ProductsDataTable;
-use App\Http\Requests\CostRequest;
-use App\Http\Requests\ProductRequest;
-use App\Models\Category;
 use App\Models\Cost;
-use App\Models\Product;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use InvalidArgumentException;
+use App\DataTables\CostDataTable;
+use App\Http\Requests\CostRequest;
 use Illuminate\Support\Facades\DB;
 
 class CostController extends Controller
@@ -27,22 +22,32 @@ class CostController extends Controller
     public function store(CostRequest $request)
     {
         try {
-                DB::transaction(function () use ($request) {
-
+            DB::transaction(function () use ($request) {
+                $itemId = request('item_id');
                 $cost = $request->validated();
-                $price = (int)str_replace(',', '', $request->price);
+                $cost['user_id'] = auth()->user()->id;
 
-                Cost::create(
-                    [
-                        'name' => $request->name,
-                        'price' => $price,
-                        'qty' => $request->qty,
-                        'description' => $request->description,
-                        'date' => now(),
-                        'user_id' => auth()->user()->id,
-                    ]
-                    , $cost);
+                if ($itemId) {
 
+                    $cost['harga'] = (int)str_replace(',', '', request('harga'));
+                    $cost = Cost::find($itemId);
+                    $cost->update([
+                        'id' => $itemId
+                    ], $cost);
+
+                } else {
+                    $name = request('name');
+                    for ($i = 0; $i < count($name); $i++) {
+                        Cost::create([
+                            'name' => $name[$i],
+                            'price' => (int)str_replace(',', '', request('harga')[$i]),
+                            'qty' => $cost['qty'][$i],
+                            'description' => $cost['description'][$i],
+                            'date' => $cost['date'][$i] ?? now(),
+                            'user_id' => auth()->user()->id,
+                        ]);
+                    }
+                }
             });
         } catch (InvalidArgumentException $e) {
             return response()->json([
@@ -58,9 +63,9 @@ class CostController extends Controller
     /**
      * Return berupa json barang untuk ditampilkan datanya di dalam modal .
      */
-    public function edit($productId): \Illuminate\Http\JsonResponse
+    public function edit($costId): \Illuminate\Http\JsonResponse
     {
-        $cost = Cost::find($productId);
+        $cost = Cost::find($costId);
         return response()->json($cost);
     }
 

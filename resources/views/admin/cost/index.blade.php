@@ -20,7 +20,8 @@
             </div>
         </div>
     </div>
-    @include('admin.cost.modals.createOrUpdate')
+    @include('admin.cost.modals.create')
+    @include('admin.cost.modals.edit')
 
 @endsection
 
@@ -67,33 +68,11 @@
             formatted = output.reverse().join("");
             return ("" + formatted + ((parts) ? "." + parts[1].substr(0, 2) : ""));
         };
+
         $(function () {
-            $("#harga").keyup(function (e) {
+            $('body').on('keyup', '#harga', function(e) {
                 $(this).val(format($(this).val()));
             });
-        });
-
-
-        let table2 = $('#table-product').DataTable({
-            processing: true,
-            serverSide: true,
-            responsive: true,
-            ajax: "{{ route('cost.index') }}" + "/product-datatables/" + "{{ auth()->user()->id }}",
-            columns: [{
-                data: 'DT_RowIndex',
-                orderable: false
-            },
-                {
-                    data: 'product.name'
-                },
-                {
-                    data: 'price'
-                },
-                {
-                    data: 'action',
-                    orderable: false
-                },
-            ]
         });
 
         $(document).ready(function() {
@@ -106,7 +85,7 @@
                 $('#saveBtn').html("Simpan");
                 $('#itemForm').trigger("reset");
                 $('.modal-title').html("Tambah Data Pengeluaran");
-                $('#modal-md').modal('show');
+                $('#modal-create').modal('show');
             });
 
             $('body').on('click', '#editItem', function() {
@@ -123,6 +102,7 @@
                     $('#name').val(data.name);
                     $('#harga').val(data.price);
                     $('#kwantitas').val(data.qty);
+                    $('#date').val(data.date);
                     $('#description').val(data.description);
                 })
             });
@@ -169,8 +149,7 @@
                     type: "POST",
                     success: function(data) {
                         $('#itemForm').trigger("reset");
-                        $('#modal-md').modal('hide');
-                        $('#cost-table').DataTable().draw();
+                        $('#modal-create').modal('hide');
                         Swal.fire({
                             icon: 'success',
                             title: 'Success',
@@ -191,14 +170,40 @@
                     }
                 });
             });
+
+            $('body').on('click', '.removeRow', function(e) {
+                e.preventDefault();
+                $(this).parents('tr').remove();
+            });
+
+            $('body').on('click', '#createRow', function(e) {
+                e.preventDefault();
+
+                let row = `
+                    <tr>
+                        <td>
+                            <input type="text" name="name[]" id="name" class="form-control form-control-sm" placeholder="Nama">
+                        </td>
+                        <td>
+                            <input type="text" name="harga[]" id="harga" class="form-control form-control-sm" placeholder="Harga">
+                        </td>
+                        <td>
+                            <input type="text" name="qty[]" id="qty" class="form-control form-control-sm" placeholder="Kuantitas">
+                        </td>
+                        <td>
+                            <input type="date" name="date[]" id="date" class="form-control form-control-sm" placeholder="Tanggal">
+                        </td>
+                        <td>
+                            <input type="text" name="description[]" id="description" class="form-control form-control-sm" placeholder="Deskripsi">
+                        </td>
+                        <td>
+                            <a class="btn btn-sm btn-danger removeRow"><i class="fa fa-trash"></i></a>
+                        </td>
+                    </tr>
+                `
+
+                $('#list-costs tbody').append(row);
+            });
         });
-
-        function showProduct() {
-            $('#modalProduct').modal('show');
-        }
-
-        function hideProduct() {
-            $('#modalProduct').modal('hide');
-        }
     </script>
 @endpush

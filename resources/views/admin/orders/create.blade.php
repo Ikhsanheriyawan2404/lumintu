@@ -185,17 +185,12 @@
                 ]
             });
 
-            // Menampilkan info data kosong pada tabel order item
-            let tr = '<tr class="empty_data"><td colspan="8" class="text-center">Belum ada data</td></tr>'
-            
             $('#customer').on('change', function() {
                 selectedUser = $(this).val();
                 tableListProductOnModal.ajax.
                     url("{{ route('orders.index') }}" + "/product-datatables/" + selectedUser).load();
 
                 $('.removeProduct').parents('tr').remove();
-
-                $('#table-order tbody').append(tr);
 
                 calculateAll()
             });
@@ -239,8 +234,9 @@
                 });
             })
 
-
-            $('#table-order tbody').append(tr);
+            // Menampilkan info data kosong pada tabel order item
+            let dataKosong = '<tr class="empty_data"><td colspan="8" class="text-center">Belum ada data</td></tr>'
+            $('#table-order tbody').append(dataKosong);
 
             // Choose item on modals to select in table orders
             $('body').on('click', '.chooseProduct', function(e) {
