@@ -1,5 +1,4 @@
 <!-- Modal Create -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/js/bootstrap-select.js"></script>
 <div class="modal fade" id="modal-create">
     <div class="modal-dialog modal-lg">
     <div class="modal-content">
@@ -9,7 +8,7 @@
                 <span aria-hidden="true">&times;</span>
             </button>
         </div>
-        <form id="itemForm" name="itemForm" method="post">
+        <form id="createForm" name="createForm" method="post">
         @csrf
         <div class="modal-body">
             <button class="btn btn-sm btn-primary" id="createRow">Tambah Baris</button>
@@ -20,7 +19,6 @@
                             <th>Nama <span class="text-danger">*</span></th>
                             <th>Harga <span class="text-danger">*</span></th>
                             <th>Kuantitas <span class="text-danger">*</span></th>
-                            <th>Tanggal</th>
                             <th>Deskripsi</th>
                             <th><i class="fa fa-cog"></i></th>
                         </tr>
@@ -29,21 +27,17 @@
                         <tr>
                             <td>
                                 <select class="form-control form-control-sm select2" name="name[]">
-                                    <option selected disabled>Pilih Pelanggan</option>
-                                    
+                                    <option selected disabled>Pilih Pengeluaran</option>
                                     @foreach ($master_cost as $item)
-                                        <option value="{{ $item->name }}">{{ $item->name }}</option>
+                                        <option data-tokens="{{ $item->name }}">{{ $item->name }}</option>
                                     @endforeach
                                 </select>
                             </td>
                             <td>
-                                <input type="text" name="harga[]" class="form-control form-control-sm" placeholder="Harga">
+                                <input type="text" name="harga[]" id="harga" class="form-control form-control-sm" placeholder="Harga">
                             </td>
                             <td>
                                 <input type="text" name="qty[]" class="form-control form-control-sm" placeholder="Kuantitas">
-                            </td>
-                            <td>
-                                <input type="date" name="date[]" class="form-control form-control-sm" placeholder="Tanggal">
                             </td>
                             <td>
                                 <input type="text" name="description[]" class="form-control form-control-sm" placeholder="Deskripsi">

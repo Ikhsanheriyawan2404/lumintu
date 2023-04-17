@@ -20,8 +20,8 @@
             </div>
         </div>
     </div>
-    @include('admin.cost.modals.create')
     @include('admin.cost.modals.edit')
+    @include('admin.cost.modals.create')
 
 @endsection
 
@@ -30,21 +30,21 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.4.1/css/responsive.bootstrap5.min.css">
 
+    <!-- Select2 -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 @endpush
 
 @push('custom-scripts')
-
-    <!-- Select2 -->
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css"
     <!-- DataTables  & Plugins -->
     <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.4.1/js/dataTables.responsive.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.4.1/js/responsive.bootstrap4.min.js"></script>
 
-     <!-- Select2 -->
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <!-- Select2 -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -74,16 +74,14 @@
             return ("" + formatted + ((parts) ? "." + parts[1].substr(0, 2) : ""));
         };
 
-        $(function () {
+        $(document).ready(function() {
+
             $('body').on('keyup', '#harga', function(e) {
                 $(this).val(format($(this).val()));
             });
-        });
-
-        $(document).ready(function() {
 
             $('.select2').select2({
-                
+                width: '100%',
             });
 
             $('#createNewItem').click(function() {
@@ -94,6 +92,7 @@
                 $('#saveBtn').html("Simpan");
                 $('#itemForm').trigger("reset");
                 $('.modal-title').html("Tambah Data Pengeluaran");
+                $('.removeRow').parents('tr').remove();
                 $('#modal-create').modal('show');
             });
 
@@ -109,7 +108,7 @@
                     $('#saveBtn').html("Simpan");
                     $('#item_id').val(data.id);
                     $('#name').val(data.name);
-                    $('#harga').val(data.price);
+                    $('#price').val(data.price);
                     $('#kwantitas').val(data.qty);
                     $('#date').val(data.date);
                     $('#description').val(data.description);
@@ -147,37 +146,12 @@
 
             $('#saveBtn').click(function(e) {
                 e.preventDefault();
-                $('#saveBtn').attr('disabled', 'disabled');
-                $('#saveBtn').html('Simpan ...');
-                var formData = new FormData($('#itemForm')[0]);
-                $.ajax({
-                    data: formData,
-                    url: "{{ route('cost.store') }}",
-                    contentType: false,
-                    processData: false,
-                    type: "POST",
-                    success: function(data) {
-                        $('#itemForm').trigger("reset");
-                        $('#modal-create').modal('hide');
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Success',
-                            text: data.message,
-                        });
-                    },
-                    error: function(data) {
-                        $('#saveBtn').removeAttr('disabled');
-                        $('#saveBtn').html("Simpan");
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Oppss',
-                            text: data.responseJSON.message,
-                        });
-                        $.each(data.responseJSON.errors, function(index, value) {
-                            toastr.error(value);
-                        });
-                    }
-                });
+                save('#saveBtn', '#createForm', '#modal-create')
+            });
+
+            $('#updateBtn').click(function(e) {
+                e.preventDefault();
+                save('#updateBtn', '#updateForm', '#modal-md')
             });
 
             $('body').on('click', '.removeRow', function(e) {
@@ -188,19 +162,25 @@
             $('body').on('click', '#createRow', function(e) {
                 e.preventDefault();
 
+                let arrayData = {!! json_encode($master_cost) !!};
+
+                let listOptions = '<option selected disable>Pilih Pengeluaran</option>';
+                $.each(arrayData, function(key, value) {
+                    listOptions += `<option value="${value.name}">${value.name}</option>`;
+                });
+
                 let row = `
                     <tr>
                         <td>
-                            <input type="text" name="name[]" id="name" class="form-control form-control-sm" placeholder="Nama">
+                            <select class="form-control form-control-sm select2" name="name[]">
+                                ${listOptions}
+                            </select>
                         </td>
                         <td>
                             <input type="text" name="harga[]" id="harga" class="form-control form-control-sm" placeholder="Harga">
                         </td>
                         <td>
                             <input type="text" name="qty[]" id="qty" class="form-control form-control-sm" placeholder="Kuantitas">
-                        </td>
-                        <td>
-                            <input type="date" name="date[]" id="date" class="form-control form-control-sm" placeholder="Tanggal">
                         </td>
                         <td>
                             <input type="text" name="description[]" id="description" class="form-control form-control-sm" placeholder="Deskripsi">
@@ -212,7 +192,46 @@
                 `
 
                 $('#list-costs tbody').append(row);
+
+                $('body .select2').select2({
+                    width: '100%',
+                });
             });
         });
+
+        function save(btn, itemForm, modal) {
+            $(btn).attr('disabled', 'disabled');
+            $(btn).html('Simpan ...');
+            var formData = new FormData($(itemForm)[0]);
+            $.ajax({
+                data: formData,
+                url: "{{ route('cost.store') }}",
+                contentType: false,
+                processData: false,
+                type: "POST",
+                success: function(data) {
+                    $('#itemForm').trigger("reset");
+                    $(modal).modal('hide');
+                    $('#cost-table').DataTable().draw();
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success',
+                        text: data.message,
+                    });
+                },
+                error: function(data) {
+                    $(btn).removeAttr('disabled');
+                    $(btn).html("Simpan");
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oppss',
+                        text: data.responseJSON.message,
+                    });
+                    $.each(data.responseJSON.errors, function(index, value) {
+                        toastr.error(value);
+                    });
+                }
+            });
+        }
     </script>
 @endpush

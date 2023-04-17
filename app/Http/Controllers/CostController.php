@@ -33,10 +33,7 @@ class CostController extends Controller
                 if ($itemId) {
 
                     $cost['harga'] = (int)str_replace(',', '', request('harga'));
-                    $cost = Cost::find($itemId);
-                    $cost->update([
-                        'id' => $itemId
-                    ], $cost);
+                    Cost::find($itemId)->update($cost);
 
                 } else {
                     $name = request('name');
@@ -46,7 +43,7 @@ class CostController extends Controller
                             'price' => (int)str_replace(',', '', request('harga')[$i]),
                             'qty' => $cost['qty'][$i],
                             'description' => $cost['description'][$i],
-                            'date' => $cost['date'][$i] ?? now(),
+                            'date' => now(),
                             'user_id' => auth()->user()->id,
                         ]);
                     }

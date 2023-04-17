@@ -8,7 +8,7 @@
                 <span aria-hidden="true">&times;</span>
             </button>
         </div>
-        <form id="itemForm" name="itemForm" method="post">
+        <form id="updateForm" name="updateForm" method="post">
         @csrf
         <input type="hidden" name="item_id" id="item_id">
         <div class="modal-body">
@@ -18,7 +18,7 @@
             </div>
             <div class="form-group">
                 <label for="harga">Harga<span class="text-danger">*</span></label>
-                <input type="text" class="form-control form-control-sm mr-2 price" name="price" id="harga">
+                <input type="text" class="form-control form-control-sm mr-2 price" name="harga" id="price">
             </div>
             <div class="form-group">
                 <label for="kwantitas">Kwantitas<span class="text-danger">*</span></label>
@@ -34,7 +34,7 @@
             </div>
         </div>
         <div class="modal-footer">
-            <button type="submit" class="btn btn-sm btn-primary float-right" id="saveBtn">Simpan</button>
+            <button type="submit" class="btn btn-sm btn-primary float-right" id="updateBtn">Simpan</button>
         </div>
         </form>
     </div>
