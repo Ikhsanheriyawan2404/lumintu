@@ -10,14 +10,14 @@
     </title>
     <!--     Fonts and icons     -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.4/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="{{ asset('library/http_cdn.jsdelivr.net_npm_bootstrap-icons@1.10.4_font_bootstrap-icons.css') }}">
     <!-- Nucleo Icons -->
     <link href="{{ asset('assets/admin/css/nucleo-icons.css') }}" rel="stylesheet" />
     <link href="{{ asset('assets/admin/css/nucleo-svg.css') }}" rel="stylesheet" />
     <!-- Font Awesome Icons -->
     {{-- <link rel="stylesheet" href="{{ asset('assets/icons/css/all.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/icons/css/fontawesome.css') }}" /> --}}
-    <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
+    <script src="{{ asset('library/http_kit.fontawesome.com_42d5adcbca.js') }}" crossorigin="anonymous"></script>
     {{-- <link rel="stylesheet" href="{{ asset('assets/icons/css/solid.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/icons/css/brands.css') }}" /> --}}
     <!-- CSS Files -->
@@ -291,12 +291,12 @@
         }
     </script>
     <!-- Github buttons -->
-    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <script async defer src="{{ asset('library/http_buttons.github.io_buttons.js') }}"></script>
     <!-- Control Center for Soft Dashboard: parallax effects, scripts for the example pages etc -->
     <script src="{{ asset('assets/admin/js/argon-dashboard.min.js?v=2.0.4') }}"></script>
 
     <!-- JQUERY -->
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"
+    <script src="{{ asset('library/http_code.jquery.com_jquery-3.6.4.js') }}"
         integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
 
     @stack('custom-scripts')
