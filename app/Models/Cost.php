@@ -12,6 +12,7 @@ class Cost extends Model
     protected $fillable = [
         'name',
         'price',
+        'total',
         'qty',
         'description',
         'date',

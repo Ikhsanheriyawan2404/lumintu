@@ -29,12 +29,15 @@
                         <li class="nav-item">
                             <a class="page-scroll" href="#contact">Kontak</a>
                         </li>
+                        <li class="nav-item">
+                                <a class="page-scroll" data-scroll-nav="0" href="{{ route('login') }}">Login</a>
+                        </li>
                     </ul>
                 </div> <!-- navbar collapse -->
 
-                <div class="navbar-btn d-none d-sm-inline-block">
-                    <a class="main-btn" data-scroll-nav="0" href="{{ route('login') }}">Login</a>
-                </div>
+{{--                <div class="navbar-btn d-none d-sm-inline-block nav-item">--}}
+{{--                    <a class="main-btn page-scroll" data-scroll-nav="0" href="{{ route('login') }}">Login</a>--}}
+{{--                </div>--}}
             </nav> <!-- navbar -->
         </div>
     </div> <!-- row -->

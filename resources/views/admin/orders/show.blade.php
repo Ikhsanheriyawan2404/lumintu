@@ -17,10 +17,12 @@
                         </div>
                         <div>
                             <a href="{{ route('orders.index', []) }}" class="btn bg-gradient-secondary ms-auto mb-0">Kembali</a>
+                            @role('superadmin|hotel|admin')
                             <form action="{{ route('orders.export-detail-pdf', $order->id) }}" method="post">
                                 @csrf
                                 <button type="submit" class="btn bg-gradient-danger ms-auto mb-0">Cetak</button>
                             </form>
+                            @endrole
                         </div>
                     </div>
                 </div>
@@ -115,7 +117,7 @@
                             @if(auth()->user()->hasRole('hotel'))
                                 <button type="submit" class="btn btn-sm btn-primary" id="uploadVerifPayment">Upload Bukti Pembayaran</button>
                                 @include('admin.orders.partials.table-payments')
-                            @else
+                            @elseif (auth()->user()->hasRole('superadmin|admin'))
                                 <form action="{{ route('orders.paid', $order->id) }}" method="post">
                                     @csrf
                                     <button type="submit" class="btn btn-sm btn-primary" >Approve Pembayaran</button>
