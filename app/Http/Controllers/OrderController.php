@@ -72,16 +72,16 @@ class OrderController extends Controller
 
         } else {
             $query = Order::orderBy('orders.created_at', 'desc')
-                ->when(request('filterStatus') && request('filterStatus') != 'all', function ($query, $status) {
-                    return $query->where('payment_status', $status);
+                ->when(request('filterStatus') && request('filterStatus') !== 'all', function ($query) {
+                    return $query->where('payment_status', request('filterStatus'));
                 })
-                ->when(request('filterCustomer') && request('filterCustomer') != 'all', function ($query, $customerId) {
-                    return $query->where('customer_id', $customerId);
+                ->when(request('filterCustomer') && request('filterCustomer') !== 'all', function ($query) {
+                    return $query->where('customer_id', request('filterCustomer'));
                 })
-                ->when(request('filterMonth') && request('filterMonth') != 'all', function ($query, $month) {
+                ->when(request('filterMonth') && request('filterMonth') !== 'all', function ($query) {
                     $year = now()->year; // set tahun saat ini
                     return $query->whereYear('created_at', $year)
-                        ->whereMonth('created_at', $month);
+                        ->whereMonth('created_at', request('filterMonth'));
                 })
                 ->with('customer');
 
@@ -94,6 +94,8 @@ class OrderController extends Controller
                 ];
                 $months[] = $month;
             }
+
+            // return response()->json($query->get());
 
             return $dataTable->with([
                 'query' => $query
@@ -464,7 +466,8 @@ class OrderController extends Controller
     // Json response list input product with the data
     public function getProductEdit($orderId)
     {
-        $orderDetails = BridgeOrderProduct::with('product_customer.product')->where('order_id', $orderId)->get();
+        $orderDetails = BridgeOrderProduct::with('product_customer.product')
+            ->where('order_id', $orderId)->get();
 
         $data = [];
         foreach ($orderDetails as $product) {

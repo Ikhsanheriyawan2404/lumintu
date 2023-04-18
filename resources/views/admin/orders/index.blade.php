@@ -149,10 +149,10 @@
                             link.href = window.URL.createObjectURL(blob);
                             link.download = 'orders.xlsx';
 
-                            link.onload = function() {
-                                $('#btnExportExcel').html('Export Excel');
-                                $('#btnExportExcel').removeAttr('disabled');
-                            };
+                            // link.onload = function() {
+                            // };
+                            $('#btnExportExcel').html('Export Excel');
+                            $('#btnExportExcel').removeAttr('disabled');
 
                             document.body.appendChild(link);
                             link.click();
@@ -160,7 +160,7 @@
                         error: function(data) {
                             $('#btnExportExcel').removeAttr('disabled');
                             $('#btnExportExcel').html('Export Excel');
-                            console.log(data)
+                            alert("Error")
                         }
                     });
                 });
