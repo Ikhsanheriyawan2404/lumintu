@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\MasterCostController;
 use App\Http\Controllers\TestController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
@@ -10,6 +9,7 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PegawaiController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CostController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PaymentController;
 
@@ -51,6 +51,9 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::post('orders/export-excel', [OrderController::class, 'exportExcel'])
             ->name('orders.export-excel');
+
+        Route::post('/cost/export-excel', [CostController::class, 'exportExcel'])->name('costs.export-excel');
+        Route::resource('cost', CostController::class);
     });
 
     Route::group(['middleware' => 'role:valet'], function () {

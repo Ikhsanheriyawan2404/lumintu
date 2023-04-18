@@ -3,6 +3,15 @@
 @section('content')
     <div class="row">
         <div class="col-lg-12">
+            <div>
+
+                <form id="formExport" method="POST">
+                    @csrf
+                    <button type="submit" class="btn btn-sm btn-success" id="btnExportExcel">Export Excel</button>
+                    <button class="btn btn-sm btn-danger">Export PDF</button>
+                </form>
+            </div>
+
             <div class="card h-100">
                 <div class="card-header pb-0 p-3">
                     <div class="row">
@@ -51,6 +60,12 @@
     {{ $dataTable->scripts(attributes: ['type' => 'module']) }}
 
     <script>
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
         const format = function (num) {
             let str = num.toString().replace("", ""), parts = false, output = [], i = 1, formatted = null;
             if (str.indexOf(".") > 0) {
@@ -81,6 +96,45 @@
             $('.select2').select2({
                 width: '100%',
             });
+
+            $('#btnExportExcel').on('click', function(e) {
+                    e.preventDefault();
+
+                    $('#btnExportExcel').attr('disabled', 'disabled');
+                    $('#btnExportExcel').html('Loading ...');
+
+                    var csrf_token = $('meta[name="csrf-token"]').attr('content');
+
+                    $.ajax({
+                        url: "{{ route('costs.export-excel') }}",
+                        data: {
+                            _token: csrf_token,
+                        },
+                        xhrFields: {
+                            responseType: 'blob'
+                        },
+                        type: "POST",
+                        success: function(data) {
+                            var blob = new Blob([data], { type: 'application/vnd.ms-excel' });
+                            var link = document.createElement('a');
+                            link.href = window.URL.createObjectURL(blob);
+                            link.download = Date.now() + 'orders.xlsx';
+
+                            // link.onload = function() {
+                            // };
+                            $('#btnExportExcel').html('Export Excel');
+                            $('#btnExportExcel').removeAttr('disabled');
+
+                            document.body.appendChild(link);
+                            link.click();
+                        },
+                        error: function(data) {
+                            $('#btnExportExcel').removeAttr('disabled');
+                            $('#btnExportExcel').html('Export Excel');
+                            alert("Error")
+                        }
+                    });
+                });
 
             $('#createNewItem').click(function() {
                 setTimeout(function() {

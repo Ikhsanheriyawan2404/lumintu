@@ -10,56 +10,68 @@ use Maatwebsite\Excel\Concerns\FromCollection;
 
 class CostsExport implements
     FromCollection,
-    WithMapping,
     WithHeadings,
     WithTitle
 {
     public function __construct(
-        protected $customerId,
-        protected $paymentStatus,
         protected $month,
-        protected $customer,
+        protected $header,
     ) {}
 
     public function headings(): array
     {
         return [
-            'No Order',
-            'Tanggal',
-            'Customer',
-            'Total',
-        ];
-    }
-
-    public function map($cost): array
-    {
-        return [
-            $cost->name,
-            date('d-m-Y', strtotime($cost->created_at)),
-            $cost->customer->name,
-            $cost->total_price,
+            $this->header,
         ];
     }
 
     public function collection()
     {
-        $costs = Cost::select(
-            'costs.id',
-            'costs.name',
-            'costs.price',
-            'costs.total',
-            'costs.qty',
-            'costs.date',
-            'costs.created_at',
-        )
-            ->orderBy('costs.created_at', 'desc')
-            ->get();
+        $year = now()->year;
+        $month = now()->month;
+        $costs = Cost::selectRaw('DAY(date) as day, name, SUM(total) as total')
+            ->whereYear('created_at', $year)
+            ->whereMonth('created_at', $month)
+            ->groupBy('day', 'name')
+            ->orderBy('day')
+            ->get()
+            ->toArray();
 
-        return collect($costs);
+        // Membuat array yang berisi data tanggal dan kategori
+        $data = [];
+        $names = [];
+        foreach ($costs as $cost) {
+
+            $day = $cost['day'];
+            $name = $cost['name'];
+            $totalPrice = $cost['total'];
+
+            if (!in_array($name, $names)) {
+                $names[] = $name;
+            }
+
+            if (!isset($data[$day])) {
+                $data[$day] = [];
+            }
+
+            $data[$day][$name] = $totalPrice;
+        }
+
+        $rows = [];
+        foreach ($data as $day => $values) {
+            $row = [$day];
+            foreach ($names as $name) {
+                $value = isset($values[$name]) ? $values[$name] : 0;
+                $row[] = $value;
+            }
+            $rows[] = $row;
+        }
+
+        return collect(array_merge($rows));
     }
 
     public function title(): string
     {
-        return $this->customer->name;
+        return $this->month;
     }
 }
