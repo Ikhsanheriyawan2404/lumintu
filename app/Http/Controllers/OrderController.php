@@ -56,6 +56,7 @@ class OrderController extends Controller
                     ->make(true);
             }
 
+
             return view('hotel.orders.index');
 
         } elseif (auth()->user()->hasRole('valet')) {
@@ -72,7 +73,8 @@ class OrderController extends Controller
                 'query' => $orders
             ])->render('admin.orders.index');
 
-        } else {
+        }
+        else {
             $query = Order::orderBy('orders.created_at', 'desc')
                 ->when(request('filterStatus') && request('filterStatus') !== 'all', function ($query) {
                     return $query->where('payment_status', request('filterStatus'));

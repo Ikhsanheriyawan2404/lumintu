@@ -36,7 +36,6 @@
     </div>
 
     @include('hotel.orders.modals.createOrUpdate')
-
 @endsection
 
 @push('custom-styles')
