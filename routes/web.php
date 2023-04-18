@@ -134,9 +134,9 @@ Route::group(['middleware' => 'auth'], function () {
 //        return view('admin.orders.report.bulanan');
 //    });
 
-    Route::get('reports/harian', function () {
-        return view('admin.orders.report.harian');
-    });
+//    Route::get('reports/harian', function () {
+//        return view('admin.report.cost.bulanan');
+//    });
 
 });
 Route::get('reports/bulanan', [TestController::class, 'test']);

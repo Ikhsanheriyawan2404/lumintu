@@ -1,6 +1,7 @@
 {{-- SetPaper A4 Potrait --}}
 
-@extends('admin.pdf.layouts.app', ['title' => 'Laporan Harian Hotel'])
+@extends('admin.report.layouts.app', ['title' => 'Laporan Harian Pengeluaran'])
+
 
 @section('content')
     <table class="header mb-2">
