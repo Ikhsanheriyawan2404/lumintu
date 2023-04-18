@@ -34,6 +34,8 @@ Route::group(['middleware' => 'auth'], function () {
         require __DIR__ . '/admin/masterPembayaran.php';
         require __DIR__ . '/admin/pengeluaran.php';
 
+        Route::get('exportpdfcost', [CostController::class, 'exportPdf'])->name('export.pdf');
+
 
         Route::resource('products', ProductController::class);
         Route::resource('categories', CategoryController::class);
