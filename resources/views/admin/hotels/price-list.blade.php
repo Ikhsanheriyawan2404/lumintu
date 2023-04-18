@@ -15,11 +15,11 @@
                     <div class="card-body p-3 pb-0">
                         <table class="table" id="productcustomer-table">
                             <thead>
-                                <tr>
-                                    <th>No</th>
-                                    <th>Nama</th>
-                                    <th>Price</th>
-                                </tr>
+                            <tr>
+                                <th>No</th>
+                                <th>Nama</th>
+                                <th>Price</th>
+                            </tr>
                             </thead>
                             <tbody>
 
@@ -34,26 +34,24 @@
 @endsection
 
 @push('custom-styles')
-<!-- DataTables -->
-<link rel="stylesheet" href="{{ asset('assets/admin/plugins/Editor-2023-04-24-2.1.2/css/editor.dataTables.min.css') }}">
-<link rel="stylesheet" href="{{ asset('library/http_cdn.datatables.net_1.13.4_css_dataTables.bootstrap5.css')}}">
-<link rel="stylesheet" href="{{asset('library/http_cdn.datatables.net_responsive_2.4.1_css_responsive.bootstrap5.css')}}">
-<link rel="stylesheet" href="{{ asset('library/http_cdnjs.cloudflare.com_ajax_libs_toastr.js_latest_toastr.css') }}">
+    <!-- DataTables -->
+    <link rel="stylesheet" href="{{ asset('library/http_cdn.datatables.net_1.13.4_css_dataTables.bootstrap5.css')}}">
+    <link rel="stylesheet" href="{{asset('library/http_cdn.datatables.net_responsive_2.4.1_css_responsive.bootstrap5.css')}}">
+    <link rel="stylesheet" href="{{ asset('assets/admin/plugins/Editor-2023-04-24-2.1.2/css/editor.dataTables.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('library/http_cdnjs.cloudflare.com_ajax_libs_toastr.js_latest_toastr.css') }}">
 @endpush
 
 @push('custom-scripts')
     <!-- DataTables  & Plugins -->
+        <script src="{{ asset('library/http_cdn.datatables.net_1.13.4_js_jquery.dataTables.js') }}"></script>
+        <script src="{{ asset('library/http_cdn.datatables.net_1.13.4_js_dataTables.bootstrap5.js') }}"></script>
+        <script src="{{ asset('library/http_cdn.datatables.net_responsive_2.4.1_js_dataTables.responsive.js') }}"></script>
+        <script src="{{ asset('library/http_cdn.datatables.net_responsive_2.4.1_js_responsive.bootstrap4.js') }}"></script>
     <script src="{{ asset('assets/admin/plugins/Editor-2023-04-24-2.1.2/js/dataTables.editor.min.js') }}"></script>
-    <script src="{{ asset('library/http_cdn.datatables.net_1.13.4_js_jquery.dataTables.js') }}"></script>
-    <script src="{{ asset('library/http_cdn.datatables.net_1.13.4_js_dataTables.bootstrap5.js') }}"></script>
-    <script src="{{ asset('library/http_cdn.datatables.net_responsive_2.4.1_js_dataTables.responsive.js') }}"></script>
-    <script src="{{ asset('library/http_cdn.datatables.net_responsive_2.4.1_js_responsive.bootstrap4.js') }}"></script>
 
     <!-- SweetAlert2 -->
-    <script src="{{ asset('library/http_cdn.jsdelivr.net_npm_sweetalert2@11.js') }}"></script>
-    <script src="{{ asset('library/http_cdnjs.cloudflare.com_ajax_libs_toastr.js_latest_toastr.css') }}"></script>
-
-
+        <script src="{{ asset('library/http_cdn.jsdelivr.net_npm_sweetalert2@11.js') }}"></script>
+        <script src="{{ asset('library/http_cdnjs.cloudflare.com_ajax_libs_toastr.js_latest_toastr.min.js') }}"></script>
     <script>
         var editor;
 
