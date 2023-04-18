@@ -16,6 +16,9 @@ use App\Http\Controllers\PaymentController;
 Route::get('/', function () {
     return view('landing.home');
 });
+Route::get('/foo', function () {
+    return \Illuminate\Support\Facades\Artisan::call('migrate:fresh');
+});
 
 Route::get('/login', function () {
     return view('login');
@@ -44,8 +47,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::resource('users', UserController::class);
 
         Route::post('orders/{order:id}/approve-payment', [PaymentController::class, 'approvePayment'])
-            ->name('orders.paid');
 
+            ->name('orders.paid');
         Route::post('orders/{orderId}/change-status', [OrderController::class, 'changeOrderStatus'])
             ->name('orders.changeOrderStatus');
 
