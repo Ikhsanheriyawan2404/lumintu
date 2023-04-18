@@ -41,7 +41,8 @@
 
     <!-- SweetAlert2 -->
     <script src="{{ asset('library/http_cdn.jsdelivr.net_npm_sweetalert2@11.js') }}"></script>
-    <script src="{{ asset('library/http_cdnjs.cloudflare.com_ajax_libs_toastr.js_latest_toastr.css') }}"></script>
+    <script src="{{ asset('library/http_cdnjs.cloudflare.com_ajax_libs_toastr.js_latest_toastr.min.js') }}"></script>
+
 
 
     {{ $dataTable->scripts(attributes: ['type' => 'module']) }}
