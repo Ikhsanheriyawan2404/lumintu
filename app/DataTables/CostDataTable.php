@@ -38,7 +38,7 @@ class CostDataTable extends DataTable
      */
     public function query(Cost $model): QueryBuilder
     {
-        return $model->newQuery();
+        return $model->newQuery()->orderBy('date', 'desc');
     }
 
     /**
@@ -85,8 +85,10 @@ class CostDataTable extends DataTable
                 ->title('Harga'),
             Column::make('qty')
                 ->title('Kwantitas'),
+            Column::make('total')
+                ->title('Total'),
             Column::make('date')
-                ->title('Tanggalqq'),
+                ->title('Tanggal'),
             Column::make('description')
                 ->title('Deskripsi'),
             Column::computed('action')

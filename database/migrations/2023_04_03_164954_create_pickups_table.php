@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('status');
             $table->date('date');
             $table->foreignId('user_id')->constrained();
-            $table->foreignId('order_id')->constrained();
+            $table->foreignId('order_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }

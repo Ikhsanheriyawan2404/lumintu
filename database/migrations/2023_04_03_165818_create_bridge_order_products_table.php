@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('bridge_order_products', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('product_customer_id')->constrained();
-            $table->foreignId('order_id')->constrained();
+            $table->foreignId('product_customer_id')->constrained()->onDelete('cascade');
+            $table->unsignedBigInteger('order_id');
 
             $table->integer('qty');
             $table->timestamps();

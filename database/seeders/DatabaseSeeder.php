@@ -27,7 +27,7 @@ class DatabaseSeeder extends Seeder
             ProductCustomerSeeder::class,
             OrderSeeder::class,
             MasterCostSeeder::class,
-            CostSeeder::class,
+            // CostSeeder::class,
         ]);
 
     }

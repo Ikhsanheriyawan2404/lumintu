@@ -3,16 +3,100 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cost;
+use App\Models\Order;
+use App\Models\MasterCost;
 use InvalidArgumentException;
 use App\DataTables\CostDataTable;
 use App\Http\Requests\CostRequest;
-use App\Models\MasterCost;
 use Illuminate\Support\Facades\DB;
+use App\Exports\CostsMultipleSheet;
+use Maatwebsite\Excel\Facades\Excel;
 
 class CostController extends Controller
 {
     public function index(CostDataTable $dataTable)
     {
+        $orders = Order::select(
+            'orders.id',
+            'orders.customer_id',
+            'orders.total_price',
+            'orders.order_number',
+            'orders.payment_status',
+            'orders.status',
+            'orders.created_at',
+        )
+            ->orderBy('orders.created_at', 'desc')
+            ->with('customer')->get();
+
+        // return response()->json(collect($orders));
+
+        $months = [];
+
+        for ($m = 1; $m <= 12; $m++) {
+            $month = date('F', mktime(0, 0, 0, $m, 1, date('Y')));
+            // return response()->json($month);
+            $months[] = $month;
+        }
+        // return response()->json($months);
+        $year = now()->year;
+        $month = now()->month;
+        $costs = Cost::selectRaw('DAY(date) as day, name, SUM(total) as total')
+            ->whereYear('created_at', $year)
+            ->whereMonth('created_at', $month)
+            ->groupBy('day', 'name')
+            ->orderBy('day')
+            ->get()
+            ->toArray();
+
+        // return response()->json($costs);
+
+        // Membuat array yang berisi data tanggal dan kategori
+        $data = [];
+        $names = [];
+        foreach ($costs as $cost) {
+
+            $day = $cost['day'];
+            $name = $cost['name'];
+            $totalPrice = $cost['total'];
+
+            if (!in_array($name, $names)) {
+                $names[] = $name;
+            }
+
+            if (!isset($data[$day])) {
+                $data[$day] = [];
+            }
+
+            $data[$day][$name] = $totalPrice;
+        }
+
+        // return response()->json($data);
+
+        // Membuat header tabel
+        $header = ['Tanggal'];
+        foreach ($names as $name) {
+            $header[] = $name;
+        }
+
+        // Mengisi data ke dalam tabel
+        $rows = [];
+        foreach ($data as $day => $values) {
+            $row = [$day];
+            foreach ($names as $name) {
+                $value = isset($values[$name]) ? $values[$name] : 0;
+                $row[] = $value;
+            }
+            $rows[] = $row;
+        }
+
+        // return response()->json($rows);
+
+        // Menggabungkan header dan data
+        $tableData = array_merge($rows);
+
+
+        // return response()->json(collect($tableData));
+
         return $dataTable->render('admin.cost.index', [
             'master_cost' => MasterCost::get(['name']),
         ]);
@@ -33,15 +117,18 @@ class CostController extends Controller
                 if ($itemId) {
 
                     $cost['harga'] = (int)str_replace(',', '', request('harga'));
+                    $cost['total'] = $cost['harga'] * $cost['qty'];
                     Cost::find($itemId)->update($cost);
 
                 } else {
                     $name = request('name');
                     for ($i = 0; $i < count($name); $i++) {
+                        $price = (int)str_replace(',', '', request('harga')[$i]);
                         Cost::create([
                             'name' => $name[$i],
-                            'price' => (int)str_replace(',', '', request('harga')[$i]),
+                            'price' => $price,
                             'qty' => $cost['qty'][$i],
+                            'total' => $price * $cost['qty'][$i],
                             'description' => $cost['description'][$i],
                             'date' => now(),
                             'user_id' => auth()->user()->id,
@@ -85,5 +172,57 @@ class CostController extends Controller
         return response()->json([
             'message' => 'Pengeluran berhasil dihapus',
         ]);
+    }
+
+    public function exportExcel()
+    {
+        $year = now()->year;
+        $month = now()->month;
+        $costs = Cost::selectRaw('DAY(date) as day, name, SUM(total) as total')
+            ->whereYear('created_at', $year)
+            ->whereMonth('created_at', $month)
+            ->groupBy('day', 'name')
+            ->orderBy('day')
+            ->get()
+            ->toArray();
+
+        $months = [];
+
+        for ($m = 1; $m <= 12; $m++) {
+            $month = [
+                'key' => $m,
+                'name' => date('F', mktime(0, 0, 0, $m, 1, date('Y')))
+            ];
+            $months[] = $month;
+        }
+
+         // Membuat array yang berisi data tanggal dan kategori
+         $data = [];
+         $names = [];
+         foreach ($costs as $cost) {
+
+             $day = $cost['day'];
+             $name = $cost['name'];
+             $totalPrice = $cost['total'];
+
+             if (!in_array($name, $names)) {
+                 $names[] = $name;
+             }
+
+             if (!isset($data[$day])) {
+                 $data[$day] = [];
+             }
+
+             $data[$day][$name] = $totalPrice;
+         }
+
+        // Membuat header tabel
+        $header = ['Tanggal'];
+        foreach ($names as $name) {
+            $header[] = $name;
+        }
+
+
+        return Excel::download(new CostsMultipleSheet($header), 'pengeluaran.xlsx');
     }
 }
