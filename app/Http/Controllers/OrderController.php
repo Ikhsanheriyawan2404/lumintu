@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use PDF;
 use App\Models\User;
 use App\Models\Order;
 use App\Models\Pickup;
 use App\Models\Delivery;
 use App\Models\OrderStatus;
-use InvalidArgumentException;
 use App\Exports\OrdersExport;
+use InvalidArgumentException;
 use App\Enums\OrderStatusEnum;
 use App\Mail\OrderNotification;
 use App\Models\ProductCustomer;
@@ -442,6 +443,24 @@ class OrderController extends Controller
         ]);
     }
 
+    public function exportExcel()
+    {
+        $customerId = request('filterCustomer');
+        $paymentStatus = request('filterStatus');
+        $month = request('filterMonth');
+
+        return Excel::download(new OrdersExport($customerId, $paymentStatus, $month), date('Ymd-His') . 'orders.xlsx');
+    }
+
+    public function exportDetailPdf($orderId)
+    {
+        $order = Order::with('order_status', 'order_details.product_customer.product', 'customer')
+            ->findOrFail($orderId);
+
+        $pdf = PDF::loadView('admin.orders.invoice.print_invoice', compact('order'))->setOptions(['defaultFont' => 'sans-serif']);
+        $pdf->setPaper('a4', 'potrait');
+        return $pdf->stream();
+    }
 
     // Json response list input product
     public function getProductToPutOnListOrderTable($productCustomerId)
@@ -488,12 +507,4 @@ class OrderController extends Controller
         return response()->json($data);
     }
 
-    public function exportExcel()
-    {
-        $customerId = request('filterCustomer');
-        $paymentStatus = request('filterStatus');
-        $month = request('filterMonth');
-
-        return Excel::download(new OrdersExport($customerId, $paymentStatus, $month), date('Ymd-His') . 'orders.xlsx');
-    }
 }

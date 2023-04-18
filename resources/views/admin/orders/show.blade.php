@@ -15,7 +15,13 @@
                                 Total : <b><i>Rp {{ number_format($order->total_price) }}</i></b>
                             </p>
                         </div>
-                        <a href="{{ route('orders.index', []) }}" class="btn bg-gradient-secondary ms-auto mb-0">Kembali</a>
+                        <div>
+                            <a href="{{ route('orders.index', []) }}" class="btn bg-gradient-secondary ms-auto mb-0">Kembali</a>
+                            <form action="{{ route('orders.export-detail-pdf', $order->id) }}" method="post">
+                                @csrf
+                                <button type="submit" class="btn bg-gradient-danger ms-auto mb-0">Cetak</button>
+                            </form>
+                        </div>
                     </div>
                 </div>
                 <div class="card-body p-4 pt-0">

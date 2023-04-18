@@ -72,7 +72,8 @@ Route::group(['middleware' => 'auth'], function () {
 
     });
 
-    Route::get('orders/{orderId}/details', [OrderController::class, 'getOrderDetails'])->middleware(['role:superadmin|admin|hotel']);
+    Route::get('orders/{orderId}/details', [OrderController::class, 'getOrderDetails'])
+        ->middleware(['role:superadmin|admin|hotel']);
 
     Route::get('orders/{productId}/product', [OrderController::class, 'getProductToPutOnListOrderTable'])
         ->middleware(['role:superadmin|admin|hotel']);
@@ -97,6 +98,10 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('orders/{orderId}/edit', [OrderController::class, 'edit'])->name('orders.edit');
 
+    Route::post('orders/{orderId}/export-pdf', [OrderController::class, 'exportDetailPdf'])
+        ->name('orders.export-detail-pdf')
+        ->middleware(['role:superadmin|admin|hotel']);
+
 //    Route::resource('valet', ValetController::class);
 
     require_once __DIR__ . '/pegawai/pegawai.php';
@@ -108,9 +113,11 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::post('hotel/{userId}/price-list', [HotelController::class, 'updatePriceList'])
         ->name('hotel.price-list')
-        ->middleware('role:superadmin|admin|hotel');
+        ->middleware('role:superadmin|admin|valet');
 
-    Route::post('hotels/price-list', [HotelController::class, 'storePriceList'])->name('hotel.price-list.store');
+    Route::post('hotels/price-list', [HotelController::class, 'storePriceList'])
+        ->name('hotel.price-list.store')
+        ->middleware('role:superadmin|admin|valet');
 
 
     // Temp Route
@@ -118,11 +125,9 @@ Route::group(['middleware' => 'auth'], function () {
         return view('admin.orders.invoice.invoice');
     });
 
-
-
-//    Route::get('invoice/print', function () {
-//        return view('admin.orders.invoice.print_invoice');
-//    });
+   Route::get('invoice/print', function () {
+       return view('admin.orders.invoice.print_invoice');
+   });
 //
 //    Route::get('reports/bulanan', function () {
 //        return view('admin.orders.report.bulanan');
@@ -131,5 +136,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('reports/harian', function () {
         return view('admin.orders.report.harian');
     });
+
 });
 Route::get('reports/bulanan', [TestController::class, 'test']);

@@ -64,10 +64,7 @@ return array(
     'MyCLabs\\Enum\\' => array($vendorDir . '/myclabs/php-enum/src'),
     'Monolog\\' => array($vendorDir . '/monolog/monolog/src/Monolog'),
     'Matrix\\' => array($vendorDir . '/markbaker/matrix/classes/src'),
-<<<<<<< HEAD
-=======
     'Masterminds\\' => array($vendorDir . '/masterminds/html5/src'),
->>>>>>> 95a1c92d6d33b58a930d9252744879d7f48ec28e
     'Maatwebsite\\Excel\\' => array($vendorDir . '/maatwebsite/excel/src'),
     'League\\MimeTypeDetection\\' => array($vendorDir . '/league/mime-type-detection/src'),
     'League\\Fractal\\' => array($vendorDir . '/league/fractal/src'),

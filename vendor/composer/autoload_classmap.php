@@ -22,6 +22,7 @@ return array(
     'App\\DataTables\\UserDataTable' => $baseDir . '/app/DataTables/UserDataTable.php',
     'App\\Enums\\OrderStatusEnum' => $baseDir . '/app/Enums/OrderStatusEnum.php',
     'App\\Exceptions\\Handler' => $baseDir . '/app/Exceptions/Handler.php',
+    'App\\Exports\\OrdersExport' => $baseDir . '/app/Exports/OrdersExport.php',
     'App\\Factories\\ConfigurationFactory' => $vendorDir . '/laravel/pint/app/Factories/ConfigurationFactory.php',
     'App\\Factories\\ConfigurationResolverFactory' => $vendorDir . '/laravel/pint/app/Factories/ConfigurationResolverFactory.php',
     'App\\Fixers\\LaravelPhpdocAlignmentFixer' => $vendorDir . '/laravel/pint/app/Fixers/LaravelPhpdocAlignmentFixer.php',
@@ -38,6 +39,7 @@ return array(
     'App\\Http\\Controllers\\PegawaiController' => $baseDir . '/app/Http/Controllers/PegawaiController.php',
     'App\\Http\\Controllers\\PickupController' => $baseDir . '/app/Http/Controllers/PickupController.php',
     'App\\Http\\Controllers\\ProductController' => $baseDir . '/app/Http/Controllers/ProductController.php',
+    'App\\Http\\Controllers\\TestController' => $baseDir . '/app/Http/Controllers/TestController.php',
     'App\\Http\\Controllers\\UserController' => $baseDir . '/app/Http/Controllers/UserController.php',
     'App\\Http\\Kernel' => $baseDir . '/app/Http/Kernel.php',
     'App\\Http\\Middleware\\Authenticate' => $baseDir . '/app/Http/Middleware/Authenticate.php',
@@ -241,6 +243,7 @@ return array(
     'Database\\Seeders\\CostSeeder' => $baseDir . '/database/seeders/CostSeeder.php',
     'Database\\Seeders\\DatabaseSeeder' => $baseDir . '/database/seeders/DatabaseSeeder.php',
     'Database\\Seeders\\DeliverySeeder' => $baseDir . '/database/seeders/DeliverySeeder.php',
+    'Database\\Seeders\\MasterCostSeeder' => $baseDir . '/database/seeders/MasterCostSeeder.php',
     'Database\\Seeders\\OrderSeeder' => $baseDir . '/database/seeders/OrderSeeder.php',
     'Database\\Seeders\\PaymentSeeder' => $baseDir . '/database/seeders/PaymentSeeder.php',
     'Database\\Seeders\\PickupSeeder' => $baseDir . '/database/seeders/PickupSeeder.php',
@@ -3190,8 +3193,6 @@ return array(
     'Maatwebsite\\Excel\\Validators\\RowValidator' => $vendorDir . '/maatwebsite/excel/src/Validators/RowValidator.php',
     'Maatwebsite\\Excel\\Validators\\ValidationException' => $vendorDir . '/maatwebsite/excel/src/Validators/ValidationException.php',
     'Maatwebsite\\Excel\\Writer' => $vendorDir . '/maatwebsite/excel/src/Writer.php',
-<<<<<<< HEAD
-=======
     'Masterminds\\HTML5' => $vendorDir . '/masterminds/html5/src/HTML5.php',
     'Masterminds\\HTML5\\Elements' => $vendorDir . '/masterminds/html5/src/HTML5/Elements.php',
     'Masterminds\\HTML5\\Entities' => $vendorDir . '/masterminds/html5/src/HTML5/Entities.php',
@@ -3212,7 +3213,6 @@ return array(
     'Masterminds\\HTML5\\Serializer\\OutputRules' => $vendorDir . '/masterminds/html5/src/HTML5/Serializer/OutputRules.php',
     'Masterminds\\HTML5\\Serializer\\RulesInterface' => $vendorDir . '/masterminds/html5/src/HTML5/Serializer/RulesInterface.php',
     'Masterminds\\HTML5\\Serializer\\Traverser' => $vendorDir . '/masterminds/html5/src/HTML5/Serializer/Traverser.php',
->>>>>>> 95a1c92d6d33b58a930d9252744879d7f48ec28e
     'Matrix\\Builder' => $vendorDir . '/markbaker/matrix/classes/src/Builder.php',
     'Matrix\\Decomposition\\Decomposition' => $vendorDir . '/markbaker/matrix/classes/src/Decomposition/Decomposition.php',
     'Matrix\\Decomposition\\LU' => $vendorDir . '/markbaker/matrix/classes/src/Decomposition/LU.php',
@@ -5482,8 +5482,6 @@ return array(
     'Spatie\\Permission\\Traits\\RefreshesPermissionCache' => $vendorDir . '/spatie/laravel-permission/src/Traits/RefreshesPermissionCache.php',
     'Spatie\\Permission\\WildcardPermission' => $vendorDir . '/spatie/laravel-permission/src/WildcardPermission.php',
     'Stringable' => $vendorDir . '/myclabs/php-enum/stubs/Stringable.php',
-<<<<<<< HEAD
-=======
     'Svg\\CssLength' => $vendorDir . '/phenx/php-svg-lib/src/Svg/CssLength.php',
     'Svg\\DefaultStyle' => $vendorDir . '/phenx/php-svg-lib/src/Svg/DefaultStyle.php',
     'Svg\\Document' => $vendorDir . '/phenx/php-svg-lib/src/Svg/Document.php',
@@ -5512,7 +5510,6 @@ return array(
     'Svg\\Tag\\StyleTag' => $vendorDir . '/phenx/php-svg-lib/src/Svg/Tag/StyleTag.php',
     'Svg\\Tag\\Text' => $vendorDir . '/phenx/php-svg-lib/src/Svg/Tag/Text.php',
     'Svg\\Tag\\UseTag' => $vendorDir . '/phenx/php-svg-lib/src/Svg/Tag/UseTag.php',
->>>>>>> 95a1c92d6d33b58a930d9252744879d7f48ec28e
     'Symfony\\Component\\Console\\Application' => $vendorDir . '/symfony/console/Application.php',
     'Symfony\\Component\\Console\\Attribute\\AsCommand' => $vendorDir . '/symfony/console/Attribute/AsCommand.php',
     'Symfony\\Component\\Console\\CI\\GithubActionReporter' => $vendorDir . '/symfony/console/CI/GithubActionReporter.php',

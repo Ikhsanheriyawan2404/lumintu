@@ -189,7 +189,7 @@
                                 </td>
                                 <td class="align-middle text-sm">
                                     <div class="col text-center">
-                                        <button class="btn btn-outline-primary btn-sm mb-0">Detail</button>
+                                        <a href="{{ route('orders.show', $order->id) }}" class="btn btn-outline-primary btn-sm mb-0">Detail</a>
                                     </div>
                                 </td>
                             </tr>

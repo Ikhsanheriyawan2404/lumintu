@@ -147,7 +147,7 @@
                             var blob = new Blob([data], { type: 'application/vnd.ms-excel' });
                             var link = document.createElement('a');
                             link.href = window.URL.createObjectURL(blob);
-                            link.download = 'orders.xlsx';
+                            link.download = Date.now() + 'orders.xlsx';
 
                             // link.onload = function() {
                             // };
