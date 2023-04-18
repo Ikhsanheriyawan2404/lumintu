@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use PDF;
 use App\Models\User;
 use App\Models\Order;
@@ -508,6 +509,22 @@ class OrderController extends Controller
         }
 
         return response()->json($data);
+    }
+
+    // Delete Order
+    public function delete($id)
+    {
+        try {
+            $order = Order::findOrFail($id);
+            $order->delete();
+        } catch (InvalidArgumentException $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+            ], 400);
+        }
+        return response()->json([
+            'message' => 'Pesanan Berhasi di cancel',
+        ]);
     }
 
 }
