@@ -29,32 +29,8 @@
                 </div>
             </div>
         </div>
-        <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
-            <div class="card">
-                <div class="card-body p-3">
-                    <div class="row">
-                        <div class="col-8">
-                            <div class="numbers">
-                                <p class="text-sm mb-0 text-uppercase font-weight-bold">Laporan</p>
-                                <h5 class="font-weight-bolder" id="reports">
-                                    <div class="spinner-border" role="status">
-                                        <span class="visually-hidden">Loading...</span>
-                                    </div>
-                                </h5>
-                                <p class="mb-0">
-                                    <span class="text-success text-sm font-weight-bolder">Cek</span>
-                                </p>
-                            </div>
-                        </div>
-                        <div class="col-4 text-end">
-                            <div class="icon icon-shape bg-gradient-danger shadow-danger text-center rounded-circle">
-                                <i class="ni ni-paper-diploma text-lg opacity-10" aria-hidden="true"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        @role('admin|superadmin')
+
         <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
             <div class="card">
                 <div class="card-body p-3">
@@ -68,7 +44,7 @@
                                     </div>
                                 </h5>
                                 <p class="mb-0">
-                                    <span class="text-success text-sm font-weight-bolder">Cek</span>
+                                    <span class="text-success text-sm font-weight-bolder"><a href="{{ url('/hotel') }}">Cek</a></span>
                                 </p>
                             </div>
                         </div>
@@ -94,7 +70,7 @@
                                     </div>
                                 </h5>
                                 <p class="mb-0">
-                                    <span class="text-success text-sm font-weight-bolder">Cek</span>
+                                    <span class="text-success text-sm font-weight-bolder"><a href="{{ url('/users') }}">Cek</a></span>
                                 </p>
                             </div>
                         </div>
@@ -107,8 +83,9 @@
                 </div>
             </div>
         </div>
+        @endrole
     </div>
-
+@role('admin|superadmin')
     <!-- Chart Accumulation Data -->
     <div class="row mt-4">
         <div class="col-lg-7 mb-lg-0 mb-4">
@@ -144,7 +121,7 @@
             </div>
         </div>
     </div>
-
+@endrole
     <!-- Table History Data -->
     <div class="row mt-4">
         <div class="col-lg-7 mb-lg-0 mb-4">
@@ -217,11 +194,6 @@
                                         <h6 class="mb-1 text-dark text-sm">{{ $category->name }}</h6>
                                         <span class="text-xs">{{ $category->products()->count() }}</span>
                                     </div>
-                                </div>
-                                <div class="d-flex">
-                                    <button
-                                        class="btn btn-link btn-icon-only btn-rounded btn-sm text-dark icon-move-right my-auto"><i
-                                            class="ni ni-bold-right" aria-hidden="true"></i></button>
                                 </div>
                             </li>
                         @endforeach

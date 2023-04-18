@@ -12,9 +12,9 @@ class DashboardController extends Controller
     public function index()
     {
         if (auth()->user()->hasRole('hotel')) {
-            return view('home', [
+            return view('admin.dashboard', [
                 'categories' => Category::all(),
-                'orders' => Order::with('customer', 'order_details')->latest()->take(5)->get(),
+                'orders' => Order::with('customer', 'order_details')->where('customer_id', '=', auth()->user()->id)->latest()->take(5)->get(),
             ]);
         } else {
             return view('admin.dashboard', [
@@ -26,11 +26,19 @@ class DashboardController extends Controller
 
     public function summary()
     {
-        return response()->json([
-            'orders' => Order::count(),
-            'customers' => User::role('hotel')->count(),
-            'employees' => User::role('pegawai')->count(),
-        ]);
+        if (auth()->user()->hasRole('hotel')) {
+            return response()->json([
+                'orders' => Order::where('customer_id', '=', auth()->user()->id)->count(),
+                'customers' => User::role('hotel')->count(),
+                'employees' => User::role('pegawai')->count(),
+                ]);
+        } else {
+            return response()->json([
+                'orders' => Order::count(),
+                'customers' => User::role('hotel')->count(),
+                'employees' => User::role('pegawai')->count(),
+            ]);
+        }
     }
 
     public function chart()
