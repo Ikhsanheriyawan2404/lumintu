@@ -3,6 +3,7 @@
 @section('content')
     <div class="row">
         <div class="col-12">
+            @hasrole('superamdin|admin')
             <div>
                 <div class="row">
                     <div class="col-md-3">
@@ -52,6 +53,7 @@
                     <button class="btn btn-sm btn-danger">Export PDF</button>
                 </form>
             </div>
+            @endhasrole
             <div class="card h-100">
                 <div class="card-header pb-0 p-3">
                     <div class="row">
