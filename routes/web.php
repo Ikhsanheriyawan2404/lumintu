@@ -32,6 +32,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::group(['middleware' => 'role:superadmin|admin'], function () {
         require __DIR__ . '/admin/masterPembayaran.php';
+        require __DIR__ . '/admin/pengeluaran.php';
 
 
         Route::resource('products', ProductController::class);
