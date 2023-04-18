@@ -292,6 +292,7 @@
     </script>
     <!-- Github buttons -->
     <script async defer src="{{ asset('library/http_buttons.github.io_buttons.js') }}"></script>
+    <script async defer src="{{ asset('library/') }}"></script>
     <!-- Control Center for Soft Dashboard: parallax effects, scripts for the example pages etc -->
     <script src="{{ asset('assets/admin/js/argon-dashboard.min.js?v=2.0.4') }}"></script>
 

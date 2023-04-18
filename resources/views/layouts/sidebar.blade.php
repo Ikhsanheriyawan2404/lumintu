@@ -65,7 +65,7 @@
                 <span class="nav-link-text ms-1">Pesanan</span>
             </a>
         </li>
-        @hasrole('superadmin|admin|pegawai|valet')
+        @hasrole('superadmin|admin|pegawai')
         <li class="nav-item mt-3">
             <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Master Setting</h6>
         </li>
