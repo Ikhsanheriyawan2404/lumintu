@@ -16,9 +16,6 @@ use App\Http\Controllers\PaymentController;
 Route::get('/', function () {
     return view('landing.home');
 });
-Route::get('/foo', function () {
-    return \Illuminate\Support\Facades\Artisan::call('migrate:fresh');
-});
 
 Route::get('/login', function () {
     return view('login');
