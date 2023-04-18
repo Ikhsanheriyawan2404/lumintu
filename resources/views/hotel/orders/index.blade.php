@@ -121,6 +121,36 @@
                 $('tr.items').remove();
             });
 
+            $('body').on('click', '.deleteBtn', function(e) {
+                e.preventDefault();
+                var confirmation = confirm("Apakah yakin untuk mencancel pesanan?");
+                if (confirmation) {
+                    var item_id = $(this).data('id');
+                    var formData = new FormData($('#deleteDoc')[0]);
+                    $('.deleteBtn').attr('disabled', 'disabled');
+                    $('.deleteBtn').html('...');
+                    $.ajax({
+                        data: formData,
+                        url: "{{ route('orders.index') }}" + '/' + item_id + '/delete',
+                        contentType: false,
+                        processData: false,
+                        type: "POST",
+                        success: function(data) {
+                            $('#deleteDoc').trigger("reset");
+                            $('#orders-table').DataTable().draw();
+                            toastr.success(data.message);
+                        },
+                        error: function(data) {
+                            $('.deleteBtn').removeAttr('disabled');
+                            $('.deleteBtn').html('Hapus');
+                            // toastr.error(data.responseJSON.message)
+                            toastr.error('Pesanan Gagal di cancle')
+                        }
+                    });
+                }
+            });
+
+
         })
     </script>
 @endpush

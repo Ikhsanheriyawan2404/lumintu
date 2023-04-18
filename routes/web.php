@@ -43,9 +43,8 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::resource('users', UserController::class);
 
-        Route::post('orders/{order:id}/approve-payment', [PaymentController::class, 'approvePayment'])
-
-            ->name('orders.paid');
+        Route::post('orders/{order:id}/approve-payment', [PaymentController::class, 'approvePayment'])->name('orders.paid');
+        Route::post('orders/{id}/delete', [OrderController::class, 'delete'])->name('orders.delete');
         Route::post('orders/{orderId}/change-status', [OrderController::class, 'changeOrderStatus'])
             ->name('orders.changeOrderStatus');
 
@@ -66,10 +65,9 @@ Route::group(['middleware' => 'auth'], function () {
     });
 
     Route::group(['middleware' => 'role:hotel'], function () {
-
         Route::post('payments/payment-documents', [PaymentController::class, 'uploadPayment'])
             ->name('payments.upload');
-
+        Route::post('orders/{id}/delete', [OrderController::class, 'delete'])->name('orders.delete');
     });
 
     Route::get('orders/{orderId}/details', [OrderController::class, 'getOrderDetails'])
