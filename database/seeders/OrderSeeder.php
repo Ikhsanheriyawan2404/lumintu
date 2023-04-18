@@ -113,14 +113,20 @@ class OrderSeeder extends Seeder
                 'qty' => random_int(1, 10),
             ]);
 
-            OrderStatus::create(
-                ['order_id' => $order->id, 'status' => 'pending'],
-                ['order_id' => $order->id, 'status' => 'approve'],
-                ['order_id' => $order->id, 'status' => 'pickup'],
-                ['order_id' => $order->id, 'status' => 'process'],
-                ['order_id' => $order->id, 'status' => 'delivery'],
-                ['order_id' => $order->id, 'status' => 'done'],
-            );
+            foreach (OrderStatusEnum::values() as $status) {
+
+                if ($status == OrderStatusEnum::PENDING) {
+                    OrderStatus::create([
+                        'order_id' => $order->id,
+                        'status' => $status,
+                    ]);
+                } else {
+                    OrderStatus::insert([
+                        'order_id' => $order->id,
+                        'status' => $status,
+                    ]);
+                }
+            }
         }
     }
 }

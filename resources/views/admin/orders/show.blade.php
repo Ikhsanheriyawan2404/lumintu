@@ -115,7 +115,7 @@
                             @if(auth()->user()->hasRole('hotel'))
                                 <button type="submit" class="btn btn-sm btn-primary" id="uploadVerifPayment">Upload Bukti Pembayaran</button>
                                 @include('admin.orders.partials.table-payments')
-                            @else
+                            @elseif (auth()->user()->hasRole('superadmin|admin'))
                                 <form action="{{ route('orders.paid', $order->id) }}" method="post">
                                     @csrf
                                     <button type="submit" class="btn btn-sm btn-primary" >Approve Pembayaran</button>
