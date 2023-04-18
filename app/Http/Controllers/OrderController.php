@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use PDF;
 use App\Models\User;
 use App\Models\Order;
 use App\Models\Pickup;
 use App\Models\Delivery;
 use App\Models\OrderStatus;
-use InvalidArgumentException;
 use App\Exports\OrdersExport;
+use InvalidArgumentException;
 use App\Enums\OrderStatusEnum;
 use App\Mail\OrderNotification;
 use App\Models\ProductCustomer;
@@ -72,16 +73,16 @@ class OrderController extends Controller
 
         } else {
             $query = Order::orderBy('orders.created_at', 'desc')
-                ->when(request('filterStatus'), function ($query, $status) {
-                    return $query->where('payment_status', $status);
+                ->when(request('filterStatus') && request('filterStatus') !== 'all', function ($query) {
+                    return $query->where('payment_status', request('filterStatus'));
                 })
-                ->when(request('filterCustomer'), function ($query, $customerId) {
-                    return $query->where('customer_id', $customerId);
+                ->when(request('filterCustomer') && request('filterCustomer') !== 'all', function ($query) {
+                    return $query->where('customer_id', request('filterCustomer'));
                 })
-                ->when(request('filterMonth'), function ($query, $month) {
+                ->when(request('filterMonth') && request('filterMonth') !== 'all', function ($query) {
                     $year = now()->year; // set tahun saat ini
                     return $query->whereYear('created_at', $year)
-                        ->whereMonth('created_at', $month);
+                        ->whereMonth('created_at', request('filterMonth'));
                 })
                 ->with('customer');
 
@@ -94,6 +95,8 @@ class OrderController extends Controller
                 ];
                 $months[] = $month;
             }
+
+            // return response()->json($query->get());
 
             return $dataTable->with([
                 'query' => $query
@@ -440,6 +443,24 @@ class OrderController extends Controller
         ]);
     }
 
+    public function exportExcel()
+    {
+        $customerId = request('filterCustomer');
+        $paymentStatus = request('filterStatus');
+        $month = request('filterMonth');
+
+        return Excel::download(new OrdersExport($customerId, $paymentStatus, $month), date('Ymd-His') . 'orders.xlsx');
+    }
+
+    public function exportDetailPdf($orderId)
+    {
+        $order = Order::with('order_status', 'order_details.product_customer.product', 'customer')
+            ->findOrFail($orderId);
+
+        $pdf = PDF::loadView('admin.orders.invoice.print_invoice', compact('order'))->setOptions(['defaultFont' => 'sans-serif']);
+        $pdf->setPaper('a4', 'potrait');
+        return $pdf->stream();
+    }
 
     // Json response list input product
     public function getProductToPutOnListOrderTable($productCustomerId)
@@ -464,7 +485,8 @@ class OrderController extends Controller
     // Json response list input product with the data
     public function getProductEdit($orderId)
     {
-        $orderDetails = BridgeOrderProduct::with('product_customer.product')->where('order_id', $orderId)->get();
+        $orderDetails = BridgeOrderProduct::with('product_customer.product')
+            ->where('order_id', $orderId)->get();
 
         $data = [];
         foreach ($orderDetails as $product) {
@@ -485,12 +507,4 @@ class OrderController extends Controller
         return response()->json($data);
     }
 
-    public function exportExcel()
-    {
-        $customerId = request('filterCustomer');
-        $paymentStatus = request('filterStatus');
-        $month = request('filterMonth');
-
-        return Excel::download(new OrdersExport($customerId, $paymentStatus, $month), date('Ymd-His') . 'orders.xlsx');
-    }
 }

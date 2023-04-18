@@ -9,7 +9,7 @@
                         <div class="form-group">
                             <label for="filterStatus">Status Pembayaran</label>
                             <select name="filterStatus" id="filterStatus" class="form-control form-control-sm">
-                                <option selected disabled>Pilih Status Pembayaran</option>
+                                <option value="all">Semua</option>
                                 <option value="unpaid">Belum Dibayar</option>
                                 <option value="paid">Sudah Dibayar</option>
                             </select>
@@ -19,7 +19,7 @@
                         <div class="form-group">
                             <label for="filterCustomer">Customer</label>
                             <select name="filterCustomer" id="filterCustomer" class="form-control form-control-sm">
-                                <option selected disabled>Pilih Customer</option>
+                                <option value="all">Semua</option>
                                 @foreach ($customers as $customer)
                                     <option value="{{ $customer->id }}">{{ $customer->name }}</option>
                                 @endforeach
@@ -30,12 +30,19 @@
                         <div class="form-group">
                             <label for="filterMonth">Bulan</label>
                             <select name="filterMonth" id="filterMonth" class="form-control form-control-sm">
-                                <option selected disabled>Pilih Bulan</option>
+                                <option value="all">Semua</option>
                                 @foreach ($months as $month)
                                     <option value="{{ $month['key'] }}">{{ $month['name'] }}</option>
                                 @endforeach
                             </select>
                         </div>
+                    </div>
+                    <div class="col-md-13">
+                        <ul>
+                            <li id="resultCustomer" class="text-dark">Customer : </li>
+                            <li id="resultMonth" class="text-dark">Bulan : </li>
+                            <li id="resultStatus" class="text-dark">Status : </li>
+                        </ul>
                     </div>
                 </div>
 
@@ -91,56 +98,72 @@
     {{ $dataTable->scripts(attributes: ['type' => 'module']) }}
 
     <script>
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
         $(document).ready(function() {
 
             $('#filterMonth, #filterStatus, #filterCustomer').on('change', function() {
+                $('#resultCustomer').html('Customer : ' + $('#filterCustomer option:selected').text());
+                $('#resultMonth').html('Bulan : ' + $('#filterMonth option:selected').text());
+                $('#resultStatus').html('Status : ' + $('#filterStatus option:selected').text());
+
                 let table = $('#order-table').DataTable();
                 table.ajax.url(`
                     {{ route('orders.index') }}?filterMonth=${$('#filterMonth').val()}&filterStatus=${$('#filterStatus').val()}&filterCustomer=${$('#filterCustomer').val()}
                 `).draw();
             });
 
-            $('#btnExportExcel').on('click', function(e) {
-                e.preventDefault();
 
-                $('#btnExportExcel').attr('disabled', 'disabled');
-                $('#btnExportExcel').html('Loading ...');
+                $('#btnExportExcel').on('click', function(e) {
+                    e.preventDefault();
 
-                var formData = new FormData($('#formExport')[0]);
-                formData.append('filterMonth', $('#filterMonth').val());
-                formData.append('filterStatus', $('#filterStatus').val());
-                formData.append('filterCustomer', $('#filterCustomer').val());
+                    $('#btnExportExcel').attr('disabled', 'disabled');
+                    $('#btnExportExcel').html('Loading ...');
 
-                $.ajax({
-                    data: formData,
-                    url: "{{ route('orders.export-excel') }}",
-                    contentType: false,
-                    processData: false,
-                    type: "POST",
-                    success: function(data) {
-                        $('#formExport').trigger("reset");
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Success',
-                            text: data.message,
-                        });
-                        $('#btnExportExcel').removeAttr('disabled');
-                        $('#btnExportExcel').html('Export Excel');
-                    },
-                    error: function(data) {
-                        $('#btnExportExcel').removeAttr('disabled');
-                        $('#btnExportExcel').html('Export Excel');
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Oppss',
-                            text: data.responseJSON.message,
-                        });
-                        $.each(data.responseJSON.errors, function (index, value) {
-                            toastr.error(value);
-                        });
-                    }
+                    // var formData = new FormData($('#formExport')[0]);
+                    // formData.append('filterMonth', $('#filterMonth').val());
+                    // formData.append('filterStatus', $('#filterStatus').val());
+                    // formData.append('filterCustomer', $('#filterCustomer').val());
+                    var csrf_token = $('meta[name="csrf-token"]').attr('content');
+
+                    $.ajax({
+                        // data: formData,
+                        url: "{{ route('orders.export-excel') }}",
+                        data: {
+                            _token: csrf_token,
+                            filterMonth: $('#filterMonth').val(),
+                            filterStatus: $('#filterStatus').val(),
+                            filterCustomer: $('#filterCustomer').val(),
+                        },
+                        xhrFields: {
+                            responseType: 'blob'
+                        },
+                        type: "POST",
+                        success: function(data) {
+                            var blob = new Blob([data], { type: 'application/vnd.ms-excel' });
+                            var link = document.createElement('a');
+                            link.href = window.URL.createObjectURL(blob);
+                            link.download = Date.now() + 'orders.xlsx';
+
+                            // link.onload = function() {
+                            // };
+                            $('#btnExportExcel').html('Export Excel');
+                            $('#btnExportExcel').removeAttr('disabled');
+
+                            document.body.appendChild(link);
+                            link.click();
+                        },
+                        error: function(data) {
+                            $('#btnExportExcel').removeAttr('disabled');
+                            $('#btnExportExcel').html('Export Excel');
+                            alert("Error")
+                        }
+                    });
                 });
-            });
 
             // setInterval(() => {
             //     let table = $('#order-table').DataTable();
