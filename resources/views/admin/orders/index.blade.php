@@ -3,7 +3,7 @@
 @section('content')
     <div class="row">
         <div class="col-12">
-            @hasrole('superamdin|admin')
+            @hasrole('superadmin|admin')
             <div>
                 <div class="row">
                     <div class="col-md-3">
