@@ -14,6 +14,7 @@ use App\Enums\OrderStatusEnum;
 use App\Mail\OrderNotification;
 use App\Models\ProductCustomer;
 use App\DataTables\OrderDataTable;
+use App\Exports\OrdersMultipleSheet;
 use App\Models\BridgeOrderProduct;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
@@ -449,7 +450,7 @@ class OrderController extends Controller
         $paymentStatus = request('filterStatus');
         $month = request('filterMonth');
 
-        return Excel::download(new OrdersExport($customerId, $paymentStatus, $month), date('Ymd-His') . 'orders.xlsx');
+        return Excel::download(new OrdersMultipleSheet($customerId, $paymentStatus, $month), date('Ymd-His') . 'orders.xlsx');
     }
 
     public function exportDetailPdf($orderId)

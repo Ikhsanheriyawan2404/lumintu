@@ -2,18 +2,27 @@
 
 namespace App\Exports;
 
+use App\Models\User;
 use App\Models\Order;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\WithMultipleSheets;
+use Maatwebsite\Excel\Concerns\WithTitle;
 
-class OrdersExport implements FromCollection, WithMapping, WithHeadings
+class OrdersExport implements
+    FromCollection,
+    WithMapping,
+    WithHeadings,
+    WithTitle
 {
+    private $customerName;
 
     public function __construct(
         protected $customerId,
         protected $paymentStatus,
         protected $month,
+        protected $customer,
     ) {}
 
     public function headings(): array
@@ -59,8 +68,14 @@ class OrdersExport implements FromCollection, WithMapping, WithHeadings
                 return $query->whereYear('created_at', $year)
                     ->whereMonth('created_at', request('filterMonth'));
             })
+            ->where('customer_id', $this->customer->id)
             ->with('customer')->get();
 
         return collect($orders);
+    }
+
+    public function title(): string
+    {
+        return $this->customer->name;
     }
 }
