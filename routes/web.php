@@ -44,8 +44,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::resource('users', UserController::class);
 
         Route::post('orders/{order:id}/approve-payment', [PaymentController::class, 'approvePayment'])
-            ->name('orders.paid');
 
+            ->name('orders.paid');
         Route::post('orders/{orderId}/change-status', [OrderController::class, 'changeOrderStatus'])
             ->name('orders.changeOrderStatus');
 
