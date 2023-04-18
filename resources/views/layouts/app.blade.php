@@ -292,12 +292,12 @@
     </script>
     <!-- Github buttons -->
     <script async defer src="{{ asset('library/http_buttons.github.io_buttons.js') }}"></script>
-    <script async defer src="{{ asset('library/') }}"></script>
     <!-- Control Center for Soft Dashboard: parallax effects, scripts for the example pages etc -->
     <script src="{{ asset('assets/admin/js/argon-dashboard.min.js?v=2.0.4') }}"></script>
 
     <!-- JQUERY -->
-    <script src="{{ asset('library/http_code.jquery.com_jquery-3.6.4.js') }}"></script>
+    <script src="{{ asset('library/http_code.jquery.com_jquery-3.6.4.js') }}"
+        integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
 
     @stack('custom-scripts')
 </body>
