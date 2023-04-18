@@ -21,7 +21,7 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <ul class="list-group mb-2">
-                                    <li class="list-group-item">Nomor Order : <i id="order_no"></i></li>
+                                    <li class="list-group-item">Nomor Order : <i id="order_number">{{ $orderNumber }}</i></li>
                                     <li class="list-group-item">Total : Rp <i id="total_price"></i></li>
                                 </ul>
                                 @hasrole('superadmin|admin')
@@ -160,7 +160,6 @@
             } else {
                 userId = selectedUser
             }
-
 
             let tableListProductOnModal = $('#table-product').DataTable({
                 processing: true,

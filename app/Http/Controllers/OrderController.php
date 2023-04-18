@@ -164,8 +164,14 @@ class OrderController extends Controller
     // Halaman create order dari user hotel
     public function create()
     {
+        $lastOrder = Order::orderBy('id', 'desc')
+                ->first();
+
+        $orderNumber = $lastOrder ? ++$lastOrder->order_number : 10001;
+
         return view('admin.orders.create', [
             'customers' => User::role('hotel')->get(),
+            'orderNumber' => $orderNumber,
         ]);
     }
 
