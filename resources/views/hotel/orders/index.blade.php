@@ -141,9 +141,8 @@
                         },
                         error: function(data) {
                             $('.deleteBtn').removeAttr('disabled');
-                            $('.deleteBtn').html('Hapus');
-                            // toastr.error(data.responseJSON.message)
-                            toastr.error('Pesanan Gagal di cancle')
+                            $('.deleteBtn').html('<i class="fa fa-trash"></i>');
+                            toastr.error(data.responseJSON.message)
                         }
                     });
                 }
@@ -155,21 +154,25 @@
                 var formData = new FormData();
                 formData.append("_token", "{{ csrf_token() }}");
                 formData.append("status", "done");
-                $.ajax({
-                    data: formData,
-                    url: "{{ route('orders.index') }}" + "/" + item_id + "/done-hotel",
-                    contentType: false,
-                    processData: false,
-                    type: "POST",
-                    success: function(data) {
-                        $('#orders-table').DataTable().draw();
-                        toastr.success(data.message, 'Success', {
-                            closeButton: true,
-                            progressBar: true,
-                        });
-                    },
-                });
+                var confirmation = confirm("Apakah yakin untuk menerima pesanan?");
+                if (confirmation) {
+                    $.ajax({
+                        data: formData,
+                        url: "{{ route('orders.index') }}" + "/" + item_id + "/done-hotel",
+                        contentType: false,
+                        processData: false,
+                        type: "POST",
+                        success: function(data) {
+                            $('#orders-table').DataTable().draw();
+                            toastr.success(data.message, 'Success', {
+                                closeButton: true,
+                                progressBar: true,
+                            });
+                        },
+                    });
+                }
             });
+
         })
     </script>
 @endpush

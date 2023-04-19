@@ -134,7 +134,9 @@ class OrderController extends Controller
     {
         $order = Order::with('order_details.product_customer.product', 'order_status', 'customer')
             ->findOrFail($orderId);
-
+        if ($order->status !== OrderStatusEnum::PENDING) {
+            abort(403, 'Order sedang diproses');
+        }
         return view('admin.orders.edit', [
             'order' => $order,
         ]);
@@ -257,8 +259,6 @@ class OrderController extends Controller
                         $totalPrice += $product->price * $data['qty'];
                     }
                 }
-
-
 
                 /**
                  * Update All About Accumulated from purchase details
@@ -537,8 +537,16 @@ class OrderController extends Controller
     // Delete Order
     public function delete($id)
     {
+        $order = Order::findOrFail($id);
+
+        if ($order->status != OrderStatusEnum::PENDING) {
+            return response()->json([
+                'message' => 'Pesanan tidak bisa di cancel',
+            ], 400);
+            die;
+        }
+
         try {
-            $order = Order::findOrFail($id);
             $order->delete();
         } catch (InvalidArgumentException $e) {
             return response()->json([
@@ -546,7 +554,7 @@ class OrderController extends Controller
             ], 400);
         }
         return response()->json([
-            'message' => 'Pesanan Berhasi di cancel',
+            'message' => 'Pesanan Berhasil di cancel',
         ]);
     }
 
