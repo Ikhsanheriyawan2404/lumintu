@@ -15,7 +15,7 @@
                         </div>
                     </div>
                     <div class="card-body p-3 pb-0">
-                        data table
+                        asdasd
                     </div>
                 </div>
             </div>
