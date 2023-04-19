@@ -57,11 +57,12 @@ class OrdersExport implements
             ->whereHas('order', function ($query) {
                 $query->where('customer_id', $this->customer->id);
                 $query->where('payment_status', 'paid');
+                $query->whereMonth('created_at', $this->month);
                 $query->orderBy('order_number', 'desc');
                 $query->orderBy('created_at', 'desc');
             })
             ->with(['product_customer.product', 'order.customer'])
-            ->get();
+            ->get(['id', 'order_id', 'qty', 'product_customer_id']);
 
         return collect($orders);
     }

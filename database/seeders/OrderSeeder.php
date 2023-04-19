@@ -96,6 +96,7 @@ class OrderSeeder extends Seeder
                 'order_number' => $orderNumber,
                 'customer_id' => random_int(4, 10),
                 'total_price' => 200000,
+                'payment_status' => 'paid',
                 'status' => OrderStatusEnum::PENDING,
                 'created_at' => Carbon::createFromTimestamp(rand(
                     Carbon::now()->subDays(360)->timestamp,
