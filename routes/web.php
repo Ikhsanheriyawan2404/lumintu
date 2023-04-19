@@ -70,16 +70,18 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('orders/{orderId}/acc-order-proccess', [OrderController::class, 'accOrderByValet'])
             ->name('orders.acc-order-process');
 
-        Route::get('orders/{orderId}/product-edit', [OrderController::class, 'getProductEdit']);
-
-    });
+        });
 
     Route::group(['middleware' => 'role:hotel'], function () {
         Route::post('payments/payment-documents', [PaymentController::class, 'uploadPayment'])
             ->name('payments.upload');
         Route::post('orders/{id}/delete', [OrderController::class, 'delete'])->name('orders.delete');
+        Route::post('orders/{id}/update', [OrderController::class, 'update'])->name('orders.update');
         Route::post('orders/{orderId}/done-hotel', [OrderController::class, 'doneOrder']);
+
     });
+
+    Route::get('orders/{orderId}/product-edit', [OrderController::class, 'getProductEdit'])->middleware(['role:valet|hotel']);
 
     Route::get('orders/{orderId}/details', [OrderController::class, 'getOrderDetails'])
         ->middleware(['role:superadmin|admin|hotel']);
