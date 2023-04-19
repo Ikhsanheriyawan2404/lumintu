@@ -53,6 +53,10 @@ class CategoryDataTable extends DataTable
                     ->columns($this->getColumns())
                     ->minifiedAjax()
                     //->dom('Bfrtip')
+                    ->addColumnDef([
+                        'responsivePriority' => 1,
+                        'targets' => 1,
+                    ])
                     ->orderBy(1)
                     ->selectStyleSingle()
                     ->buttons([

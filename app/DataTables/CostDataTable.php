@@ -52,6 +52,10 @@ class CostDataTable extends DataTable
             ->setTableId('cost-table')
             ->columns($this->getColumns())
             ->minifiedAjax()
+            ->addColumnDef([
+                'responsivePriority' => 1,
+                'targets' => 2,
+            ])
             //->dom('Bfrtip')
             ->orderBy(1)
             ->selectStyleSingle()

@@ -24,7 +24,9 @@
                     </div>
                 </div>
                 <div class="card-body p-3 pb-0">
-                    {{ $dataTable->table(['class' => 'table table-sm table-bordered display responsive nowrap', 'width' => '100%']) }}
+                    <div class="table-responsive">
+                        {{ $dataTable->table(['class' => 'table table-sm table-bordered display responsive nowrap', 'width' => '100%']) }}
+                    </div>
                 </div>
             </div>
         </div>

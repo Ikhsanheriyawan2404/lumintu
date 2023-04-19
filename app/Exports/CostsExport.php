@@ -35,7 +35,7 @@ class CostsExport implements
         $numDays = \Carbon\Carbon::create($year, $month)->daysInMonth;
 
         $days = array_map(function ($day) {
-            return $day < 10 ? '0' . $day : $day; // Tambahkan 0 di depan hari jika kurang dari 10
+            return (int)$day;
         }, range(1, $numDays));
 
         $costs = Cost::selectRaw('DAY(date) as day, name, SUM(total) as total')

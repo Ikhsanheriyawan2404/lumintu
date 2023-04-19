@@ -57,6 +57,10 @@ class UserDataTable extends DataTable
                     ->setTableId('users-table')
                     ->columns($this->getColumns())
                     ->minifiedAjax()
+                    ->addColumnDef([
+                        'responsivePriority' => 1,
+                        'targets' => 1,
+                    ])
                     //->dom('Bfrtip')
                     ->orderBy(1)
                     ->selectStyleSingle()
