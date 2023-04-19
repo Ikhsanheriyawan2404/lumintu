@@ -55,6 +55,10 @@ class OrderDataTable extends DataTable
                     ->setTableId('order-table')
                     ->columns($this->getColumns())
                     ->minifiedAjax()
+                    ->addColumnDef([
+                        'responsivePriority' => 1,
+                        'targets' => 1,
+                    ])
                     //->dom('Bfrtip')
                     ->orderBy(1)
                     ->selectStyleSingle()
@@ -95,6 +99,9 @@ class OrderDataTable extends DataTable
             Column::make('customer.name')
                 ->addClass("text-sm font-weight-normal")
                 ->title('Pelanggan'),
+            Column::make('payment_status')
+                ->addClass("text-sm font-weight-normal")
+                ->title('Pembayaran'),
             Column::make('status')
                 ->addClass("text-sm font-weight-normal")
                 ->title('Status'),

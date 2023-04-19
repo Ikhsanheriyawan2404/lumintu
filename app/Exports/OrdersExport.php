@@ -2,11 +2,12 @@
 
 namespace App\Exports;
 
-use App\Models\Order;
+use App\Models\BridgeOrderProduct;
+use Maatwebsite\Excel\Concerns\WithTitle;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\FromCollection;
-use Maatwebsite\Excel\Concerns\WithTitle;
+use Maatwebsite\Excel\Concerns\WithStyles;
 
 class OrdersExport implements
     FromCollection,
@@ -26,46 +27,41 @@ class OrdersExport implements
         return [
             'No Order',
             'Tanggal',
-            'Customer',
-            'Total',
+            'Nama Barang',
+            'Harga',
+            'Kuantiti',
+            'Subtotal',
         ];
     }
 
-    public function map($order): array
+    public function map($orderDetail): array
     {
         return [
-            $order->order_number,
-            date('d-m-Y', strtotime($order->created_at)),
-            $order->customer->name,
-            $order->total_price,
+            $orderDetail->order->order_number,
+            date('d-m-Y', strtotime($orderDetail->order->created_at)),
+            $orderDetail->product_customer->product->name,
+            $orderDetail->product_customer->price,
+            $orderDetail->qty,
+            $orderDetail->product_customer->price * $orderDetail->qty,
         ];
     }
 
     public function collection()
     {
-        $orders = Order::select(
-            'orders.id',
-            'orders.customer_id',
-            'orders.total_price',
-            'orders.order_number',
-            'orders.payment_status',
-            'orders.status',
-            'orders.created_at',
+        $orders = BridgeOrderProduct::select(
+            'bridge_order_products.id',
+            'bridge_order_products.order_id',
+            'bridge_order_products.qty',
+            'bridge_order_products.product_customer_id',
         )
-            ->orderBy('orders.created_at', 'desc')
-            ->when(request('filterStatus') && request('filterStatus') !== 'all', function ($query) {
-                return $query->where('payment_status', request('filterStatus'));
+            ->whereHas('order', function ($query) {
+                $query->where('customer_id', $this->customer->id);
+                $query->where('payment_status', 'paid');
+                $query->orderBy('order_number', 'desc');
+                $query->orderBy('created_at', 'desc');
             })
-            ->when(request('filterCustomer') && request('filterCustomer') !== 'all', function ($query) {
-                return $query->where('customer_id', request('filterCustomer'));
-            })
-            ->when(request('filterMonth') && request('filterMonth') !== 'all', function ($query) {
-                $year = now()->year; // set tahun saat ini
-                return $query->whereYear('created_at', $year)
-                    ->whereMonth('created_at', request('filterMonth'));
-            })
-            ->where('customer_id', $this->customer->id)
-            ->with('customer')->get();
+            ->with(['product_customer.product', 'order.customer'])
+            ->get();
 
         return collect($orders);
     }

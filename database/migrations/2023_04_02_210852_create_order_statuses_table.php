@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('order_statuses', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('order_id');
+            $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('restrict');
             $table->string('status');
             $table->text('description')->nullable();
             $table->timestamps();

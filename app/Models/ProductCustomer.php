@@ -17,6 +17,7 @@ class ProductCustomer extends Model
 
     public function product()
     {
+        // with no trashed
         return $this->belongsTo(Product::class);
     }
 

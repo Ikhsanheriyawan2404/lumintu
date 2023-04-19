@@ -2,14 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Category;
 use PDF;
 use App\Models\User;
 use App\Models\Order;
 use App\Models\Pickup;
 use App\Models\Delivery;
 use App\Models\OrderStatus;
-use App\Exports\OrdersExport;
 use InvalidArgumentException;
 use App\Enums\OrderStatusEnum;
 use App\Mail\OrderNotification;
@@ -124,6 +122,11 @@ class OrderController extends Controller
             $nextStatus = $statuses[$currentIndex + 1];
         }
 
+
+        if ($order->customer_id != auth()->user()->id && auth()->user()->hasRole('hotel')) {
+            abort(403, "Forbidden");
+        }
+
         return view('admin.orders.show', [
             'order' => $order,
             'order_statuses' => OrderStatus::where('order_id', $orderId)->get(),
@@ -136,6 +139,13 @@ class OrderController extends Controller
     {
         $order = Order::with('order_details.product_customer.product', 'order_status', 'customer')
             ->findOrFail($orderId);
+        if ($order->status !== OrderStatusEnum::PENDING) {
+            abort(403, 'Order sedang diproses');
+        }
+
+        if ($order->customer_id != auth()->user()->id) {
+            abort(403, "Forbidden");
+        }
 
         return view('admin.orders.edit', [
             'order' => $order,
@@ -145,8 +155,13 @@ class OrderController extends Controller
     // Halaman acc order dari valet
     public function accOrder($orderId)
     {
+
         $order = Order::with('order_details.product_customer.product', 'order_status', 'customer')
-            ->findOrFail($orderId);
+        ->findOrFail($orderId);
+
+        if ($order->status !== OrderStatusEnum::PICKUP) {
+            abort(403, 'Order sedang diproses');
+        }
 
         return view('admin.orders.acc-order', [
             'order' => $order,
@@ -226,6 +241,7 @@ class OrderController extends Controller
                         $order->order_status()->create([
                             'order_id' => $order->id,
                             'status' => $status,
+                            'user_id' => auth()->user()->id,
                         ]);
                     } else {
                         $order->order_status()->insert([
@@ -258,8 +274,6 @@ class OrderController extends Controller
                         $totalPrice += $product->price * $data['qty'];
                     }
                 }
-
-
 
                 /**
                  * Update All About Accumulated from purchase details
@@ -299,7 +313,70 @@ class OrderController extends Controller
         ]);
     }
 
-    // Merubah order status by admin
+    // Merubah order status by hotel
+    public function update(OrderStoreRequest $request, $orderId)
+    {
+        try {
+
+            $request->validated();
+
+            DB::transaction(function () use ($orderId) {
+
+                $order = Order::findOrFail($orderId);
+
+                if ($order->status != OrderStatusEnum::PENDING) {
+                    throw new InvalidArgumentException('Order sedang diproses', 403);
+                }
+
+                if ($order->customer_id != auth()->user()->id) {
+                    throw new InvalidArgumentException('Forbidden', 403);
+                }
+
+                // Add new order details
+                $totalRequestItem = request('product_id');
+                if ($totalRequestItem == null) {
+                    throw new InvalidArgumentException('Barang tidak boleh kosong', 400);
+                } else {
+                    $totalPrice = 0;
+                    $order->order_details()->delete();
+                    for ($i = 0; $i < count($totalRequestItem); $i++) {
+
+                        $product = ProductCustomer::where('user_id', $order->customer_id)
+                            ->where('product_id', request('product_id')[$i])
+                            ->first();
+
+                        $data = [
+                            'order_id' => $order->id,
+                            'product_customer_id' => request('product_id')[$i],
+                            'qty' => request('qty')[$i],
+                        ];
+
+                        BridgeOrderProduct::create($data);
+
+                        $totalPrice += $product->price * $data['qty'];
+                    }
+                }
+
+                /**
+                 * Update All About Accumulated from purchase details
+                 * Why this proccess on the controller? cuz to avoid manipulate input in view from users
+                 */
+                $order->total_price = $totalPrice;
+                $order->save();
+            });
+
+        } catch (InvalidArgumentException $e) {
+
+            return response()->json([
+                'message' => $e->getMessage(),
+            ], $e->getCode());
+        }
+
+        return response()->json([
+            'message' => 'Berhasil Mengubah Order',
+        ]);
+    }
+
     public function changeOrderStatus($orderId)
     {
         try {
@@ -320,6 +397,7 @@ class OrderController extends Controller
 
                 $order->order_status()->where('status', $nextOrderStatus)->update([
                     'created_at' => now(),
+                    'user_id' => auth()->user()->id,
                 ]);
 
                 $listUsersWhoGetNotifications = [];
@@ -383,6 +461,7 @@ class OrderController extends Controller
 
                 $order->update([
                     'status' => OrderStatusEnum::PICKUP,
+                    'user_id' => auth()->user()->id,
                 ]);
 
                 // Change Order Status
@@ -453,6 +532,22 @@ class OrderController extends Controller
         ]);
     }
 
+    // Done order from hotel
+    public function doneOrder($orderId)
+    {
+        $order = Order::find($orderId);
+        $order->update([
+            'status' => request('status')
+        ]);
+
+        $order->order_status()->where('status', request('status'))->update([
+            'created_at' => now(),
+            'user_id' => auth()->user()->id,
+        ]);
+
+        return response()->json(['message' => 'Order berhasil diterima']);
+    }
+
     public function exportExcel()
     {
         $customerId = request('filterCustomer');
@@ -520,8 +615,16 @@ class OrderController extends Controller
     // Delete Order
     public function delete($id)
     {
+        $order = Order::findOrFail($id);
+
+        if ($order->status != OrderStatusEnum::PENDING) {
+            return response()->json([
+                'message' => 'Pesanan tidak bisa di cancel',
+            ], 400);
+            die;
+        }
+
         try {
-            $order = Order::findOrFail($id);
             $order->delete();
         } catch (InvalidArgumentException $e) {
             return response()->json([
@@ -529,7 +632,7 @@ class OrderController extends Controller
             ], 400);
         }
         return response()->json([
-            'message' => 'Pesanan Berhasi di cancel',
+            'message' => 'Pesanan Berhasil di cancel',
         ]);
     }
 

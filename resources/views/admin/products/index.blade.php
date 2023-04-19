@@ -16,7 +16,7 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        {{ $dataTable->table(['class' => 'table align-items-center display responsive nowrap', 'width' => '100%']) }}
+                        {{ $dataTable->table(['class' => 'table align-items-center display responsive', 'width' => '100%']) }}
                     </div>
                 </div>
             </div>
@@ -45,8 +45,6 @@
     <!-- SweetAlert2 -->
     <script src="{{ asset('library/http_cdn.jsdelivr.net_npm_sweetalert2@11.js') }}"></script>
     <script src="{{ asset('library/http_cdnjs.cloudflare.com_ajax_libs_toastr.js_latest_toastr.min.js') }}"></script>
-
-
 
     {{ $dataTable->scripts(attributes: ['type' => 'module']) }}
 
@@ -104,7 +102,8 @@
                         },
                         error: function(data) {
                             $('.deleteBtn').removeAttr('disabled');
-                            alert(data.error)
+                            $('.deleteBtn').html('Hapus');
+                            toastr.error('Data tidak bisa dihapus karena sudah digunakan');
                         }
                     });
                 }
@@ -139,6 +138,7 @@
                             title: 'Oppss',
                             text: data.responseJSON.message,
                         });
+
                         $.each(data.responseJSON.errors, function(index, value) {
                             toastr.error(value);
                         });

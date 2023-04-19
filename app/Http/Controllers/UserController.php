@@ -108,18 +108,13 @@ class UserController extends Controller
         return response()->json($user);
     }
 
-    public function destroy($id)
+    public function changeStatus($userId)
     {
-        try {
-            $user = User::findOrFail($id);
-            $user->delete();
-        } catch (InvalidArgumentException $e) {
-            return response()->json([
-                'message' => $e->getMessage(),
-            ], 400);
-        }
-        return response()->json([
-            'message' => 'User berhasil dihapus',
+        $order = User::find($userId);
+        $order->update([
+            'active' => request('active')
         ]);
+
+        return response()->json(['message' => 'User berhasil ' . (request('active') == 1 ? 'diaktifkan' : 'dinonaktifkan')]);
     }
 }

@@ -83,6 +83,32 @@
                 </div>
             </div>
         </div>
+        <div class="col-xl-3 col-sm-6">
+            <div class="card">
+                <div class="card-body p-3">
+                    <div class="row">
+                        <div class="col-8">
+                            <div class="numbers">
+                                <p class="text-sm mb-0 text-uppercase font-weight-bold">Pengeluaran</p>
+                                <h5 class="font-weight-bolder" id="costs">
+                                    <div class="spinner-border" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                </h5>
+                                <p class="mb-0">
+                                    <span class="text-success text-sm font-weight-bolder"><a href="{{ url('/cost') }}">Cek</a></span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="col-4 text-end">
+                            <div class="icon icon-shape bg-gradient-warning shadow-warning text-center rounded-circle">
+                                <i class="ni ni-single-02 text-lg opacity-10" aria-hidden="true"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         @endrole
     </div>
 @role('admin|superadmin')
@@ -93,8 +119,6 @@
                 <div class="card-header pb-0 pt-3 bg-transparent">
                     <h6 class="text-capitalize">Data Penjualan</h6>
                     <p class="text-sm mb-0">
-                        <i class="fa fa-arrow-up text-success"></i>
-                        <span class="font-weight-bold">4% meningkat</span> di 2022
                     </p>
                 </div>
                 <div class="card-body p-3">
@@ -109,8 +133,6 @@
                 <div class="card-header pb-0 pt-3 bg-transparent">
                     <h6 class="text-capitalize">Data Pelanggan</h6>
                     <p class="text-sm mb-0">
-                        <i class="fa fa-arrow-up text-success"></i>
-                        <span class="font-weight-bold">4% meningkat</span> di 2022
                     </p>
                 </div>
                 <div class="card-body p-3">
@@ -195,6 +217,11 @@
                                         <span class="text-xs">{{ $category->products()->count() }}</span>
                                     </div>
                                 </div>
+                                <div class="d-flex">
+                                    <a href="{{ route('categories.index', []) }}"
+                                        class="btn btn-link btn-icon-only btn-rounded btn-sm text-dark icon-move-right my-auto"><i
+                                            class="ni ni-bold-right" aria-hidden="true"></i></a>
+                                </div>
                             </li>
                         @endforeach
                     </ul>
@@ -210,7 +237,7 @@
         $(document).ready(function() {
             $.get("{{ route('dashboard.summary') }}", function(data) {
                 $('#orders').html(data.orders)
-                $('#reports').html(data.orders)
+                $('#costs').html(data.costs)
                 $('#customers').html(data.customers)
                 $('#employees').html(data.employees)
             });

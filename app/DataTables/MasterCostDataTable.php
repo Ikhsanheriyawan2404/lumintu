@@ -38,7 +38,7 @@ class MasterCostDataTable extends DataTable
      */
     public function query(MasterCost $model): QueryBuilder
     {
-        return $model->newQuery();
+        return $model->newQuery()->orderBy('id', 'desc');
     }
 
     /**
@@ -52,6 +52,10 @@ class MasterCostDataTable extends DataTable
             ->setTableId('mastercost-table')
             ->columns($this->getColumns())
             ->minifiedAjax()
+            ->addColumnDef([
+                'responsivePriority' => 1,
+                'targets' => 1,
+            ])
             //->dom('Bfrtip')
             ->orderBy(1)
             ->selectStyleSingle()

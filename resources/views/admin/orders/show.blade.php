@@ -70,6 +70,10 @@
                                             <p class="text-secondary font-weight-bold text-xs mt-1 mb-0">
                                                 {{ $status?->created_at ?? 'Belum tahap ini' }}</p>
 
+                                            <p class="text-secondary font-weight-bold text-xs mt-1 mb-0">
+                                                Dibuat oleh :   {{ $status?->user?->name ?? '' }}</p>
+
+
                                             @if (
                                                 $status->status == $order->status &&
                                                     $order->status->value != 'done' &&
@@ -118,10 +122,19 @@
                                 <button type="submit" class="btn btn-sm btn-primary" id="uploadVerifPayment">Upload Bukti Pembayaran</button>
                                 @include('admin.orders.partials.table-payments')
                             @elseif (auth()->user()->hasRole('superadmin|admin'))
-                                <form action="{{ route('orders.paid', $order->id) }}" method="post">
-                                    @csrf
-                                    <button type="submit" class="btn btn-sm btn-primary" >Approve Pembayaran</button>
-                                </form>
+                                @if ($order->payment_status == 'unpaid')
+                                    <form action="{{ route('orders.paid', $order->id) }}" method="post">
+                                        @csrf
+                                        <button type="submit" class="btn btn-sm btn-primary" >Approve Pembayaran</button>
+                                    </form>
+                                @else
+                                    @if(auth()->user()->hasRole('superadmin'))
+                                    <form action="{{ route('orders.unpaid', $order->id) }}" method="post">
+                                        @csrf
+                                        <button type="submit" class="btn btn-sm btn-danger" >Cancel Pembayaran</button>
+                                    </form>
+                                    @endif
+                                @endif
                                 @include('admin.orders.partials.table-payments')
                             @endif
                         </div>
@@ -130,7 +143,7 @@
             </div>
         </div>
     </div>
- 
+
 
     @include('admin.orders.modals.processStatus')
     <!-- Modal Upload Agreement Document -->

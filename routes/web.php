@@ -24,7 +24,7 @@ Route::get('/login', function () {
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-Route::group(['middleware' => 'auth'], function () {
+Route::middleware(['auth', 'active'])->group(function () {
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/dashboard/summary', [DashboardController::class, 'summary'])->name('dashboard.summary');
@@ -34,6 +34,8 @@ Route::group(['middleware' => 'auth'], function () {
         require __DIR__ . '/admin/masterPembayaran.php';
         require __DIR__ . '/admin/pengeluaran.php';
 
+        Route::get('exportpdfcost', [CostController::class, 'exportPdf'])->name('export.pdf');
+
 
         Route::resource('products', ProductController::class);
         Route::resource('categories', CategoryController::class);
@@ -41,9 +43,16 @@ Route::group(['middleware' => 'auth'], function () {
         Route::resource('hotel', HotelController::class);
         Route::resource('pegawai', PegawaiController::class);
 
+        // Nontatikf/Aktif users
+        Route::post('users/{userId}/status', [UserController::class, 'changeStatus']);
         Route::resource('users', UserController::class);
 
-        Route::post('orders/{order:id}/approve-payment', [PaymentController::class, 'approvePayment'])->name('orders.paid');
+        // Cancel and Approve order payment
+        Route::post('orders/{order:id}/approve-payment', [PaymentController::class, 'approvePayment'])
+            ->name('orders.paid');
+        Route::post('orders/{order:id}/cancel-payment', [PaymentController::class, 'cancelPayment'])
+            ->name('orders.unpaid');
+
         Route::post('orders/{id}/delete', [OrderController::class, 'delete'])->name('orders.delete');
         Route::post('orders/{orderId}/change-status', [OrderController::class, 'changeOrderStatus'])
             ->name('orders.changeOrderStatus');
@@ -63,15 +72,18 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('orders/{orderId}/acc-order-proccess', [OrderController::class, 'accOrderByValet'])
             ->name('orders.acc-order-process');
 
-        Route::get('orders/{orderId}/product-edit', [OrderController::class, 'getProductEdit']);
-
-    });
+        });
 
     Route::group(['middleware' => 'role:hotel'], function () {
         Route::post('payments/payment-documents', [PaymentController::class, 'uploadPayment'])
             ->name('payments.upload');
         Route::post('orders/{id}/delete', [OrderController::class, 'delete'])->name('orders.delete');
+        Route::post('orders/{id}/update', [OrderController::class, 'update'])->name('orders.update');
+        Route::post('orders/{orderId}/done-hotel', [OrderController::class, 'doneOrder']);
+
     });
+
+    Route::get('orders/{orderId}/product-edit', [OrderController::class, 'getProductEdit'])->middleware(['role:valet|hotel']);
 
     Route::get('orders/{orderId}/details', [OrderController::class, 'getOrderDetails'])
         ->middleware(['role:superadmin|admin|hotel']);
@@ -139,4 +151,4 @@ Route::group(['middleware' => 'auth'], function () {
 //    });
 
 });
-Route::get('reports/bulanan', [TestController::class, 'test']);
+Route::get('test', [TestController::class, 'test']);

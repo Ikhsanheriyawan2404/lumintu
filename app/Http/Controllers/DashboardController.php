@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Order;
 use App\Models\Category;
+use App\Models\Cost;
 use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
@@ -35,6 +36,7 @@ class DashboardController extends Controller
         } else {
             return response()->json([
                 'orders' => Order::count(),
+                'costs' => number_format(Cost::sum('total')),
                 'customers' => User::role('hotel')->count(),
                 'employees' => User::role('pegawai')->count(),
             ]);

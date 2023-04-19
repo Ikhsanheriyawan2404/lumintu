@@ -22,7 +22,7 @@
                         <div class="col-md-6">
                             <ul class="list-group mb-2">
                                 <li class="list-group-item">Nomor Order : <i id="order_no"></i></li>
-                                <li class="list-group-item">Total : Rp <i id="total_price"></i></li>
+                                <li class="list-group-item">Total : Rp <i id="total_price">{{ number_format($order->total_price, 0, ',', '.') }}</i></li>
                             </ul>
                         </div>
                         <div class="col-md-6">
@@ -36,7 +36,8 @@
                         <div class="col-md-6">
                             <div class="input-group mb-3">
                                 <input type="text" class="form-control" placeholder="Pilih Barang" disabled>
-                                <button type="button" class="btn btn-primary mb-0" onclick="showProduct()"><i class="fa fa-search"></i></button>
+                                <button type="button" class="btn btn-primary mb-0" onclick="showProduct()"><i
+                                        class="fa fa-search"></i></button>
                             </div>
                         </div>
                     </div>
@@ -134,56 +135,45 @@
 
         $(document).ready(function () {
 
-            let table2 = $('#table-product').DataTable({
+            let orderId = "{{ $order->id }}"
+
+            let tableListProductOnModal = $('#table-product').DataTable({
                 processing: true,
                 serverSide: true,
                 responsive: true,
-                ajax: "{{ route('orders.index') }}" + "/product-datatables/" + auth()->user()->id,
-                columns: [
-                    {data: 'DT_RowIndex', orderable: false},
-                    {data: 'product.name'},
-                    {data: 'price'},
-                    {data: 'action', orderable: false},
+                ajax: "{{ route('orders.index') }}" + "/product-datatables/" + "{{auth()->user()->id}}",
+                columns: [{
+                        data: 'DT_RowIndex',
+                        orderable: false
+                    },
+                    {
+                        data: 'product.name'
+                    },
+                    {
+                        data: 'price'
+                    },
+                    {
+                        data: 'action',
+                        orderable: false
+                    },
                 ]
             });
 
-            let orderId = "{{ $order->id }}"
-            $.get("{{ route('orders.index') }}" + "/" + orderId + '/product', function(data) {
+            $.get("{{ route('orders.index') }}" + "/" + orderId + '/product-edit', function(data) {
 
-                // Get All Item list record on the table orders
-                let allProductId = [];
-                $("input[name='product_id[]']").each(function() {
-                    allProductId.push($(this).val());
-                });
-                // Condition if item has arrived on the list tables
-                let match = allProductId.some(productId => productId == id);
-                if (match) {
-                    alert('Barang sudah ada')
-                } else {
-                    // Put every column input in tables
-                    $('#table-order tbody tr.empty_data').remove();
+                // Put every column input in tables
+                $('#table-order tbody tr.empty_data').remove();
 
-                    // Put every column input in tables
+                // Put every column input in tables
+                data.forEach(item => {
                     var tr = $('<tr>');
                     for (var i = 0; i < 5; i++) {
-                        var td = $('<td class="text-center">').html(data[i]);
+                        var td = $('<td class="text-center">').html(item[i]);
                         tr.append(td);
                     }
                     $('#table-order tbody').append(tr);
-
-                    // Trigger For Update Column
-                    let qtyElement = $('.qty[data-id=' + id + ']');
-                    $(qtyElement).val(1)
-                    let qty = 1
-                    let price = parseInt($('.price[data-id=' + id + ']')
-                        .val().replace(/\./g, ''));
-                    let subtotal = qty * price;
-
-                    $(`.subtotal[data-id="${id}"]`).val(subtotal.toLocaleString('id-ID'));
-
-                    calculateAll();
-                }
                 });
+            });
 
             $('body').on('click', '#createOrder', function(e) {
                 e.preventDefault();
@@ -194,7 +184,7 @@
 
                 $.ajax({
                     data: formData,
-                    url: "{{ route('orders.store') }}",
+                    url: "{{ route('orders.update', $order->id) }}",
                     contentType: false,
                     processData: false,
                     type: "POST",
@@ -206,9 +196,7 @@
                             title: 'Success',
                             text: data.message,
                         });
-                        setInterval(() => {
-                            window.location.href = "{{ route('orders.index') }}";
-                        }, 1000);
+                        window.location.href = "{{ route('orders.index') }}";
                     },
                     error: function(response) {
                         const data = response.responseJSON;
@@ -226,9 +214,9 @@
                 });
             })
 
-            // Menampilkan info data kosong pada tabel order item
-            let tr = '<tr class="empty_data"><td colspan="8" class="text-center">Belum ada data</td></tr>'
-            $('#table-order tbody').append(tr);
+               // Menampilkan info data kosong pada tabel order item
+            let dataKosong = '<tr class="empty_data"><td colspan="8" class="text-center">Belum ada data</td></tr>'
+            $('#table-order tbody').append(dataKosong);
 
             // Choose item on modals to select in table orders
             $('body').on('click', '.chooseProduct', function(e) {
@@ -243,7 +231,7 @@
                         allProductId.push($(this).val());
                     });
                     // Condition if item has arrived on the list tables
-                    let match = allProductId.some(productId => productId == id);
+                    let match = allProductId.some(productId => productId === id);
                     if (match) {
                         alert('Barang sudah ada')
                     } else {
@@ -252,7 +240,7 @@
 
                         // Put every column input in tables
                         var tr = $('<tr>');
-                        for (var i = 0; i < 5; i++) {
+                        for (var i = 0; i < data.length; i++) {
                             var td = $('<td class="text-center">').html(data[i]);
                             tr.append(td);
                         }
