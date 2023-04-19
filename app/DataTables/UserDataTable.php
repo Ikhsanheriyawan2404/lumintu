@@ -27,6 +27,9 @@ class UserDataTable extends DataTable
             ->addColumn('action', function ($row) {
                 return view('admin.users.datatables.action', compact('row'))->render();
             })
+            ->addColumn('roles', function ($row) {
+                return $row->roles[0]->name;
+            })
             ->rawColumns(['action']);
     }
 
@@ -41,12 +44,6 @@ class UserDataTable extends DataTable
         return $model->newQuery()
            ->orderBy('users.created_at', 'desc')
            ->with(['user_detail', 'roles']);
-            // ->join('user_details','users.id','=','user_details.user_id')
-            // ->join('model_has_roles','users.id','=','model_has_roles.model_id')
-            // ->join('roles','model_has_roles.role_id','=','roles.id')
-            // ->where('roles.name','!=', 'hotel')
-            // ->select('users.id, users.name','users.username','users.email', 'phone_number', 'address',  'roles.name as role')
-            // ;
     }
 
     /**
@@ -93,13 +90,13 @@ class UserDataTable extends DataTable
                 ->title('Username'),
                 Column::make('email')
                 ->title('Email'),
-            Column::make('user.roles[0].name')
+            Column::make('roles')
                 ->searchable(false)
                 ->orderable(false)
                 ->title('Role'),
-            Column::make('phone_number')
+            Column::make('user_detail.phone_number')
                 ->title('No HP'),
-            Column::make('address')
+            Column::make('user_detail.address')
                 ->title('Alamat'),
             Column::computed('action')
                 ->exportable(false)

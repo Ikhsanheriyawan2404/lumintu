@@ -24,7 +24,7 @@ Route::get('/login', function () {
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-Route::group(['middleware' => 'auth'], function () {
+Route::middleware(['auth', 'active'])->group( function () {
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/dashboard/summary', [DashboardController::class, 'summary'])->name('dashboard.summary');
@@ -43,6 +43,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::resource('hotel', HotelController::class);
         Route::resource('pegawai', PegawaiController::class);
 
+        // Nontatikf/Aktif users
+        Route::post('users/{userId}/status', [UserController::class, 'changeStatus']);
         Route::resource('users', UserController::class);
 
         // Cancel and Approve order payment

@@ -142,6 +142,50 @@
                     }
                 });
             });
+
+            $('body').on('click', '#active', function(e) {
+                e.preventDefault();
+                var item_id = $(this).data('id');
+                var formData = new FormData();
+                formData.append("_token", "{{ csrf_token() }}");
+                formData.append("active", "0");
+                $.ajax({
+                    data: formData,
+                    url: "{{ route('users.index') }}" + "/" + item_id + "/status",
+                    contentType: false,
+                    processData: false,
+                    type: "POST",
+                    success: function(data) {
+                        $('#users-table').DataTable().draw();
+                        toastr.success(data.message, 'Success', {
+                            closeButton: true,
+                            progressBar: true,
+                        });
+                    },
+                });
+            });
+
+            $('body').on('click', '#nonactive', function(e) {
+                e.preventDefault();
+                let item_id = $(this).data('id');
+                var formData = new FormData();
+                formData.append("_token", "{{ csrf_token() }}");
+                formData.append("active", "1");
+                $.ajax({
+                    data: formData,
+                    url: "{{ route('users.index') }}" + "/" + item_id + "/status",
+                    contentType: false,
+                    processData: false,
+                    type: "POST",
+                    success: function(data) {
+                        $('#users-table').DataTable().draw();
+                        toastr.success(data.message, 'Success', {
+                            closeButton: true,
+                            progressBar: true,
+                        });
+                    },
+                });
+            });
         });
     </script>
 @endpush
