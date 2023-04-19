@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="{{ asset('assets/report/css/bootstrap.min.css') }}">
     {{-- <link rel="stylesheet" href="{{ asset('assets/report/css/report.css') }}"> --}}
 
-    {{-- @stack('custom-style') --}}
+    @stack('custom-style')
 </head>
 
 <body>
