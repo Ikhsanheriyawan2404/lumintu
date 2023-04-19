@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\ExportPdfCost;
 use App\Models\Cost;
 use App\Models\Order;
 use App\Models\MasterCost;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Storage;
 use InvalidArgumentException;
 use App\DataTables\CostDataTable;
 use App\Http\Requests\CostRequest;
@@ -224,5 +227,14 @@ class CostController extends Controller
 
 
         return Excel::download(new CostsMultipleSheet($header), 'pengeluaran.xlsx');
+    }
+
+    public function exportPdf()
+    {
+        $pdf = Pdf::loadView('admin.report.cost.harian')->setPaper('a4')->download('test.pdf');
+        Storage::disk('local')->put('pdf.pdf','Contents');
+        $pdf = public_path('storage/pdf/', 'test.pdf');
+        return response()->download($pdf);
+
     }
 }

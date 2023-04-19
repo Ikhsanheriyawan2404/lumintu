@@ -16,7 +16,7 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        {{ $dataTable->table(['class' => 'table align-items-center display responsive nowrap', 'width' => '100%']) }}
+                        {{ $dataTable->table(['class' => 'table align-items-center display responsive', 'width' => '100%']) }}
                     </div>
                 </div>
             </div>
@@ -104,7 +104,8 @@
                         },
                         error: function(data) {
                             $('.deleteBtn').removeAttr('disabled');
-                            alert(data.error)
+                            $('.deleteBtn').html('Hapus');
+                            toastr.error('Data tidak bisa dihapus karena sudah digunakan');
                         }
                     });
                 }
@@ -139,6 +140,7 @@
                             title: 'Oppss',
                             text: data.responseJSON.message,
                         });
+
                         $.each(data.responseJSON.errors, function(index, value) {
                             toastr.error(value);
                         });

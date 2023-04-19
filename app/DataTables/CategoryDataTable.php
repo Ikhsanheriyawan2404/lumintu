@@ -38,7 +38,7 @@ class CategoryDataTable extends DataTable
      */
     public function query(Category $model): QueryBuilder
     {
-        return $model->newQuery()->orderBy('name', 'desc');
+        return $model->newQuery()->orderBy('name', 'asc');
     }
 
     /**

@@ -72,18 +72,18 @@ class OrderSeeder extends Seeder
         ]);
 
         OrderStatus::factory()->count(12)->sequence(
-            ['order_id' => 1, 'status' => 'pending'],
-            ['order_id' => 1, 'status' => 'approve'],
-            ['order_id' => 1, 'status' => 'pickup'],
-            ['order_id' => 1, 'status' => 'process'],
-            ['order_id' => 1, 'status' => 'delivery'],
-            ['order_id' => 1, 'status' => 'done'],
-            ['order_id' => 2, 'status' => 'pending'],
-            ['order_id' => 2, 'status' => 'approve'],
-            ['order_id' => 2, 'status' => 'pickup'],
-            ['order_id' => 2, 'status' => 'process'],
-            ['order_id' => 2, 'status' => 'delivery'],
-            ['order_id' => 2, 'status' => 'done'],
+            ['order_id' => 1, 'status' => 'pending', 'user_id' => random_int(4, 10)],
+            ['order_id' => 1, 'status' => 'approve', 'user_id' => random_int(1, 2)],
+            ['order_id' => 1, 'status' => 'pickup', 'user_id' => random_int(1, 2)],
+            ['order_id' => 1, 'status' => 'process', 'user_id' => random_int(1, 2)],
+            ['order_id' => 1, 'status' => 'delivery', 'user_id' => random_int(1, 2)],
+            ['order_id' => 1, 'status' => 'done', 'user_id' => random_int(1, 2)],
+            ['order_id' => 2, 'status' => 'pending', 'user_id' => random_int(4, 10)],
+            ['order_id' => 2, 'status' => 'approve', 'user_id' => random_int(1, 2)],
+            ['order_id' => 2, 'status' => 'pickup', 'user_id' => random_int(1, 2)],
+            ['order_id' => 2, 'status' => 'process', 'user_id' => random_int(1, 2)],
+            ['order_id' => 2, 'status' => 'delivery', 'user_id' => random_int(1, 2)],
+            ['order_id' => 2, 'status' => 'done', 'user_id' => random_int(1, 2)],
         )->create();
 
         for ($i = 0; $i < 100; $i++) {
@@ -119,6 +119,7 @@ class OrderSeeder extends Seeder
                     OrderStatus::create([
                         'order_id' => $order->id,
                         'status' => $status,
+                        'user_id' => random_int(4, 10),
                     ]);
                 } else {
                     OrderStatus::insert([

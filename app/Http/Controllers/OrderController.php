@@ -8,7 +8,6 @@ use App\Models\Order;
 use App\Models\Pickup;
 use App\Models\Delivery;
 use App\Models\OrderStatus;
-use App\Exports\OrdersExport;
 use InvalidArgumentException;
 use App\Enums\OrderStatusEnum;
 use App\Mail\OrderNotification;
@@ -225,6 +224,7 @@ class OrderController extends Controller
                         $order->order_status()->create([
                             'order_id' => $order->id,
                             'status' => $status,
+                            'user_id' => auth()->user()->id,
                         ]);
                     } else {
                         $order->order_status()->insert([
@@ -319,6 +319,7 @@ class OrderController extends Controller
 
                 $order->order_status()->where('status', $nextOrderStatus)->update([
                     'created_at' => now(),
+                    'user_id' => auth()->user()->id,
                 ]);
 
                 $listUsersWhoGetNotifications = [];
@@ -382,6 +383,7 @@ class OrderController extends Controller
 
                 $order->update([
                     'status' => OrderStatusEnum::PICKUP,
+                    'user_id' => auth()->user()->id,
                 ]);
 
                 // Change Order Status
@@ -452,6 +454,22 @@ class OrderController extends Controller
         ]);
     }
 
+    // Done order from hotel
+    public function doneOrder($orderId)
+    {
+        $order = Order::find($orderId);
+        $order->update([
+            'status' => request('status')
+        ]);
+
+        $order->order_status()->where('status', request('status'))->update([
+            'created_at' => now(),
+            'user_id' => auth()->user()->id,
+        ]);
+
+        return response()->json(['message' => 'Order berhasil diterima']);
+    }
+
     public function exportExcel()
     {
         $customerId = request('filterCustomer');
@@ -514,6 +532,22 @@ class OrderController extends Controller
         }
 
         return response()->json($data);
+    }
+
+    // Delete Order
+    public function delete($id)
+    {
+        try {
+            $order = Order::findOrFail($id);
+            $order->delete();
+        } catch (InvalidArgumentException $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+            ], 400);
+        }
+        return response()->json([
+            'message' => 'Pesanan Berhasi di cancel',
+        ]);
     }
 
 }

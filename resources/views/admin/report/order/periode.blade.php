@@ -1,6 +1,6 @@
 {{-- SetPaper A4 Landscape --}}
+@extends('admin.report.layouts.app', ['title' => 'Laporan Harian Pengeluaran'])
 
-@extends('admin.pdf.layouts.app', ['title' => 'Laporan Periode Transaksi'])
 
 @section('content')
     <table class="header mb-2">

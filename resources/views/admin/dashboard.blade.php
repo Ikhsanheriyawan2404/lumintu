@@ -29,32 +29,8 @@
                 </div>
             </div>
         </div>
-        <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
-            <div class="card">
-                <div class="card-body p-3">
-                    <div class="row">
-                        <div class="col-8">
-                            <div class="numbers">
-                                <p class="text-sm mb-0 text-uppercase font-weight-bold">Laporan</p>
-                                <h5 class="font-weight-bolder" id="reports">
-                                    <div class="spinner-border" role="status">
-                                        <span class="visually-hidden">Loading...</span>
-                                    </div>
-                                </h5>
-                                <p class="mb-0">
-                                    <span class="text-success text-sm font-weight-bolder">Cek</span>
-                                </p>
-                            </div>
-                        </div>
-                        <div class="col-4 text-end">
-                            <div class="icon icon-shape bg-gradient-danger shadow-danger text-center rounded-circle">
-                                <i class="ni ni-paper-diploma text-lg opacity-10" aria-hidden="true"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        @role('admin|superadmin')
+
         <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
             <div class="card">
                 <div class="card-body p-3">
@@ -68,7 +44,7 @@
                                     </div>
                                 </h5>
                                 <p class="mb-0">
-                                    <span class="text-success text-sm font-weight-bolder">Cek</span>
+                                    <span class="text-success text-sm font-weight-bolder"><a href="{{ url('/hotel') }}">Cek</a></span>
                                 </p>
                             </div>
                         </div>
@@ -94,7 +70,7 @@
                                     </div>
                                 </h5>
                                 <p class="mb-0">
-                                    <span class="text-success text-sm font-weight-bolder">Cek</span>
+                                    <span class="text-success text-sm font-weight-bolder"><a href="{{ url('/users') }}">Cek</a></span>
                                 </p>
                             </div>
                         </div>
@@ -107,8 +83,35 @@
                 </div>
             </div>
         </div>
+        <div class="col-xl-3 col-sm-6">
+            <div class="card">
+                <div class="card-body p-3">
+                    <div class="row">
+                        <div class="col-8">
+                            <div class="numbers">
+                                <p class="text-sm mb-0 text-uppercase font-weight-bold">Pengeluaran</p>
+                                <h5 class="font-weight-bolder" id="costs">
+                                    <div class="spinner-border" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                </h5>
+                                <p class="mb-0">
+                                    <span class="text-success text-sm font-weight-bolder"><a href="{{ url('/cost') }}">Cek</a></span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="col-4 text-end">
+                            <div class="icon icon-shape bg-gradient-warning shadow-warning text-center rounded-circle">
+                                <i class="ni ni-single-02 text-lg opacity-10" aria-hidden="true"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @endrole
     </div>
-
+@role('admin|superadmin')
     <!-- Chart Accumulation Data -->
     <div class="row mt-4">
         <div class="col-lg-7 mb-lg-0 mb-4">
@@ -116,8 +119,6 @@
                 <div class="card-header pb-0 pt-3 bg-transparent">
                     <h6 class="text-capitalize">Data Penjualan</h6>
                     <p class="text-sm mb-0">
-                        <i class="fa fa-arrow-up text-success"></i>
-                        <span class="font-weight-bold">4% meningkat</span> di 2022
                     </p>
                 </div>
                 <div class="card-body p-3">
@@ -132,8 +133,6 @@
                 <div class="card-header pb-0 pt-3 bg-transparent">
                     <h6 class="text-capitalize">Data Pelanggan</h6>
                     <p class="text-sm mb-0">
-                        <i class="fa fa-arrow-up text-success"></i>
-                        <span class="font-weight-bold">4% meningkat</span> di 2022
                     </p>
                 </div>
                 <div class="card-body p-3">
@@ -144,7 +143,7 @@
             </div>
         </div>
     </div>
-
+@endrole
     <!-- Table History Data -->
     <div class="row mt-4">
         <div class="col-lg-7 mb-lg-0 mb-4">
@@ -238,7 +237,7 @@
         $(document).ready(function() {
             $.get("{{ route('dashboard.summary') }}", function(data) {
                 $('#orders').html(data.orders)
-                $('#reports').html(data.orders)
+                $('#costs').html(data.costs)
                 $('#customers').html(data.customers)
                 $('#employees').html(data.employees)
             });

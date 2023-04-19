@@ -42,7 +42,6 @@
     <!-- DataTables -->
     <link rel="stylesheet" href="{{ asset('library/http_cdn.datatables.net_1.13.4_css_dataTables.bootstrap5.css')}}">
     <link rel="stylesheet" href="{{asset('library/http_cdn.datatables.net_responsive_2.4.1_css_responsive.bootstrap5.css')}}">
-
     <link rel="stylesheet" href="{{ asset('library/http_cdnjs.cloudflare.com_ajax_libs_toastr.js_latest_toastr.css') }}">
 @endpush
 
@@ -55,7 +54,7 @@
 
     <!-- SweetAlert2 -->
     <script src="{{ asset('library/http_cdn.jsdelivr.net_npm_sweetalert2@11.js') }}"></script>
-    <script src="{{ asset('library/http_cdnjs.cloudflare.com_ajax_libs_toastr.js_latest_toastr.css') }}"></script>
+    <script src="{{ asset('library/http_cdnjs.cloudflare.com_ajax_libs_toastr.js_latest_toastr.min.js') }}"></script>
 
     <script>
         $(document).ready(function() {
@@ -121,6 +120,56 @@
                 $('tr.items').remove();
             });
 
+            $('body').on('click', '.deleteBtn', function(e) {
+                e.preventDefault();
+                var confirmation = confirm("Apakah yakin untuk mencancel pesanan?");
+                if (confirmation) {
+                    var item_id = $(this).data('id');
+                    var formData = new FormData($('#deleteDoc')[0]);
+                    $('.deleteBtn').attr('disabled', 'disabled');
+                    $('.deleteBtn').html('...');
+                    $.ajax({
+                        data: formData,
+                        url: "{{ route('orders.index') }}" + '/' + item_id + '/delete',
+                        contentType: false,
+                        processData: false,
+                        type: "POST",
+                        success: function(data) {
+                            $('#deleteDoc').trigger("reset");
+                            $('#orders-table').DataTable().draw();
+                            toastr.success(data.message);
+                        },
+                        error: function(data) {
+                            $('.deleteBtn').removeAttr('disabled');
+                            $('.deleteBtn').html('Hapus');
+                            // toastr.error(data.responseJSON.message)
+                            toastr.error('Pesanan Gagal di cancle')
+                        }
+                    });
+                }
+            });
+
+            $('body').on('click', '#doneOrder', function(e) {
+                e.preventDefault();
+                var item_id = $(this).data('id');
+                var formData = new FormData();
+                formData.append("_token", "{{ csrf_token() }}");
+                formData.append("status", "done");
+                $.ajax({
+                    data: formData,
+                    url: "{{ route('orders.index') }}" + "/" + item_id + "/done-hotel",
+                    contentType: false,
+                    processData: false,
+                    type: "POST",
+                    success: function(data) {
+                        $('#orders-table').DataTable().draw();
+                        toastr.success(data.message, 'Success', {
+                            closeButton: true,
+                            progressBar: true,
+                        });
+                    },
+                });
+            });
         })
     </script>
 @endpush

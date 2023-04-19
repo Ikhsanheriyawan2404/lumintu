@@ -79,7 +79,7 @@ class ProductsDataTable extends DataTable
         return [
             Column::make('DT_RowIndex')
                 ->title('No')
-                ->width(30)
+                ->width(5)
                 ->searchable(false)
                 ->orderable(false)
                 ->addClass("text-sm font-weight-normal")

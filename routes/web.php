@@ -34,6 +34,8 @@ Route::group(['middleware' => 'auth'], function () {
         require __DIR__ . '/admin/masterPembayaran.php';
         require __DIR__ . '/admin/pengeluaran.php';
 
+        Route::get('exportpdfcost', [CostController::class, 'exportPdf'])->name('export.pdf');
+
 
         Route::resource('products', ProductController::class);
         Route::resource('categories', CategoryController::class);
@@ -43,9 +45,13 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::resource('users', UserController::class);
 
+        // Cancel and Approve order payment
         Route::post('orders/{order:id}/approve-payment', [PaymentController::class, 'approvePayment'])
-
             ->name('orders.paid');
+        Route::post('orders/{order:id}/cancel-payment', [PaymentController::class, 'cancelPayment'])
+            ->name('orders.unpaid');
+
+        Route::post('orders/{id}/delete', [OrderController::class, 'delete'])->name('orders.delete');
         Route::post('orders/{orderId}/change-status', [OrderController::class, 'changeOrderStatus'])
             ->name('orders.changeOrderStatus');
 
@@ -69,10 +75,10 @@ Route::group(['middleware' => 'auth'], function () {
     });
 
     Route::group(['middleware' => 'role:hotel'], function () {
-
         Route::post('payments/payment-documents', [PaymentController::class, 'uploadPayment'])
             ->name('payments.upload');
-
+        Route::post('orders/{id}/delete', [OrderController::class, 'delete'])->name('orders.delete');
+        Route::post('orders/{orderId}/done-hotel', [OrderController::class, 'doneOrder']);
     });
 
     Route::get('orders/{orderId}/details', [OrderController::class, 'getOrderDetails'])
@@ -136,9 +142,9 @@ Route::group(['middleware' => 'auth'], function () {
 //        return view('admin.orders.report.bulanan');
 //    });
 
-    Route::get('reports/harian', function () {
-        return view('admin.orders.report.harian');
-    });
+//    Route::get('reports/harian', function () {
+//        return view('admin.report.cost.bulanan');
+//    });
 
 });
 Route::get('reports/bulanan', [TestController::class, 'test']);

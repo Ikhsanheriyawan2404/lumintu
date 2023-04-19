@@ -133,17 +133,18 @@
 @endpush
 
 @push('custom-scripts')
-    <!-- Select2 -->
-    <link href="{{ asset('library/http_cdn.jsdelivr.net_npm_select2@4.1.0-rc.0_dist_js_select2.js') }}">
     <!-- DataTables  & Plugins -->
     <script src="{{ asset('library/http_cdn.datatables.net_1.13.4_js_jquery.dataTables.js') }}"></script>
     <script src="{{ asset('library/http_cdn.datatables.net_1.13.4_js_dataTables.bootstrap5.js') }}"></script>
     <script src="{{ asset('library/http_cdn.datatables.net_responsive_2.4.1_js_dataTables.responsive.js') }}"></script>
     <script src="{{ asset('library/http_cdn.datatables.net_responsive_2.4.1_js_responsive.bootstrap4.js') }}"></script>
+    <script src="{{ asset('library/http_cdnjs.cloudflare.com_ajax_libs_toastr.js_latest_toastr.min.js') }}"></script>
+    <!-- Select2 -->
+    <script src="{{ asset('library/http_cdn.jsdelivr.net_npm_select2@4.1.0-rc.0_dist_js_select2.js') }}"></script>
 
     <!-- SweetAlert2 -->
     <script src="{{ asset('library/http_cdn.jsdelivr.net_npm_sweetalert2@11.js') }}"></script>
-    <script src="{{ asset('library/http_cdnjs.cloudflare.com_ajax_libs_toastr.js_latest_toastr.css') }}"></script>
+    <script src="{{ asset('library/http_cdnjs.cloudflare.com_ajax_libs_toastr.js_latest_toastr.min.js') }}"></script>
 
 
     <script>
