@@ -38,7 +38,7 @@ class CategoryDataTable extends DataTable
      */
     public function query(Category $model): QueryBuilder
     {
-        return $model->newQuery();
+        return $model->newQuery()->orderBy('name', 'desc');
     }
 
     /**
@@ -75,7 +75,7 @@ class CategoryDataTable extends DataTable
         return [
             Column::make('DT_RowIndex')
                 ->title('No')
-                ->width(30)
+                ->width(5)
                 ->searchable(false)
                 ->orderable(false)
                 ->addClass("text-sm font-weight-normal")

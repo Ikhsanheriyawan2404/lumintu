@@ -39,14 +39,14 @@ class UserDataTable extends DataTable
     public function query(User $model): QueryBuilder
     {
         return $model->newQuery()
-//            ->orderBy('users.created_at', 'desc')
-//            ->with(['user_detail', 'roles']);
-        ->join('user_details','users.id','=','user_details.user_id')
-        ->join('model_has_roles','users.id','=','model_has_roles.model_id')
-        ->join('roles','model_has_roles.role_id','=','roles.id')
-            ->where('roles.name','!=', 'hotel')
-            ->select('users.name','users.username','users.email', 'phone_number', 'address',  'roles.name as role')
-            ;
+           ->orderBy('users.created_at', 'desc')
+           ->with(['user_detail', 'roles']);
+            // ->join('user_details','users.id','=','user_details.user_id')
+            // ->join('model_has_roles','users.id','=','model_has_roles.model_id')
+            // ->join('roles','model_has_roles.role_id','=','roles.id')
+            // ->where('roles.name','!=', 'hotel')
+            // ->select('users.id, users.name','users.username','users.email', 'phone_number', 'address',  'roles.name as role')
+            // ;
     }
 
     /**
@@ -93,7 +93,7 @@ class UserDataTable extends DataTable
                 ->title('Username'),
                 Column::make('email')
                 ->title('Email'),
-            Column::make('role')
+            Column::make('user.roles[0].name')
                 ->searchable(false)
                 ->orderable(false)
                 ->title('Role'),

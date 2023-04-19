@@ -63,7 +63,6 @@
             $('body').on('click', '#editItem', function() {
                 var item_id = $(this).data('id');
                 $.get("{{ route('users.index') }}" + '/' + item_id + '/edit', function(data) {
-                    console.log(data);
                     $('#modal-md').modal('show');
                     setTimeout(function() {
                         $('#name').focus();
@@ -102,7 +101,7 @@
                         },
                         error: function(data) {
                             $('.deleteBtn').removeAttr('disabled');
-                            alert(data.error)
+                            alert('User tidak bisa dihapus')
                         }
                     });
                 }

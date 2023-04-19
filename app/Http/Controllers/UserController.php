@@ -15,6 +15,8 @@ class UserController extends Controller
 {
     public function index(UserDataTable $dataTable)
     {
+        $user = User::with('roles')->find(1);
+        return response()->json($user->roles->name);
         return $dataTable->render('admin.users.index', [
             'roles' => Role::get(),
         ]);

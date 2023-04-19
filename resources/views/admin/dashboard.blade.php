@@ -219,9 +219,9 @@
                                     </div>
                                 </div>
                                 <div class="d-flex">
-                                    <button
+                                    <a href="{{ route('categories.index', []) }}"
                                         class="btn btn-link btn-icon-only btn-rounded btn-sm text-dark icon-move-right my-auto"><i
-                                            class="ni ni-bold-right" aria-hidden="true"></i></button>
+                                            class="ni ni-bold-right" aria-hidden="true"></i></a>
                                 </div>
                             </li>
                         @endforeach

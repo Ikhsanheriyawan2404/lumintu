@@ -38,7 +38,7 @@ class CostDataTable extends DataTable
      */
     public function query(Cost $model): QueryBuilder
     {
-        return $model->newQuery()->orderBy('date', 'desc');
+        return $model->newQuery()->orderBy('created_at', 'desc');
     }
 
     /**
