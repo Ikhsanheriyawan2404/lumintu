@@ -28,7 +28,8 @@ Route::middleware(['auth', 'active'])->group(function () {
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/dashboard/summary', [DashboardController::class, 'summary'])->name('dashboard.summary');
-    Route::get('/dashboard/chart', [DashboardController::class, 'chart'])->name('dashboard.chart');
+    Route::get('/dashboard/chart-order', [DashboardController::class, 'chartOrder'])->name('dashboard.chartOrder');
+    Route::get('/dashboard/customer-ordered', [DashboardController::class, 'customerOrdered'])->name('dashboard.customer-ordered');
 
     Route::group(['middleware' => 'role:superadmin|admin'], function () {
         require __DIR__ . '/admin/masterPembayaran.php';
