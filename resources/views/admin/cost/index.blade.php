@@ -8,7 +8,7 @@
                 <form id="formExport" method="POST">
                     @csrf
                     <button type="submit" class="btn btn-sm btn-success" id="btnExportExcel">Export Excel</button>
-                    <button class="btn btn-sm btn-danger">Export PDF</button>
+                    <button type="button" class="btn btn-sm btn-danger" id="btnExportPDF">Export PDF</button>
                 </form>
             </div>
 
@@ -24,7 +24,9 @@
                     </div>
                 </div>
                 <div class="card-body p-3 pb-0">
-                    {{ $dataTable->table(['class' => 'table table-sm table-bordered display responsive nowrap', 'width' => '100%']) }}
+                    <div class="table-responsive">
+                        {{ $dataTable->table(['class' => 'table table-sm table-bordered display responsive nowrap', 'width' => '100%']) }}
+                    </div>
                 </div>
             </div>
         </div>
@@ -135,6 +137,28 @@
                         }
                     });
                 });
+
+            $('#btnExportPDF').on('click', function() {
+                var csrf_token = $('meta[name="csrf-token"]').attr('content');
+                $.ajax({
+                    url: "{{ route('export.pdf') }}",
+                    data: {
+                        _token: csrf_token,
+                    },
+                    xhrFields: {
+                        responseType: 'blob'
+                    },
+                    type: 'GET',
+                    success: function (response) {
+                        var blob = new Blob([response]);
+                        var link = document.createElement('a');
+                        link.href = window.URL.createObjectURL([blob]);
+                        link.download = "MyPDF.pdf";
+                        link.click();
+                    }
+                });
+            });
+
 
             $('#createNewItem').click(function() {
                 setTimeout(function() {

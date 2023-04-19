@@ -38,7 +38,7 @@ class CategoryDataTable extends DataTable
      */
     public function query(Category $model): QueryBuilder
     {
-        return $model->newQuery();
+        return $model->newQuery()->orderBy('name', 'asc');
     }
 
     /**
@@ -53,6 +53,10 @@ class CategoryDataTable extends DataTable
                     ->columns($this->getColumns())
                     ->minifiedAjax()
                     //->dom('Bfrtip')
+                    ->addColumnDef([
+                        'responsivePriority' => 1,
+                        'targets' => 1,
+                    ])
                     ->orderBy(1)
                     ->selectStyleSingle()
                     ->buttons([
@@ -75,7 +79,7 @@ class CategoryDataTable extends DataTable
         return [
             Column::make('DT_RowIndex')
                 ->title('No')
-                ->width(30)
+                ->width(5)
                 ->searchable(false)
                 ->orderable(false)
                 ->addClass("text-sm font-weight-normal")

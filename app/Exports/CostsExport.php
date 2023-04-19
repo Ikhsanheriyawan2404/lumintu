@@ -3,8 +3,8 @@
 namespace App\Exports;
 
 use App\Models\Cost;
+use App\Models\MasterCost;
 use Maatwebsite\Excel\Concerns\WithTitle;
-use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\FromCollection;
 
@@ -15,54 +15,56 @@ class CostsExport implements
 {
     public function __construct(
         protected $month,
-        protected $header,
-    ) {}
+        protected $header = ["Tanggal"],
+    ) {
+        $categoryCost = MasterCost::orderBy('name', 'asc')->get(['name']);
+        foreach ($categoryCost as $val) {
+            $this->header[] = $val->name;
+        }
+    }
 
     public function headings(): array
     {
-        return [
-            $this->header,
-        ];
+        return $this->header;
     }
 
     public function collection()
     {
         $year = now()->year;
-        $month = now()->month;
+        $month = $this->month['key'];
+        $numDays = \Carbon\Carbon::create($year, $month)->daysInMonth;
+
+        $days = array_map(function ($day) {
+            return (int)$day;
+        }, range(1, $numDays));
+
         $costs = Cost::selectRaw('DAY(date) as day, name, SUM(total) as total')
-            ->whereYear('created_at', $year)
-            ->whereMonth('created_at', $month)
+            ->whereYear('date', $year)
+            ->whereMonth('date', $month)
             ->groupBy('day', 'name')
             ->orderBy('day')
             ->get()
             ->toArray();
 
-        // Membuat array yang berisi data tanggal dan kategori
-        $data = [];
-        $names = [];
-        foreach ($costs as $cost) {
-
-            $day = $cost['day'];
-            $name = $cost['name'];
-            $totalPrice = $cost['total'];
-
-            if (!in_array($name, $names)) {
-                $names[] = $name;
-            }
-
-            if (!isset($data[$day])) {
-                $data[$day] = [];
-            }
-
-            $data[$day][$name] = $totalPrice;
-        }
+        $result = collect($days)
+            ->map(function ($day) use ($costs) {
+                $filtered = array_filter($costs, function ($cost) use ($day) {
+                    return $cost['day'] == $day;
+                });
+                return ['day' => $day] + array_reduce($filtered, function ($acc, $cost) {
+                    return $acc + [$cost['name'] => $cost['total']];
+                }, []);
+            })
+            ->toArray();
 
         $rows = [];
-        foreach ($data as $day => $values) {
-            $row = [$day];
-            foreach ($names as $name) {
-                $value = isset($values[$name]) ? $values[$name] : 0;
-                $row[] = $value;
+        foreach ($result as $values) {
+            $row = [$values['day']];
+            foreach ($this->header as $name) {
+                if ($name == 'Tanggal') {
+                    continue;
+                }
+                $row[] = isset($values[$name]) ? $values[$name] : 0;
             }
             $rows[] = $row;
         }
@@ -72,6 +74,6 @@ class CostsExport implements
 
     public function title(): string
     {
-        return $this->month;
+        return $this->month['name'];
     }
 }

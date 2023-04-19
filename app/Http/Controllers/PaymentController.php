@@ -56,4 +56,13 @@ class PaymentController extends Controller
 
         return redirect()->back();
     }
+
+    public function cancelPayment(Order $order)
+    {
+        $order->update([
+            'payment_status' => 'unpaid'
+        ]);
+
+        return redirect()->back();
+    }
 }

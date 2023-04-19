@@ -63,7 +63,6 @@
             $('body').on('click', '#editItem', function() {
                 var item_id = $(this).data('id');
                 $.get("{{ route('users.index') }}" + '/' + item_id + '/edit', function(data) {
-                    console.log(data);
                     $('#modal-md').modal('show');
                     setTimeout(function() {
                         $('#name').focus();
@@ -102,7 +101,7 @@
                         },
                         error: function(data) {
                             $('.deleteBtn').removeAttr('disabled');
-                            alert(data.error)
+                            alert('User tidak bisa dihapus')
                         }
                     });
                 }
@@ -141,6 +140,50 @@
                             toastr.error(value);
                         });
                     }
+                });
+            });
+
+            $('body').on('click', '#active', function(e) {
+                e.preventDefault();
+                var item_id = $(this).data('id');
+                var formData = new FormData();
+                formData.append("_token", "{{ csrf_token() }}");
+                formData.append("active", "0");
+                $.ajax({
+                    data: formData,
+                    url: "{{ route('users.index') }}" + "/" + item_id + "/status",
+                    contentType: false,
+                    processData: false,
+                    type: "POST",
+                    success: function(data) {
+                        $('#users-table').DataTable().draw();
+                        toastr.success(data.message, 'Success', {
+                            closeButton: true,
+                            progressBar: true,
+                        });
+                    },
+                });
+            });
+
+            $('body').on('click', '#nonactive', function(e) {
+                e.preventDefault();
+                let item_id = $(this).data('id');
+                var formData = new FormData();
+                formData.append("_token", "{{ csrf_token() }}");
+                formData.append("active", "1");
+                $.ajax({
+                    data: formData,
+                    url: "{{ route('users.index') }}" + "/" + item_id + "/status",
+                    contentType: false,
+                    processData: false,
+                    type: "POST",
+                    success: function(data) {
+                        $('#users-table').DataTable().draw();
+                        toastr.success(data.message, 'Success', {
+                            closeButton: true,
+                            progressBar: true,
+                        });
+                    },
                 });
             });
         });

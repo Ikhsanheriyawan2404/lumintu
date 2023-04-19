@@ -54,6 +54,10 @@ class HotelDataTable extends DataTable
                     ->setTableId('hotel-table')
                     ->columns($this->getColumns())
                     ->minifiedAjax()
+                    ->addColumnDef([
+                        'responsivePriority' => 1,
+                        'targets' => 1,
+                    ])
                     //->dom('Bfrtip')
                     ->orderBy(1)
                     ->selectStyleSingle()

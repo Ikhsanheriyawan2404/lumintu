@@ -38,7 +38,7 @@ class CostDataTable extends DataTable
      */
     public function query(Cost $model): QueryBuilder
     {
-        return $model->newQuery()->orderBy('date', 'desc');
+        return $model->newQuery()->orderBy('created_at', 'desc');
     }
 
     /**
@@ -52,6 +52,10 @@ class CostDataTable extends DataTable
             ->setTableId('cost-table')
             ->columns($this->getColumns())
             ->minifiedAjax()
+            ->addColumnDef([
+                'responsivePriority' => 1,
+                'targets' => 2,
+            ])
             //->dom('Bfrtip')
             ->orderBy(1)
             ->selectStyleSingle()

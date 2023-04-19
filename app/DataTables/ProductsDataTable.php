@@ -56,6 +56,10 @@ class ProductsDataTable extends DataTable
                     ->setTableId('products-table')
                     ->columns($this->getColumns())
                     ->minifiedAjax()
+                    ->addColumnDef([
+                        'responsivePriority' => 1,
+                        'targets' => 1,
+                    ])
                     // ->dom('Bfrtip')
                     ->orderBy(1)
                     ->selectStyleSingle()
@@ -104,6 +108,24 @@ class ProductsDataTable extends DataTable
                 ->addClass('text-center'),
         ];
     }
+
+    // protected function getColumnDefOptions(): array
+    // {
+    //     return [
+    //         [
+    //             'targets' => '_all',
+    //             'createdCell' => function ($td, $cellData, $rowData, $row, $col) {
+    //                 if ($col == 0) {
+    //                     // your custom action for column 0
+    //                 }
+    //                 if ($col == 1) {
+    //                     // your custom action for column 1
+    //                 }
+    //                 // and so on for other columns
+    //             }
+    //         ],
+    //     ];
+    // }
 
     /**
      * Get filename for export.

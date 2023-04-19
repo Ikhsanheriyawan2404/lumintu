@@ -20,7 +20,7 @@ return new class extends Migration
             $table->decimal('price', 15, 2);
             $table->timestamps();
 
-            $table->foreign('product_id')->references('id')->on('products')->onDelete('restrict');
+            $table->foreign('product_id')->references('id')->on('products')->onDelete('restrict')->onUpdate('restrict');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('restrict');
         });
     }
