@@ -1,4 +1,4 @@
-@extends('admin.emails.layouts.app')
+@extends('emails.layouts.app')
 
 @section('content')
     <div class="container">

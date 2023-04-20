@@ -59,6 +59,6 @@ class OrderNotification extends Mailable
 
     public function build()
     {
-        return $this->view('emails.order-notifications');
+        return $this->view('emails.hotel-pending');
     }
 }
