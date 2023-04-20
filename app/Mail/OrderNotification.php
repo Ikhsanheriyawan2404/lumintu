@@ -43,7 +43,7 @@ class OrderNotification extends Mailable
     public function content()
     {
         return new Content(
-            view: 'emails.order-notifications',
+            markdown: 'emails.order-notifications',
         );
     }
 
