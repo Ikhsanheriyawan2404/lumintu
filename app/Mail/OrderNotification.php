@@ -59,6 +59,6 @@ class OrderNotification extends Mailable
 
     public function build()
     {
-        return $this->markdown('emails.order-notifications');
+        return $this->view('emails.order-notifications');
     }
 }
