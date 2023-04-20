@@ -57,7 +57,7 @@
                             <h6 class="card-title">Nomor Order</h6>
                         </div>
                         <div class="col-md-9">
-                            <p class="card-text">ORD-643542532432</p>
+                            <p class="card-text">ORD#{{ $order->order_number }}</p>
                         </div>
                     </div>
                     <div class="row mb-2">
@@ -65,7 +65,7 @@
                             <h6 class="card-title">Tanggal Order</h6>
                         </div>
                         <div class="col-md-9">
-                            <p class="card-text">12 Januari 2023</p>
+                            <p class="card-text">{{ $order->created_at }}</p>
                         </div>
                     </div>
                     <div class="row">
@@ -73,7 +73,7 @@
                             <h6 class="card-title">Tujuan</h6>
                         </div>
                         <div class="col-md-9">
-                            <p class="card-text">Hotel Alam Sari</p>
+                            <p class="card-text">{{ $order->customer->name }}</p>
                         </div>
                     </div>
                 </div>
@@ -83,7 +83,7 @@
                             <h6 class="card-title">Alamat</h6>
                         </div>
                         <div class="col-md-8">
-                            <p class="card-text">Kampung Baru No. 1A RT.007 RW.003 Dangdang Cisauk Kab. Tangerang, Banten.
+                            <p class="card-text">{{ $order->customer->user_detail->address }}
                             </p>
                         </div>
                     </div>
@@ -92,7 +92,7 @@
                             <h6 class="card-title">Penanggungjawab</h6>
                         </div>
                         <div class="col-md-8">
-                            <p class="card-text">Thoriqul Hafidz Prahanto</p>
+                            <p class="card-text">asik</p>
                         </div>
                     </div>
                     <div class="row">
@@ -100,7 +100,7 @@
                             <h6 class="card-title">Nomor Telepon</h6>
                         </div>
                         <div class="col-md-8">
-                            <p class="card-text">+6287839736104</p>
+                            <p class="card-text">{{ $order->customer->user_detail->phone_number }}</p>
                         </div>
                     </div>
                 </div>
@@ -116,21 +116,17 @@
                         </tr>
                     </thead>
                     <tbody>
+                    @foreach($order->order_details as $data)
                         <tr>
-                            <th scope="row">Apron</th>
-                            <td class="text-center">4.000</td>
-                            <td class="text-center">3</td>
-                            <td class="text-center">12.000</td>
+                            <th scope="row">{{ $data->product_customer->product->name }}</th>
+                            <td class="text-center">{!! number_format($data->product_customer->price, 2) !!}</td>
+                            <td class="text-center">{{ $data->qty }}</td>
+                            <td class="text-center">{!! number_format($data->product_customer->price * $data->qty, 2)!!}</td>
                         </tr>
-                        <tr>
-                            <th scope="row">Food & Beverage</th>
-                            <td class="text-center">7.000</td>
-                            <td class="text-center">5</td>
-                            <td class="text-center">35.000</td>
-                        </tr>
+                    @endforeach
                         <tr>
                             <th scope="row" colspan="3" class="text-center">TOTAL</th>
-                            <th scope="row" class="text-center">47.000</th>
+                            <th scope="row" class="text-center">{!! number_format($order->total_price, 2) !!}</th>
                         </tr>
                     </tbody>
                 </table>
