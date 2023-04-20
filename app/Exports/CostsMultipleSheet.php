@@ -2,9 +2,16 @@
 
 namespace App\Exports;
 
+use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithMultipleSheets;
+use Maatwebsite\Excel\Concerns\WithStyles;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class CostsMultipleSheet implements WithMultipleSheets
+
+class CostsMultipleSheet implements
+    WithMultipleSheets,
+    WithStyles,
+    ShouldAutoSize
 {
     public function sheets(): array
     {
@@ -19,5 +26,13 @@ class CostsMultipleSheet implements WithMultipleSheets
         }
 
         return $sheets;
+    }
+
+    public function styles(Worksheet $sheet)
+    {
+        return [
+            // Style the first row as bold text.
+            1    => ['font' => ['bold' => true]]
+        ];
     }
 }
