@@ -50,7 +50,7 @@
                 <form id="formExport" method="POST">
                     @csrf
                     <button type="submit" class="btn btn-sm btn-success" id="btnExportExcel">Export Excel</button>
-                    <button class="btn btn-sm btn-danger">Export PDF</button>
+                    <button class="btn btn-sm btn-danger" id="btnExportPDF">Export PDF</button>
                 </form>
             </div>
             @endhasrole
@@ -120,6 +120,35 @@
                 table.ajax.url(`
                     {{ route('orders.index') }}?filterMonth=${$('#filterMonth').val()}&filterStatus=${$('#filterStatus').val()}&filterCustomer=${$('#filterCustomer').val()}
                 `).draw();
+            });
+            $('#btnExportPDF').on('click', function() {
+                var csrf_token = $('meta[name="csrf-token"]').attr('content');
+                $('#btnExportPDF').attr('disabled', 'disabled');
+                $('#btnExportPDF').html('Loading ...');
+                $.ajax({
+                    url: "{{ route('export.pdf.pengeluran') }}",
+                    data: {
+                        _token: csrf_token,
+                    },
+                    xhrFields: {
+                        responseType: 'blob'
+                    },
+                    type: 'GET',
+                    success: function(response) {
+                        var blob = new Blob([response], { type: 'application/pdf' });
+                        var url = window.URL.createObjectURL(blob);
+                        $('#btnExportPDF').html('Export PDF');
+                        $('#btnExportPDF').removeAttr('disabled');
+                        var win = window.open(url, 'targetWindow', 'toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=800,height=600');
+                        win.blur();
+                        window.focus();
+                    },
+                    error: function(data) {
+                        $('#btnExportPDF').removeAttr('disabled');
+                        $('#btnExportPDF').html('Export PDF');
+                        alert("Error")
+                    }
+                });
             });
 
 

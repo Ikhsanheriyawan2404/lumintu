@@ -23,6 +23,14 @@ class UserSeeder extends Seeder
             'password' => bcrypt('123'),
         ])->assignRole('superadmin');
 
+        $user = User::create([
+            'name' => 'owner',
+            'username' => 'owner',
+            'email' => 'owner@gmail.com',
+            'email_verified_at' => now(),
+            'password' => bcrypt('123'),
+        ])->assignRole('owner');
+
         $user->user_detail()->create([
             'address' => 'Jl. Raya Cibaduyut',
             'phone_number' => '08123456789',

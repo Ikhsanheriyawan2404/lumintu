@@ -140,6 +140,8 @@
 
             $('#btnExportPDF').on('click', function() {
                 var csrf_token = $('meta[name="csrf-token"]').attr('content');
+                $('#btnExportPDF').attr('disabled', 'disabled');
+                $('#btnExportPDF').html('Loading ...');
                 $.ajax({
                     url: "{{ route('export.pdf') }}",
                     data: {
@@ -149,12 +151,19 @@
                         responseType: 'blob'
                     },
                     type: 'GET',
-                    success: function (response) {
-                        var blob = new Blob([response]);
-                        var link = document.createElement('a');
-                        link.href = window.URL.createObjectURL([blob]);
-                        link.download = "MyPDF.pdf";
-                        link.click();
+                    success: function(response) {
+                        var blob = new Blob([response], { type: 'application/pdf' });
+                        var url = window.URL.createObjectURL(blob);
+                        $('#btnExportPDF').html('Export PDF');
+                        $('#btnExportPDF').removeAttr('disabled');
+                        var win = window.open(url, 'targetWindow', 'toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=800,height=600');
+                        win.blur();
+                        window.focus();
+                    },
+                    error: function(data) {
+                        $('#btnExportPDF').removeAttr('disabled');
+                        $('#btnExportPDF').html('Export PDF');
+                        alert("Error")
                     }
                 });
             });

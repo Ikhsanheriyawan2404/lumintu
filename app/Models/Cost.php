@@ -18,4 +18,6 @@ class Cost extends Model
         'date',
         'user_id',
     ];
+
+
 }

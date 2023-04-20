@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Cost;
 use App\Models\MasterCost;
+use Illuminate\Http\Response;
 use InvalidArgumentException;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\DataTables\CostDataTable;
@@ -103,10 +104,14 @@ class CostController extends Controller
 
     public function exportPdf()
     {
-        $pdf = Pdf::loadView('admin.report.cost.harian')->setPaper('a4')->download('test.pdf');
-        Storage::disk('local')->put('pdf.pdf','Contents');
-        $pdf = public_path('storage/pdf/', 'test.pdf');
-        return response()->download($pdf);
-
+        $data = Cost::all();
+        $pdf = PDF::loadView('admin.report.cost.harian', ['data' => $data]);
+        $pdfContent = $pdf->output();
+        $headers = [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline; filename="invoice.pdf"',
+            'Cache-Control'=> 'public, max-age=3600'
+        ];
+        return new Response($pdfContent, 200, $headers);
     }
 }

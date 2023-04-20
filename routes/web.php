@@ -36,6 +36,7 @@ Route::middleware(['auth', 'active'])->group(function () {
         require __DIR__ . '/admin/pengeluaran.php';
 
         Route::get('exportpdfcost', [CostController::class, 'exportPdf'])->name('export.pdf');
+        Route::get('exportpdfpesanan', [OrderController::class, 'exportPdf'])->name('export.pdf.pengeluran');
 
 
         Route::resource('products', ProductController::class);

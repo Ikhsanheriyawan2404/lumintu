@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cost;
+use Illuminate\Http\Response;
 use PDF;
 use App\Models\User;
 use App\Models\Order;
@@ -557,6 +559,21 @@ class OrderController extends Controller
         return Excel::download(new OrdersMultipleSheet($customerId, $paymentStatus, $month), date('Ymd-His') . 'orders.xlsx');
     }
 
+    public function exportPdf()
+    {
+        $data = Order::join('users', 'orders.customer_id', '=', 'users.id')
+            ->where('orders.payment_status', '=', 'paid')
+            ->select(['users.name as name', 'orders.total_price as total'])
+            ->get();
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('admin.report.order.harian', ['order' => $data]);
+        $pdfContent = $pdf->output();
+        $headers = [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline; filename="invoice.pdf"',
+            'Cache-Control'=> 'public, max-age=3600'
+        ];
+        return new Response($pdfContent, 200, $headers);
+    }
     public function exportDetailPdf($orderId)
     {
         $order = Order::with('order_status', 'order_details.product_customer.product', 'customer')

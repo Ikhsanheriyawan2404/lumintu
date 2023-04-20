@@ -33,16 +33,13 @@
             </tr>
         </thead>
         <tbody>
+        @foreach($order as $data)
             <tr>
-                <td class="text-center" width="20">1</td>
-                <td>Hotel Alam Sari</td>
-                <td class="text-center">Rp. 200.000</td>
+                <td class="text-center" width="20">{{ $loop->iteration }}</td>
+                <td>{{ $data->name }}</td>
+                <td class="text-center">{{ $data->total }}</td>
             </tr>
-            <tr>
-                <td class="text-center" width="20">2</td>
-                <td>Hotel Indah</td>
-                <td class="text-center">Rp. 130.000</td>
-            </tr>
+        @endforeach
         </tbody>
         <tfoot>
             <tr>

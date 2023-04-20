@@ -16,6 +16,7 @@ class AuthSeeder extends Seeder
     public function run()
     {
         Role::create(['name' => 'valet']);
+        Role::create(['name' => 'owner']);
         Role::create(['name' => 'hotel']);
         Role::create(['name' => 'admin']);
         Role::create(['name' => 'pegawai']);
