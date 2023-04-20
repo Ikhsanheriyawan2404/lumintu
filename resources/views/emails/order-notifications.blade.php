@@ -1,20 +1,19 @@
-<!DOCTYPE html>
-<html lang="en">
+<x-mail::message>
+    # Notifikasi Pesanan
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-</head>
+    Order anda dengan nomor {{ $order->order_number }}, statusnya sedang {{ $order->status->value }}
 
-<body>
-    <h1>Notifikasi Pesanan</h1>
-    <p>Order anda dengan nomor {{ $order->order_number }}, statusnya sedang {{ $order->status->value }}</p>
+    <x-mail::button :url="''">
+        View Order
+    </x-mail::button>
 
-    <a href="#" class="btn">Lihat Pesanan</a>
+    <x-mail::table>
+        | Laravel | Table | Example |
+        | ------------- |:-------------:| --------:|
+        | Col 2 is | Centered | $10 |
+        | Col 3 is | Right-Aligned | $20 |
+    </x-mail::table>
 
-
-</body>
-
-</html>
+    Thanks,<br>
+    {{ config('app.name') }}
+</x-mail::message>

@@ -21,7 +21,8 @@ class OrderNotification extends Mailable
      */
     public function __construct(
         public Order $order
-    ) {}
+    ) {
+    }
 
     /**
      * Get the message envelope.
@@ -43,7 +44,7 @@ class OrderNotification extends Mailable
     public function content()
     {
         return new Content(
-            view: 'view.name',
+            view: 'emails.order-notifications',
         );
     }
 

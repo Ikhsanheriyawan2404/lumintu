@@ -30,7 +30,7 @@
                 </div>
             </div>
         </div>
-        @role('admin|superadmin')
+        @role('admin|superadmin|owner')
             <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
                 <div class="card">
                     <div class="card-body p-3">
@@ -114,7 +114,7 @@
             </div>
         @endrole
     </div>
-    @role('admin|superadmin')
+    @role('admin|superadmin|owner')
         <!-- Chart Accumulation Data -->
         <div class="row mt-4">
             <div class="col-lg-7 mb-lg-0 mb-4">
@@ -142,6 +142,22 @@
                         <div class="chart">
                             <canvas id="pie-chart" class="chart-canvas" height="600" width="480"
                                 style="display: block; box-sizing: border-box; height: 300px; width: 240px;"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col-lg-7 mb-lg-0 mb-4">
+                <div class="card z-index-2 h-100">
+                    <div class="card-header pb-0 pt-3 bg-transparent">
+                        <h6 class="text-capitalize">Data Penjualan</h6>
+                        <p class="text-sm mb-0">
+                        </p>
+                    </div>
+                    <div class="card-body p-3">
+                        <div class="chart">
+                            <canvas id="chart-bar" class="chart-canvas" height="300"></canvas>
                         </div>
                     </div>
                 </div>
@@ -297,6 +313,90 @@
                                         lineHeight: 2
                                     },
                                 }
+                            },
+                            x: {
+                                grid: {
+                                    drawBorder: false,
+                                    display: false,
+                                    drawOnChartArea: false,
+                                    drawTicks: false,
+                                    borderDash: [5, 5]
+                                },
+                                ticks: {
+                                    display: true,
+                                    color: '#ccc',
+                                    padding: 20,
+                                    font: {
+                                        size: 11,
+                                        family: "Open Sans",
+                                        style: 'normal',
+                                        lineHeight: 2
+                                    },
+                                }
+                            },
+                        },
+                    },
+                });
+            });
+
+            $.get("{{ route('dashboard.chartBar') }}", function(data) {
+                var ctx1 = document.getElementById("chart-bar");
+                new Chart(ctx1, {
+                    type: "bar",
+                    data: {
+                        labels: data.labels,
+                        datasets: [{
+                                label: "Bulan Sekarang",
+                                tension: 0.4,
+                                borderWidth: 0,
+                                pointRadius: 0,
+                                borderColor: "#16007a",
+                                backgroundColor: gradientStroke1,
+                                borderWidth: 3,
+                                fill: true,
+                                data: data.thisMonth,
+                                maxBarThickness: 6
+                            },
+                            {
+                                label: "Bulan Lalu",
+                                tension: 0.4,
+                                borderWidth: 0,
+                                pointRadius: 0,
+                                borderColor: "#ffe654",
+                                backgroundColor: gradientStroke1,
+                                borderWidth: 3,
+                                fill: true,
+                                data: data.lastMonth,
+                                maxBarThickness: 6
+                            },
+                        ],
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false,
+                            }
+                        },
+                        interaction: {
+                            intersect: false,
+                            mode: 'index',
+                        },
+                        scales: {
+                            y: {
+                                stacked: true,
+                                ticks: {
+                                    stepSize: 1
+                                },
+                                beginAtZero: true,
+                                grid: {
+                                    drawBorder: true,
+                                    display: true,
+                                    drawOnChartArea: true,
+                                    drawTicks: false,
+                                    borderDash: [5, 5]
+                                },
                             },
                             x: {
                                 grid: {

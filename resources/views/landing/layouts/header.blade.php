@@ -16,7 +16,7 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="header-hero-image text-center wow fadeIn" data-wow-duration="1.3s" data-wow-delay="1.4s">
-                <img src="{{ asset('assets/landing/images/header-hero.png') }}" alt="hero">
+                <img src="{{ asset('assets/landing/images/washmac2.png') }}" alt="hero">
             </div> <!-- header hero image -->
         </div>
     </div> <!-- row -->

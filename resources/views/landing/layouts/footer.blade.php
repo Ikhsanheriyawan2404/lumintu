@@ -1,23 +1,22 @@
 <div class="container">
-    <div class="subscribe-area wow fadeIn" data-wow-duration="1s" data-wow-delay="0.5s">
+    {{-- <div class="subscribe-area wow fadeIn align-items-center" data-wow-duration="1s" data-wow-delay="0.5s">
         <div class="row">
             <div class="col-lg-6">
-                <div class="subscribe-content mt-45">
-                    <h2 class="subscribe-title">Berlangganan sekarang<span>Dapatkan pembaruan rutin</span></h2>
+                <div class="subscribe-content">
+                    <h2 class="subscribe-title">Informasi lebih lanjut</h2>
                 </div>
             </div>
             <div class="col-lg-6">
-                <div class="subscribe-form mt-50">
+                <div class="subscribe-form">
                     <form action="#">
-                        <input type="text" placeholder="Masukkan Email">
-                        <button class="main-btn">Berlangganan</button>
+                        <button class="main-btn rounded">Kirim Email</button>
                     </form>
                 </div>
             </div>
         </div> <!-- row -->
-    </div> <!-- subscribe area -->
-    <div class="footer-widget pb-100">
-        <div class="row">
+    </div> <!-- subscribe area --> --}}
+    <div class="footer-widget pb-50">
+        <div class="row mt-170">
             <div class="col-lg-4 col-md-6 col-sm-8">
                 <div class="footer-about mt-50 wow fadeIn" data-wow-duration="1s" data-wow-delay="0.2s">
                     <a class="logo" href="/">
@@ -25,7 +24,7 @@
                     </a>
                     <ul class="social">
                         <li><a href="#"><i class="lni-facebook-filled"></i></a></li>
-                        <li><a href="#"><i class="lni-twitter-filled"></i></a></li>
+                        <li><a href="#"><i class="bi bi-whatsapp"></i></a></li>
                         <li><a href="#"><i class="lni-instagram-filled"></i></a></li>
                         <li><a href="#"><i class="lni-linkedin-original"></i></a></li>
                     </ul>
@@ -38,9 +37,9 @@
                             <h4 class="title">Akses Cepat</h4>
                         </div>
                         <ul class="link">
-                            <li><a href="/">Profile Perusahaan</a></li>
-                            <li><a href="/">Detail Program</a></li>
-                            <li><a href="/">Syarat & Ketentuan</a></li>
+                            <li><a href="/profile">Profile Perusahaan</a></li>
+                            <li><a href="/program">Detail Program</a></li>
+                            <li><a href="#">Syarat & Ketentuan</a></li>
                         </ul>
                     </div> <!-- footer wrapper -->
                     <div class="link-wrapper wow fadeIn" data-wow-duration="1s" data-wow-delay="0.6s">
@@ -63,9 +62,10 @@
                         <h4 class="title">Hubungi Kami</h4>
                     </div>
                     <ul class="contact">
-                        <li>+6282110271556</li>
-                        <li>lumintu.laundry123@gmail.com</li>
-                        <li>Kampung Baru No. 1A RT.007 RW.003 Dangdang Cisauk Kab. Tangerang, Banten.</li>
+                        <li><i class="bi bi-envelope-fill"></i> lumintu.laundry123@gmail.com
+                        </li>
+                        <li><i class="bi bi-geo-alt-fill"></i> Kampung Baru No. 1A RT.007 RW.003 Dangdang Cisauk Kab.
+                            Tangerang, Banten.</li>
                     </ul>
                 </div> <!-- footer contact -->
             </div>
