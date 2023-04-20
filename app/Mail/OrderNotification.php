@@ -43,7 +43,7 @@ class OrderNotification extends Mailable
     public function content()
     {
         return new Content(
-            view: 'emails.hotel-pending',
+            view: 'emails.order-notifications',
         );
     }
 
@@ -59,6 +59,6 @@ class OrderNotification extends Mailable
 
     public function build()
     {
-        return $this->html('emails.hotel-pending');
+        return $this->html('emails.order-notifications');
     }
 }
