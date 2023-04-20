@@ -4,7 +4,6 @@
     <div class="row">
         <div class="col-lg-12">
             <div>
-
                 <form id="formExport" method="POST">
                     @csrf
                     <button type="submit" class="btn btn-sm btn-success" id="btnExportExcel">Export Excel</button>
@@ -20,6 +19,19 @@
                         </div>
                         <div class="col-6 text-end">
                             <button id="createNewItem" class="btn btn-outline-primary btn-sm mb-0">Tambah</button>
+                        </div>
+                        <div class="col-3 align-self-end">
+                            <div class="form-group">
+                                <select name="filterDate" id="filterDate" class="form-control form-control-sm">
+                                    <option value="today">Hari Ini</option>
+                                    <option value="yesterday">Kemarin</option>
+                                    <option value="thisWeek">Minggu Ini</option>
+                                    <option value="lastWeek">Minggu Lalu</option>
+                                    <option value="thisMonth">Bulan Ini</option>
+                                    <option value="lastMonth">Bulan Lalu</option>
+                                    <option value="all">Semuannya</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -62,6 +74,7 @@
     {{ $dataTable->scripts(attributes: ['type' => 'module']) }}
 
     <script>
+
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -90,6 +103,13 @@
         };
 
         $(document).ready(function() {
+            $('#filterDate').on('change', function() {
+
+                let table = $('#cost-table').DataTable();
+                table.ajax.url(`
+                    {{ route('cost.index') }}?filterDate=${$('#filterDate').val()}
+                `).draw();
+            });
 
             $('body').on('keyup', '#harga', function(e) {
                 $(this).val(format($(this).val()));

@@ -20,7 +20,14 @@ class CostController extends Controller
 
     public function index(CostDataTable $dataTable)
     {
-        return $dataTable->render('admin.cost.index', [
+
+        $query = DB::table('costs')
+            ->when(request('filterDate') && request('filterDate') !== 'today', function ($query) {
+                    return $query->whereDay('created_at', '=', now());
+                });
+        return $dataTable->with([
+            'query' => $query
+        ])->render('admin.cost.index', [
             'master_cost' => MasterCost::get(['name']),
         ]);
     }
