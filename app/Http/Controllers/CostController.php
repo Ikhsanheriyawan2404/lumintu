@@ -110,7 +110,7 @@ class CostController extends Controller
         $headers = [
             'Content-Type' => 'application/pdf',
             'Content-Disposition' => 'inline; filename="invoice.pdf"',
-            'Cache-Control'=> 'public, max-age=3600'
+            'Cache-Control'=> 'public, max-age=60'
         ];
         return new Response($pdfContent, 200, $headers);
     }
