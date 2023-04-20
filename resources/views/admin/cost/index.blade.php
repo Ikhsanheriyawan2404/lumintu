@@ -23,7 +23,7 @@
                         <div class="col-3 align-self-end">
                             <div class="form-group">
                                 <select name="filterDate" id="filterDate" class="form-control form-control-sm">
-                                    <option value="today">Hari Ini</option>
+                                    <option value="today" selected>Hari Ini</option>
                                     <option value="yesterday">Kemarin</option>
                                     <option value="thisWeek">Minggu Ini</option>
                                     <option value="lastWeek">Minggu Lalu</option>
@@ -103,6 +103,7 @@
         };
 
         $(document).ready(function() {
+
             $('#filterDate').on('change', function() {
 
                 let table = $('#cost-table').DataTable();

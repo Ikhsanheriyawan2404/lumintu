@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Cost;
 use App\Models\MasterCost;
+use Carbon\Carbon;
 use Illuminate\Http\Response;
 use InvalidArgumentException;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -21,10 +22,32 @@ class CostController extends Controller
     public function index(CostDataTable $dataTable)
     {
 
-        $query = DB::table('costs')
-            ->when(request('filterDate') && request('filterDate') !== 'today', function ($query) {
-                    return $query->whereDay('created_at', '=', now());
-                });
+        $query = Cost::orderBy('date', 'desc')
+            ->when(!request('filterDate'), function ($query) {
+                return $query->where('date', '=', Carbon::now()->format('Y-m-d'));
+            })
+            ->when(request('filterDate') && request('filterDate') === 'today', function ($query) {
+                return $query->where('date', '=', Carbon::now()->format('Y-m-d'));
+            })
+            ->when(request('filterDate') && request('filterDate') === 'yesterday', function ($query) {
+                return $query->where('date', '=', Carbon::yesterday()->format('Y-m-d'));
+            })
+            ->when(request('filterDate') && request('filterDate') === 'thisWeek', function ($query) {
+                return $query->whereBetween('date', [Carbon::now()->startOfWeek()->format('Y-m-d'), Carbon::now()->endOfWeek()->format('Y-m-d')] );
+            })
+            ->when(request('filterDate') && request('filterDate') === 'lastWeek', function ($query) {
+                return $query->whereBetween('date', [Carbon::now()->subWeek()->startOfWeek()->format('Y-m-d'), Carbon::now()->subWeek()->endOfWeek()->format('Y-m-d')] );
+            })
+            ->when(request('filterDate') && request('filterDate') === 'thisMonth', function ($query) {
+                return $query->whereBetween('date', [Carbon::now()->startOfMonth()->format('Y-m-d'), Carbon::now()->lastOfMonth()->format('Y-m-d')] );
+            })
+            ->when(request('filterDate') && request('filterDate') === 'lastMonth', function ($query) {
+                return $query->whereBetween('date', [Carbon::now()->startOfMonth()->subMonth()->format('Y-m-d'), Carbon::now()->lastOfMonth()->subMonth()->format('Y-m-d')] );
+            })
+            ->when(request('filterDate') && request('filterDate') === 'all', function ($query) {
+                return $query;
+            })
+        ;
         return $dataTable->with([
             'query' => $query
         ])->render('admin.cost.index', [
