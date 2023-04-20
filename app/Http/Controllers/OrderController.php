@@ -201,7 +201,10 @@ class OrderController extends Controller
     public function listProductDatatables($customerId)
     {
         if (request()->ajax()) {
-            $productCustomer = ProductCustomer::with('product')->where('user_id', $customerId)->get();
+            $productCustomer = ProductCustomer::with('product')
+                ->whereHas('product', fn($query) => $query->whereNull('deleted_at'))
+                ->where('user_id', $customerId)->get();
+                
             return DataTables::of($productCustomer)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {

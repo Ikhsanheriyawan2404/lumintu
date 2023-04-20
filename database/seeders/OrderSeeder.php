@@ -86,7 +86,7 @@ class OrderSeeder extends Seeder
             ['order_id' => 2, 'status' => 'done', 'user_id' => random_int(1, 2)],
         )->create();
 
-        for ($i = 0; $i < 100; $i++) {
+        for ($i = 0; $i < 1000; $i++) {
             $lastOrder = Order::orderBy('id', 'desc')
                 ->first();
 

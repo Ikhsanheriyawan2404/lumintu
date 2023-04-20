@@ -38,7 +38,7 @@ class CostsExport implements
             return (int)$day;
         }, range(1, $numDays));
 
-        $costs = Cost::selectRaw('DAY(date) as day, name, SUM(total) as total')
+        $costs = Cost::selectRaw('EXTRACT(DAY FROM created_at) as day, name, SUM(total) as total')
             ->whereYear('date', $year)
             ->whereMonth('date', $month)
             ->groupBy('day', 'name')

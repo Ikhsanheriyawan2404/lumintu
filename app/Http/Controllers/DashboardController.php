@@ -52,7 +52,7 @@ class DashboardController extends Controller
 
         $orders = [];
         foreach ($days as $value) {
-            $order = Order::where(DB::raw("DATE_FORMAT(created_at, '%d')"), $value)
+            $order = Order::where(DB::raw("to_char(created_at, 'DD')"), $value)
                 ->whereYear('created_at', date('Y'))
                 ->where('payment_status', 'paid')
                 ->get([
