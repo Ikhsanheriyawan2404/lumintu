@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Response;
-use App\Models\User;
-use App\Models\Order;
+use App\Models\{
+    User,
+    Order
+};
 use App\Models\Pickup;
 use App\Models\Delivery;
 use App\Models\OrderStatus;
@@ -476,15 +478,15 @@ class OrderController extends Controller
                 $order = Order::findOrFail($orderId);
 
                 $order->update([
-                    'status' => OrderStatusEnum::APPROVE,
-                    'user_id' => auth()->user()->id,
+                    'status' => OrderStatusEnum::PROCESS,
                 ]);
 
                 // Change Order Status
                 OrderStatus::where('order_id', $order->id)
-                    ->where('status', OrderStatusEnum::APPROVE)
+                    ->where('status', OrderStatusEnum::PROCESS)
                     ->update([
                         'created_at' => now(),
+                        'user_id' => auth()->user()->id,
                     ]);
 
                 // Add new order details
