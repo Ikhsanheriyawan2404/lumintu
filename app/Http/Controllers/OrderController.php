@@ -427,7 +427,7 @@ class OrderController extends Controller
 
                 if (request('chooseValet')) {
 
-                    if ($nextOrderStatus == OrderStatusEnum::APPROVE) {
+                    if ($nextOrderStatus == OrderStatusEnum::PICKUP) {
 
                         Pickup::create([
                             'order_id' => $order->id,
@@ -476,13 +476,13 @@ class OrderController extends Controller
                 $order = Order::findOrFail($orderId);
 
                 $order->update([
-                    'status' => OrderStatusEnum::PICKUP,
+                    'status' => OrderStatusEnum::APPROVE,
                     'user_id' => auth()->user()->id,
                 ]);
 
                 // Change Order Status
                 OrderStatus::where('order_id', $order->id)
-                    ->where('status', OrderStatusEnum::PICKUP)
+                    ->where('status', OrderStatusEnum::APPROVE)
                     ->update([
                         'created_at' => now(),
                     ]);
@@ -499,6 +499,10 @@ class OrderController extends Controller
                         $product = ProductCustomer::where('user_id', $order->customer_id)
                             ->where('product_id', request('product_id')[$i])
                             ->first();
+
+                            dd(request('product_id')[$i]);
+                            dd($product);
+                        // return response()->json($product, 400);
 
                         $data = [
                             'order_id' => $order->id,
