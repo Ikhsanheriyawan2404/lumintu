@@ -51,7 +51,7 @@
                             <li><a href="#profile">Tentang</a></li>
                             <li><a href="#program">Program</a></li>
                             <li><a href="#gallery">Galeri</a></li>
-                            <li><a href="#contact">Kontak</a></li>
+                            <li><a href="#maps">Maps</a></li>
                         </ul>
                     </div> <!-- footer wrapper -->
                 </div> <!-- footer link -->

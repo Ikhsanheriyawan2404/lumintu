@@ -20,14 +20,10 @@
 
                         <div class="row">
                             <div class="col-md-6">
-                                <ul class="list-group mb-2">
-                                    <li class="list-group-item">Nomor Order : <i id="order_number">{{ $orderNumber }}</i></li>
-                                    <li class="list-group-item">Total : Rp <i id="total_price"></i></li>
-                                </ul>
                                 @hasrole('superadmin|admin')
                                     <div class="form-group">
-                                        <label for="customer">Pelanggan <span class="text-danger">*</span></label>
-                                        <select class="form-control form-control-sm select2" name="customer" id="customer">
+                                        {{-- <label for="customer">Pelanggan <span class="text-danger">*</span></label> --}}
+                                        <select class="form-control select2" name="customer" id="customer">
                                             <option selected disabled>Pilih Pelanggan</option>
                                             @foreach ($customers as $customer)
                                                 <option value="{{ $customer->id }}">{{ $customer->name }}</option>
@@ -37,16 +33,7 @@
                                 @endhasrole
                             </div>
                             <div class="col-md-6">
-                                <div class="form-group">
-                                    <textarea class="form-control form-control-sm" name="description" id="description" rows="3"
-                                        placeholder="Catatan..."></textarea>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row my-2">
-                            <div class="col-md-6">
-                                <div class="input-group mb-3">
+                                <div class="input-group">
                                     <input type="text" class="form-control" placeholder="Pilih Barang" disabled>
                                     <button type="button" class="btn btn-primary mb-0" onclick="showProduct()"><i
                                             class="fa fa-search"></i></button>
@@ -76,10 +63,26 @@
                             </div>
                         </div>
 
+                        <div class="row mt-3">
+                            <div class="col-md-6">
+                                <ul class="list-group mb-2">
+                                    <li class="list-group-item">Nomor Order : <i id="order_number">{{ $orderNumber }}</i>
+                                    </li>
+                                    <li class="list-group-item">Total : Rp <i id="total_price"></i></li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <textarea class="form-control form-control-sm" name="description" id="description" rows="3"
+                                        placeholder="Catatan..."></textarea>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                     <div class="card-footer">
-                        <div class="d-flex justify-content-end">
-                            <button type="reset" class="btn btn-sm btn-secondary float-right">Cancel</button>
+                        <div class="d-flex justify-content-end gap-2">
+                            <button type="reset" class="btn btn-sm btn-secondary float-right">Reset</button>
                             <button type="submit" class="btn btn-sm btn-primary float-right" id="createOrder">Simpan
                             </button>
                         </div>
@@ -127,8 +130,9 @@
     <!-- Select2 -->
     <link href="{{ asset('library/http_cdn.jsdelivr.net_npm_select2@4.1.0-rc.0_dist_css_select2.css') }}">
     <!-- DataTables -->
-    <link rel="stylesheet" href="{{ asset('library/http_cdn.datatables.net_1.13.4_css_dataTables.bootstrap5.css')}}">
-    <link rel="stylesheet" href="{{asset('library/http_cdn.datatables.net_responsive_2.4.1_css_responsive.bootstrap5.css')}}">
+    <link rel="stylesheet" href="{{ asset('library/http_cdn.datatables.net_1.13.4_css_dataTables.bootstrap5.css') }}">
+    <link rel="stylesheet"
+        href="{{ asset('library/http_cdn.datatables.net_responsive_2.4.1_css_responsive.bootstrap5.css') }}">
     <link rel="stylesheet" href="{{ asset('library/http_cdnjs.cloudflare.com_ajax_libs_toastr.js_latest_toastr.css') }}">
 @endpush
 
@@ -187,7 +191,7 @@
             $('#customer').on('change', function() {
                 selectedUser = $(this).val();
                 tableListProductOnModal.ajax.
-                    url("{{ route('orders.index') }}" + "/product-datatables/" + selectedUser).load();
+                url("{{ route('orders.index') }}" + "/product-datatables/" + selectedUser).load();
 
                 $('.removeProduct').parents('tr').remove();
 
