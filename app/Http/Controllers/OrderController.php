@@ -132,7 +132,7 @@ class OrderController extends Controller
 
         return view('admin.orders.show', [
             'order' => $order,
-            'order_statuses' => OrderStatus::where('order_id', $orderId)->get(),
+            'order_statuses' => OrderStatus::orderBy('id', 'asc')->where('order_id', $orderId)->get(),
             'valet' => User::role('valet')->get(),
             'nextStatus' => $nextStatus ?? null,
         ]);
@@ -201,7 +201,10 @@ class OrderController extends Controller
     public function listProductDatatables($customerId)
     {
         if (request()->ajax()) {
-            $productCustomer = ProductCustomer::with('product')->where('user_id', $customerId)->get();
+            $productCustomer = ProductCustomer::with('product')
+                ->whereHas('product', fn($query) => $query->whereNull('deleted_at'))
+                ->where('user_id', $customerId)->get();
+
             return DataTables::of($productCustomer)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
@@ -382,8 +385,8 @@ class OrderController extends Controller
 
     public function changeOrderStatus($orderId)
     {
-        try {
 
+        try {
             DB::transaction(function () use ($orderId) {
 
                 $order = Order::with('order_status')->findOrFail($orderId);
@@ -413,7 +416,17 @@ class OrderController extends Controller
 
                 $listUsersWhoGetNotifications[] = User::find($order->customer_id);
 
+                if ($nextOrderStatus == OrderStatusEnum::PICKUP || $nextOrderStatus == OrderStatusEnum::DELIVERY) {
+
+                    request()->validate([
+                        'chooseValet' => 'required'
+                    ], [
+                        'chooseValet.required' => 'Pilihlah valet terlebih dahulu.'
+                    ]);
+                }
+
                 if (request('chooseValet')) {
+
                     if ($nextOrderStatus == OrderStatusEnum::APPROVE) {
 
                         Pickup::create([

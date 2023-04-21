@@ -5,8 +5,8 @@ namespace App\Enums;
 enum OrderStatusEnum:string
 {
     case PENDING = 'pending';
-    case APPROVE = 'approve';
     case PICKUP = 'pickup';
+    case APPROVE = 'approve';
     case PROCESS = 'process';
     case DELIVERY = 'delivery';
     case DONE = 'done';
@@ -15,8 +15,8 @@ enum OrderStatusEnum:string
     {
         return [
             OrderStatusEnum::PENDING,
-            OrderStatusEnum::APPROVE,
             OrderStatusEnum::PICKUP,
+            OrderStatusEnum::APPROVE,
             OrderStatusEnum::PROCESS,
             OrderStatusEnum::DELIVERY,
             OrderStatusEnum::DONE,
