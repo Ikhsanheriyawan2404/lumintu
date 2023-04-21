@@ -91,7 +91,7 @@ class DashboardController extends Controller
                          FROM orders
                          WHERE created_at LIKE '$sLastMonth%'
                          GROUP BY customer_id) as o"), 'u.id', '=', 'o.customer_id')
-            ->where('m.role_id', '=', 3)
+            ->where('m.role_id', 3)
             ->select('u.name as name', DB::raw('COALESCE(o.orders, 0) as orders'))
             ->get();
 
