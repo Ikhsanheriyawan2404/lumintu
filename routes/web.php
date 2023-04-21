@@ -16,6 +16,12 @@ use App\Http\Controllers\PaymentController;
 Route::get('/', function () {
     return view('landing.home');
 });
+Route::get('/profile', function () {
+    return view('landing.pages.detail_perusahaan');
+});
+Route::get('/program', function () {
+    return view('landing.pages.detail_program');
+});
 
 Route::get('/login', function () {
     return view('login');
