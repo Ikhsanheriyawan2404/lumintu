@@ -32,6 +32,9 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::middleware(['auth', 'active'])->group(function () {
 
+    Route::post('users', [UserController::class, 'store'])->name('users.store');
+    Route::get('users/{user}/edit', [UserController::class, 'edit']);
+
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/dashboard/summary', [DashboardController::class, 'summary'])->name('dashboard.summary');
     Route::get('/dashboard/chart-order', [DashboardController::class, 'chartOrder'])->name('dashboard.chartOrder');
@@ -54,7 +57,8 @@ Route::middleware(['auth', 'active'])->group(function () {
 
         // Nontatikf/Aktif users
         Route::post('users/{userId}/status', [UserController::class, 'changeStatus']);
-        Route::resource('users', UserController::class);
+        Route::get('users', [UserController::class, 'index'])->name('users.index');
+
 
         // Cancel and Approve order payment
         Route::post('orders/{order:id}/approve-payment', [PaymentController::class, 'approvePayment'])
