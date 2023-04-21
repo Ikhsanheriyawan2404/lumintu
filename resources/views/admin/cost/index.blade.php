@@ -3,25 +3,18 @@
 @section('content')
     <div class="row">
         <div class="col-lg-12">
-            <div>
-                <form id="formExport" method="POST">
-                    @csrf
-                    <button type="submit" class="btn btn-sm btn-success" id="btnExportExcel">Export Excel</button>
-                    <button type="button" class="btn btn-sm btn-danger" id="btnExportPDF">Export PDF</button>
-                </form>
-            </div>
-
             <div class="card h-100">
                 <div class="card-header pb-0 p-3">
                     <div class="row">
                         <div class="col-6 d-flex align-items-center">
-                            <h6 class="mb-0">Pengeluaran</h6>
+                            <h5 class="mb-0">Pengeluaran</h5>
                         </div>
                         <div class="col-6 text-end">
                             <button id="createNewItem" class="btn btn-outline-primary btn-sm mb-0">Tambah</button>
                         </div>
-                        <div class="col-3 align-self-end">
-                            <div class="form-group">
+                        <div class="col-11 col-lg-3 mx-auto mx-lg-0 mt-3">
+                            <div class="form-group d-flex flex-row align-items-center gap-2">
+                                <label for="filterDate" class="font-weight-normal my-auto">Select</label>
                                 <select name="filterDate" id="filterDate" class="form-control form-control-sm">
                                     <option value="today" selected>Hari Ini</option>
                                     <option value="yesterday">Kemarin</option>
@@ -32,6 +25,14 @@
                                     <option value="all">Semuannya</option>
                                 </select>
                             </div>
+                        </div>
+                        <div class="col-12 col-lg-9 text-center text-lg-end mt-lg-3">
+                            <form id="formExport" method="POST">
+                                @csrf
+                                <button type="submit" class="btn btn-sm btn-success" id="btnExportExcel">Export
+                                    Excel</button>
+                                <button type="button" class="btn btn-sm btn-danger" id="btnExportPDF">Export PDF</button>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -45,15 +46,15 @@
     </div>
     @include('admin.cost.modals.edit')
     @include('admin.cost.modals.create')
-
 @endsection
 
 @push('custom-styles')
     <!-- Select2 -->
-    <link rel="stylesheet" href="{{ asset('library/http_cdn.jsdelivr.net_npm_select2@4.1.0-rc.0_dist_css_select2.css')}}">
+    <link rel="stylesheet" href="{{ asset('library/http_cdn.jsdelivr.net_npm_select2@4.1.0-rc.0_dist_css_select2.css') }}">
     <!-- DataTables -->
-    <link rel="stylesheet" href="{{ asset('library/http_cdn.datatables.net_1.13.4_css_dataTables.bootstrap5.css')}}">
-    <link rel="stylesheet" href="{{ asset('library/http_cdn.datatables.net_responsive_2.4.1_css_responsive.bootstrap5.css')}}">
+    <link rel="stylesheet" href="{{ asset('library/http_cdn.datatables.net_1.13.4_css_dataTables.bootstrap5.css') }}">
+    <link rel="stylesheet"
+        href="{{ asset('library/http_cdn.datatables.net_responsive_2.4.1_css_responsive.bootstrap5.css') }}">
     <link rel="stylesheet" href="{{ asset('library/http_cdnjs.cloudflare.com_ajax_libs_toastr.js_latest_toastr.css') }}">
 @endpush
 
@@ -74,21 +75,25 @@
     {{ $dataTable->scripts(attributes: ['type' => 'module']) }}
 
     <script>
-
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
 
-        const format = function (num) {
-            let str = num.toString().replace("", ""), parts = false, output = [], i = 1, formatted = null;
+        const format = function(num) {
+            let str = num.toString().replace("", ""),
+                parts = false,
+                output = [],
+                i = 1,
+                formatted = null;
             if (str.indexOf(".") > 0) {
                 parts = str.split(".");
                 str = parts[0];
             }
             str = str.split("").reverse();
-            let j = 0, len = str.length;
+            let j = 0,
+                len = str.length;
             for (; j < len; j++) {
                 if (str[j] !== ",") {
                     output.push(str[j]);
@@ -121,43 +126,45 @@
             });
 
             $('#btnExportExcel').on('click', function(e) {
-                    e.preventDefault();
+                e.preventDefault();
 
-                    $('#btnExportExcel').attr('disabled', 'disabled');
-                    $('#btnExportExcel').html('Loading ...');
+                $('#btnExportExcel').attr('disabled', 'disabled');
+                $('#btnExportExcel').html('Loading ...');
 
-                    var csrf_token = $('meta[name="csrf-token"]').attr('content');
+                var csrf_token = $('meta[name="csrf-token"]').attr('content');
 
-                    $.ajax({
-                        url: "{{ route('costs.export-excel') }}",
-                        data: {
-                            _token: csrf_token,
-                        },
-                        xhrFields: {
-                            responseType: 'blob'
-                        },
-                        type: "POST",
-                        success: function(data) {
-                            var blob = new Blob([data], { type: 'application/vnd.ms-excel' });
-                            var link = document.createElement('a');
-                            link.href = window.URL.createObjectURL(blob);
-                            link.download = Date.now() + 'orders.xlsx';
+                $.ajax({
+                    url: "{{ route('costs.export-excel') }}",
+                    data: {
+                        _token: csrf_token,
+                    },
+                    xhrFields: {
+                        responseType: 'blob'
+                    },
+                    type: "POST",
+                    success: function(data) {
+                        var blob = new Blob([data], {
+                            type: 'application/vnd.ms-excel'
+                        });
+                        var link = document.createElement('a');
+                        link.href = window.URL.createObjectURL(blob);
+                        link.download = Date.now() + 'orders.xlsx';
 
-                            // link.onload = function() {
-                            // };
-                            $('#btnExportExcel').html('Export Excel');
-                            $('#btnExportExcel').removeAttr('disabled');
+                        // link.onload = function() {
+                        // };
+                        $('#btnExportExcel').html('Export Excel');
+                        $('#btnExportExcel').removeAttr('disabled');
 
-                            document.body.appendChild(link);
-                            link.click();
-                        },
-                        error: function(data) {
-                            $('#btnExportExcel').removeAttr('disabled');
-                            $('#btnExportExcel').html('Export Excel');
-                            alert("Error")
-                        }
-                    });
+                        document.body.appendChild(link);
+                        link.click();
+                    },
+                    error: function(data) {
+                        $('#btnExportExcel').removeAttr('disabled');
+                        $('#btnExportExcel').html('Export Excel');
+                        alert("Error")
+                    }
                 });
+            });
 
             $('#btnExportPDF').on('click', function() {
                 var csrf_token = $('meta[name="csrf-token"]').attr('content');
@@ -173,11 +180,15 @@
                     },
                     type: 'GET',
                     success: function(response) {
-                        var blob = new Blob([response], { type: 'application/pdf' });
+                        var blob = new Blob([response], {
+                            type: 'application/pdf'
+                        });
                         var url = window.URL.createObjectURL(blob);
                         $('#btnExportPDF').html('Export PDF');
                         $('#btnExportPDF').removeAttr('disabled');
-                        var win = window.open(url, 'targetWindow', 'toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=800,height=600');
+                        var win = window.open(url, 'targetWindow',
+                            'toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=800,height=600'
+                        );
                         win.blur();
                         window.focus();
                     },
