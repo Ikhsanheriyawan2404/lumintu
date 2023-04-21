@@ -458,7 +458,7 @@
                         plugins: {
                             title: {
                                 display: true,
-                                text: 'Chart.js Bar Chart - Stacked'
+                                text: 'Data Penjualan'
                             },
                         },
                         responsive: true,
