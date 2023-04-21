@@ -36,7 +36,10 @@ class HotelController extends Controller
             $productCustomer->save();
         }
 
-        $orders = ProductCustomer::with('product')->where('user_id', $userId)->get();
+        $orders = ProductCustomer::with('product')
+            ->whereHas('product', fn($query) => $query->whereNull('deleted_at'))
+            ->where('user_id', $userId)
+            ->get();
         return DataTables::of($orders)
             ->addIndexColumn()
             ->editColumn('price', function ($row) {

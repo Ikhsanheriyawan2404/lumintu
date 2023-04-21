@@ -6,7 +6,9 @@ use App\Models\User;
 use App\Models\Order;
 use App\Models\Category;
 use App\Models\Cost;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Spatie\Permission\Models\Role;
 
 class DashboardController extends Controller
 {
@@ -52,7 +54,7 @@ class DashboardController extends Controller
 
         $orders = [];
         foreach ($days as $value) {
-            $order = Order::where(DB::raw("DATE_FORMAT(created_at, '%d')"), $value)
+            $order = Order::where(DB::raw("to_char(created_at, 'DD')"), $value)
                 ->whereYear('created_at', date('Y'))
                 ->where('payment_status', 'paid')
                 ->get([
@@ -66,6 +68,48 @@ class DashboardController extends Controller
         return response()->json([
             'labels' => $days,
             'orders' => $orders,
+        ]);
+    }
+
+    public function chartBar()
+    {
+        $sThisMonth = Carbon::now()->startOfMonth()->format('Y-m-');
+        $sLastMonth = Carbon::now()->startOfMonth()->subMonth()->format('Y-m-');
+        $thisMonth = DB::table('orders as o')
+            ->rightJoin('users as u', 'o.customer_id', '=', 'u.id')
+            ->where('o.created_at', 'LIKE', $sThisMonth.'%')
+            ->select(DB::raw('COUNT(o.customer_id) as total'), 'u.name')
+            ->orderBy('u.name', 'desc')
+            ->groupBy('u.name')
+            ->get();
+        $lastMonth = DB::table('orders as o')
+            ->rightJoin('users as u', 'o.customer_id', '=', 'u.id')
+            ->where('o.created_at', 'LIKE', $sLastMonth.'%')
+            ->select(DB::raw('COUNT(o.customer_id) as total'), 'u.name')
+            ->orderBy('u.name', 'desc')
+            ->groupBy('u.name')
+            ->get();
+
+        $thisMonths = [];
+        foreach ($thisMonth as $data) {
+            $thisMonths[] = $data->total;
+        }
+
+        $lastMonths = [];
+        foreach ($lastMonth as $data) {
+            $lastMonths[] = $data->total;
+        }
+
+        $hotel = User::role('hotel')->get();
+        $labels = [];
+        foreach ($hotel as $data) {
+            $labels[] = $data->name;
+        }
+
+        return response()->json([
+            'labels' => $labels,
+            'thisMonth' => $thisMonths,
+            'lastMonth' => $lastMonths,
         ]);
     }
 

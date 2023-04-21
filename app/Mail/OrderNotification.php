@@ -21,7 +21,8 @@ class OrderNotification extends Mailable
      */
     public function __construct(
         public Order $order
-    ) {}
+    ) {
+    }
 
     /**
      * Get the message envelope.
@@ -43,7 +44,7 @@ class OrderNotification extends Mailable
     public function content()
     {
         return new Content(
-            view: 'emails.hotel-pending',
+            view: 'emails.order-notifications',
         );
     }
 
@@ -59,6 +60,6 @@ class OrderNotification extends Mailable
 
     public function build()
     {
-        return $this->html('emails.hotel-pending');
+        return $this->markdown('emails.order-notifications');
     }
 }

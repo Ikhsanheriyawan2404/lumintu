@@ -18,7 +18,8 @@ class ProductCustomer extends Model
     public function product()
     {
         // with no trashed
-        return $this->belongsTo(Product::class);
+        return $this->belongsTo(Product::class)
+        ->whereNull('deleted_at');
     }
 
     public function user_details()
