@@ -152,7 +152,7 @@
     <!-- JQUERY -->
     <script src="{{ asset('library/http_code.jquery.com_jquery-3.6.4.js') }}"></script>
 
-    <script>
+    {{-- <script>
         $(document).ready(function() {
             $('body').on('click', '#profile-modal', function () {
                 var item_id = $(this).data('id');
@@ -209,7 +209,7 @@
             });
 
         });
-    </script>
+    </script> --}}
 
     @stack('custom-scripts')
 </body>

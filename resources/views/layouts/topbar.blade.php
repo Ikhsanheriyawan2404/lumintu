@@ -91,7 +91,7 @@
     </div>
 </div>
 
-<div class="modal fade" id="modal-profile">
+{{-- <div class="modal fade" id="modal-profile">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -138,4 +138,4 @@
         <!-- /.modal-content -->
     </div>
     <!-- /.modal-dialog -->
-</div>
+</div> --}}

@@ -22,7 +22,7 @@
                             <div class="col-md-6">
                                 @hasrole('superadmin|admin')
                                     <div class="form-group">
-                                        {{-- <label for="customer">Pelanggan <span class="text-danger">*</span></label> --}}
+                                        <label for="customer">Pelanggan <span class="text-danger">*</span></label>
                                         <select class="form-control select2" name="customer" id="customer">
                                             <option selected disabled>Pilih Pelanggan</option>
                                             @foreach ($customers as $customer)
@@ -155,9 +155,9 @@
         $(document).ready(function() {
 
             $('#customer').select2({
-                placeholder: 'Pilih Pelanggan',
                 width: '100%'
             });
+            
             let loggedInUser = "{{ auth()->user()->id }}"
             let selectedUser = $('#customer').val();
             if (selectedUser == null) {
