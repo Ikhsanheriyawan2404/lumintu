@@ -74,13 +74,11 @@ class OrderSeeder extends Seeder
         OrderStatus::factory()->count(12)->sequence(
             ['order_id' => 1, 'status' => 'pending', 'user_id' => random_int(5, 10)],
             ['order_id' => 1, 'status' => 'pickup', 'user_id' => random_int(1, 3)],
-            ['order_id' => 1, 'status' => 'approve', 'user_id' => random_int(1, 3)],
             ['order_id' => 1, 'status' => 'process', 'user_id' => random_int(1, 3)],
             ['order_id' => 1, 'status' => 'delivery', 'user_id' => random_int(1, 3)],
             ['order_id' => 1, 'status' => 'done', 'user_id' => random_int(1, 3)],
             ['order_id' => 2, 'status' => 'pending', 'user_id' => random_int(5, 10)],
             ['order_id' => 2, 'status' => 'pickup', 'user_id' => null, 'created_at' => null],
-            ['order_id' => 2, 'status' => 'approve', 'user_id' => null, 'created_at' => null],
             ['order_id' => 2, 'status' => 'process', 'user_id' => null, 'created_at' => null],
             ['order_id' => 2, 'status' => 'delivery', 'user_id' => null, 'created_at' => null],
             ['order_id' => 2, 'status' => 'done', 'user_id' => null, 'created_at' => null],

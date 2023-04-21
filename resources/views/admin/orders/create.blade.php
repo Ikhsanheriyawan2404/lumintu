@@ -22,7 +22,6 @@
                             <div class="col-md-6">
                                 @hasrole('superadmin|admin')
                                     <div class="form-group">
-                                        <label for="customer">Pelanggan <span class="text-danger">*</span></label>
                                         <select class="form-control select2" name="customer" id="customer">
                                             <option selected disabled>Pilih Pelanggan</option>
                                             @foreach ($customers as $customer)
@@ -154,10 +153,6 @@
     <script>
         $(document).ready(function() {
 
-            $('#customer').select2({
-                width: '100%'
-            });
-            
             let loggedInUser = "{{ auth()->user()->id }}"
             let selectedUser = $('#customer').val();
             if (selectedUser == null) {
@@ -273,8 +268,7 @@
                         let qtyElement = $('.qty[data-id=' + id + ']');
                         $(qtyElement).val(1)
                         let qty = 1
-                        let price = parseInt($('.price[data-id=' + id + ']')
-                            .val().replace(/\./g, ''));
+                        let price = parseInt($('.price[data-id=' + id + ']').val().replace(/\./g, ''));
                         let subtotal = qty * price;
 
                         $(`.subtotal[data-id="${id}"]`).val(subtotal.toLocaleString('id-ID'));
