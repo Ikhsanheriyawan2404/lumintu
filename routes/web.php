@@ -75,7 +75,7 @@ Route::middleware(['auth', 'active'])->group(function () {
         Route::post('orders/{orderId}/acc-order-proccess', [OrderController::class, 'accOrderByValet'])
             ->name('orders.acc-order-process');
 
-        });
+    });
 
     Route::group(['middleware' => 'role:hotel'], function () {
         Route::post('payments/payment-documents', [PaymentController::class, 'uploadPayment'])
@@ -118,7 +118,7 @@ Route::middleware(['auth', 'active'])->group(function () {
         ->name('orders.export-detail-pdf')
         ->middleware(['role:superadmin|admin|hotel']);
 
-//    Route::resource('valet', ValetController::class);
+    //    Route::resource('valet', ValetController::class);
 
     require_once __DIR__ . '/pegawai/pegawai.php';
 
@@ -141,15 +141,15 @@ Route::middleware(['auth', 'active'])->group(function () {
         return view('admin.orders.invoice.invoice');
     });
 
-   Route::get('invoice/print', function () {
-       return view('admin.orders.invoice.print_invoice');
-   });
-//
+    Route::get('invoice/print', function () {
+        return view('admin.orders.invoice.print_invoice');
+    });
+    //
 //    Route::get('reports/bulanan', function () {
 //        return view('admin.orders.report.bulanan');
 //    });
 
-//    Route::get('reports/harian', function () {
+    //    Route::get('reports/harian', function () {
 //        return view('admin.report.cost.bulanan');
 //    });
 

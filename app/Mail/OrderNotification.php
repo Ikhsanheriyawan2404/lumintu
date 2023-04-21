@@ -21,7 +21,8 @@ class OrderNotification extends Mailable
      */
     public function __construct(
         public Order $order
-    ) {}
+    ) {
+    }
 
     /**
      * Get the message envelope.
