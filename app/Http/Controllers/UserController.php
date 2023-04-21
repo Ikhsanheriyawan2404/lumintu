@@ -29,16 +29,16 @@ class UserController extends Controller
 
                 $validated = [
                     'name' => 'required|string',
-                    'email' => 'required|email|unique:users,email',
+                    'email' => 'required|email:rfc,dns|unique:users,email',
                     'username' => 'required|string|unique:users,username',
                     'password' => 'required',
-                    'role' => 'required|string',
+//                    'role' => 'required|string',
                     'address' => 'required|string',
                     'phone_number' => 'required|string',
                 ];
 
                 if ($itemId) {
-                    $validated['email'] = 'required|email|unique:users,email,' . $itemId;
+                    $validated['email'] = 'required|email:rfc,dns|unique:users,email,' . $itemId;
                     $validated['username'] = 'required|string|unique:users,username,' . $itemId;
                     $validated['password'] = 'sometimes';
                     request()->validate($validated);
@@ -48,7 +48,7 @@ class UserController extends Controller
                     $user->email = request('email');
                     $user->username = request('username');
                     $user->password = request('password') ? password_hash(request('password'), PASSWORD_DEFAULT) : $user->password;
-                    $user->syncRoles(request('role'));
+                    (request('role') )? $user->syncRoles(request('role')) : 'berari bukan admin';
                     $user->save();
 
                     $userDetail = UserDetail::where('user_id', $user->id)->first();
@@ -116,5 +116,18 @@ class UserController extends Controller
         ]);
 
         return response()->json(['message' => 'User berhasil ' . (request('active') == 1 ? 'diaktifkan' : 'dinonaktifkan')]);
+    }
+
+    public function update()
+    {
+        $validated = [
+            'name' => 'required|string',
+            'email' => 'required|email|unique:users,email',
+            'username' => 'required|string|unique:users,username',
+            'password' => 'required',
+            'role' => 'required|string',
+            'address' => 'required|string',
+            'phone_number' => 'required|string',
+        ];
     }
 }

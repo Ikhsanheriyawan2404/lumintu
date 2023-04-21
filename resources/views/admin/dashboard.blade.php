@@ -346,6 +346,8 @@
 @endsection
 
 @push('custom-scripts')
+    <script src="{{ asset('library/http_cdn.jsdelivr.net_npm_sweetalert2@11.js') }}"></script>
+
     <script>
         $(document).ready(function() {
             $.get("{{ route('dashboard.summary') }}", function(data) {
