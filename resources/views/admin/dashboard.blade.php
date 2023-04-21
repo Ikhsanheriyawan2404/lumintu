@@ -439,80 +439,37 @@
                     type: "bar",
                     data: {
                         labels: data.labels,
-                        datasets: [{
+                        datasets: [
+                            {
                                 label: "Bulan Sekarang",
-                                tension: 0.4,
-                                borderWidth: 0,
-                                pointRadius: 0,
-                                borderColor: "#16007a",
-                                backgroundColor: gradientStroke1,
-                                borderWidth: 3,
-                                fill: true,
                                 data: data.thisMonth,
-                                maxBarThickness: 6
+                                backgroundColor: 'rgba(99, 132, 0, 0.6)',
+                                borderColor: 'rgba(99, 132, 0, 1)',
                             },
                             {
                                 label: "Bulan Lalu",
-                                tension: 0.4,
-                                borderWidth: 0,
-                                pointRadius: 0,
-                                borderColor: "#ffe654",
-                                backgroundColor: gradientStroke1,
-                                borderWidth: 3,
-                                fill: true,
                                 data: data.lastMonth,
-                                maxBarThickness: 6
+                                backgroundColor: 'rgba(0, 99, 132, 0.6)',
+                                borderColor: 'rgba(0, 99, 132, 1)',
                             },
                         ],
                     },
                     options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
                         plugins: {
-                            legend: {
-                                display: false,
-                            }
+                            title: {
+                                display: true,
+                                text: 'Chart.js Bar Chart - Stacked'
+                            },
                         },
-                        interaction: {
-                            intersect: false,
-                            mode: 'index',
-                        },
+                        responsive: true,
                         scales: {
-                            y: {
-                                stacked: true,
-                                ticks: {
-                                    stepSize: 1
-                                },
-                                beginAtZero: true,
-                                grid: {
-                                    drawBorder: true,
-                                    display: true,
-                                    drawOnChartArea: true,
-                                    drawTicks: false,
-                                    borderDash: [5, 5]
-                                },
-                            },
-                            x: {
-                                grid: {
-                                    drawBorder: false,
-                                    display: false,
-                                    drawOnChartArea: false,
-                                    drawTicks: false,
-                                    borderDash: [5, 5]
-                                },
-                                ticks: {
-                                    display: true,
-                                    color: '#ccc',
-                                    padding: 20,
-                                    font: {
-                                        size: 11,
-                                        family: "Open Sans",
-                                        style: 'normal',
-                                        lineHeight: 2
-                                    },
-                                }
-                            },
-                        },
+                            xAxes: [{
+                                stacked: true
+                            }],
+                            yAxes: [{
+                                stacked: true
+                            }]
+                        }
                     },
                 });
             });
