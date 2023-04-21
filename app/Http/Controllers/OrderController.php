@@ -499,10 +499,9 @@ class OrderController extends Controller
                         $product = ProductCustomer::where('user_id', $order->customer_id)
                             ->where('product_id', request('product_id')[$i])
                             ->first();
-
-                            dd(request('product_id')[$i]);
-                            dd($product);
-                        // return response()->json($product, 400);
+                        // dd($order->customer_id);
+                        // dd($product);
+                        // dd(request('product_id')[$i]);
 
                         $data = [
                             'order_id' => $order->id,
