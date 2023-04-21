@@ -42,8 +42,8 @@ class UserDataTable extends DataTable
     public function query(User $model): QueryBuilder
     {
         return $model->newQuery()
-           ->orderBy('users.created_at', 'desc')
-           ->with(['user_detail', 'roles']);
+        ->orderBy('users.created_at', 'desc')
+        ->with(['user_detail', 'roles']);
     }
 
     /**
