@@ -86,50 +86,49 @@ class OrderSeeder extends Seeder
             ['order_id' => 2, 'status' => 'done', 'user_id' => null, 'created_at' => null],
         )->create();
 
+        for ($i = 0; $i < 100; $i++) {
+            $lastOrder = Order::orderBy('id', 'desc')
+            ->first();
 
-        // for ($i = 0; $i < 1000; $i++) {
-        //     $lastOrder = Order::orderBy('id', 'desc')
-        //         ->first();
+        $orderNumber = $lastOrder ? ++$lastOrder->order_number : 10001;
 
-        //     $orderNumber = $lastOrder ? ++$lastOrder->order_number : 10001;
+        $order = Order::create([
+            'order_number' => $orderNumber,
+            'customer_id' => random_int(4, 10),
+            'total_price' => 200000,
+            'payment_status' => 'paid',
+            'status' => OrderStatusEnum::PENDING,
+            'created_at' => Carbon::createFromTimestamp(rand(
+                Carbon::now()->subDays(360)->timestamp,
+                Carbon::now()->timestamp
+            ))
+        ]);
 
-        //     $order = Order::create([
-        //         'order_number' => $orderNumber,
-        //         'customer_id' => random_int(4, 10),
-        //         'total_price' => 200000,
-        //         'payment_status' => 'paid',
-        //         'status' => OrderStatusEnum::PENDING,
-        //         'created_at' => Carbon::createFromTimestamp(rand(
-        //             Carbon::now()->subDays(360)->timestamp,
-        //             Carbon::now()->timestamp
-        //         ))
-        //     ]);
+        $order->order_details()->create([
+            'product_customer_id' => 1,
+            'qty' => random_int(1, 10),
+        ]);
 
-        //     $order->order_details()->create([
-        //         'product_customer_id' => 1,
-        //         'qty' => random_int(1, 10),
-        //     ]);
+        $order->order_details()->create([
+            'product_customer_id' => 2,
+            'qty' => random_int(1, 10),
+        ]);
 
-        //     $order->order_details()->create([
-        //         'product_customer_id' => 2,
-        //         'qty' => random_int(1, 10),
-        //     ]);
+        foreach (OrderStatusEnum::values() as $status) {
 
-        //     foreach (OrderStatusEnum::values() as $status) {
-
-        //         if ($status == OrderStatusEnum::PENDING) {
-        //             OrderStatus::create([
-        //                 'order_id' => $order->id,
-        //                 'status' => $status,
-        //                 'user_id' => random_int(5, 10),
-        //             ]);
-        //         } else {
-        //             OrderStatus::insert([
-        //                 'order_id' => $order->id,
-        //                 'status' => $status,
-        //             ]);
-        //         }
-        //     }
-        // }
+            if ($status == OrderStatusEnum::PENDING) {
+                OrderStatus::create([
+                    'order_id' => $order->id,
+                    'status' => $status,
+                    'user_id' => random_int(5, 10),
+                ]);
+            } else {
+                OrderStatus::insert([
+                    'order_id' => $order->id,
+                    'status' => $status,
+                ]);
+            }
+        }
+        }
     }
 }

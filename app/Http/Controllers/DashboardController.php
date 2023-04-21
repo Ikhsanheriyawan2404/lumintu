@@ -14,6 +14,7 @@ class DashboardController extends Controller
 {
     public function index()
     {
+
         if (auth()->user()->hasRole('hotel')) {
             return view('admin.dashboard', [
                 'categories' => Category::all(),
@@ -75,29 +76,33 @@ class DashboardController extends Controller
     {
         $sThisMonth = Carbon::now()->startOfMonth()->format('Y-m-');
         $sLastMonth = Carbon::now()->startOfMonth()->subMonth()->format('Y-m-');
-        $thisMonth = DB::table('orders as o')
-            ->rightJoin('users as u', 'o.customer_id', '=', 'u.id')
-            ->where('o.created_at', 'LIKE', $sThisMonth . '%')
-            ->select(DB::raw('COUNT(o.customer_id) as total'), 'u.name')
-            ->orderBy('u.name', 'desc')
-            ->groupBy('u.name')
+        $thisMonth = DB::table('users as u')
+            ->join('model_has_roles as m', 'u.id', '=', 'm.model_id')
+            ->leftJoin(DB::raw("(SELECT customer_id, COUNT(*) as orders
+                         FROM orders
+                         WHERE created_at LIKE '$sThisMonth%'
+                         GROUP BY customer_id) as o"), 'u.id', '=', 'o.customer_id')
+            ->where('m.role_id', '=', 3)
+            ->select('u.name as name', DB::raw('COALESCE(o.orders, 0) as orders'))
             ->get();
-        $lastMonth = DB::table('orders as o')
-            ->rightJoin('users as u', 'o.customer_id', '=', 'u.id')
-            ->where('o.created_at', 'LIKE', $sLastMonth . '%')
-            ->select(DB::raw('COUNT(o.customer_id) as total'), 'u.name')
-            ->orderBy('u.name', 'desc')
-            ->groupBy('u.name')
+        $lastMonth = DB::table('users as u')
+            ->join('model_has_roles as m', 'u.id', '=', 'm.model_id')
+            ->leftJoin(DB::raw("(SELECT customer_id, COUNT(*) as orders
+                         FROM orders
+                         WHERE created_at LIKE '$sLastMonth%'
+                         GROUP BY customer_id) as o"), 'u.id', '=', 'o.customer_id')
+            ->where('m.role_id', '=', 3)
+            ->select('u.name as name', DB::raw('COALESCE(o.orders, 0) as orders'))
             ->get();
 
         $thisMonths = [];
         foreach ($thisMonth as $data) {
-            $thisMonths[] = $data->total;
+            $thisMonths[] = $data->orders;
         }
 
         $lastMonths = [];
         foreach ($lastMonth as $data) {
-            $lastMonths[] = $data->total;
+            $lastMonths[] = $data->orders;
         }
 
         $hotel = User::role('hotel')->get();
