@@ -25,6 +25,9 @@
     <!--====== Line Icons CSS ======-->
     <link rel="stylesheet" href="{{ asset('assets/landing/css/LineIcons.css') }}">
 
+    <!--====== Bootstrap Icons ======-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.4/font/bootstrap-icons.css">
+
     <!--====== Font Awesome CSS ======-->
     <link rel="stylesheet" href="{{ asset('assets/landing/css/font-awesome.min.css') }}">
 

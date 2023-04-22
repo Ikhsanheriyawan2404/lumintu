@@ -9,9 +9,16 @@
     {{-- <title>{{ $title ?? config('app.name') }}</title> --}}
 
     <link rel="stylesheet" href="{{ asset('assets/report/css/bootstrap.min.css') }}">
-    {{-- <link rel="stylesheet" href="{{ asset('assets/report/css/report.css') }}"> --}}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.4/font/bootstrap-icons.css">
 
-    @stack('custom-style')
+    <style>
+        body {
+            font-family: 'PT-Serif', 'serif';
+            background-color: #D5d8d8;
+        }
+    </style>
+
+    {{-- @stack('custom-style') --}}
 </head>
 
 <body>

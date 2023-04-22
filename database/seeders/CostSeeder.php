@@ -20,7 +20,7 @@ class CostSeeder extends Seeder
         MasterCost::get(['name']);
         $listPrice = [10000, 15000, 25000];
         $listQty = [1, 3, 5, 10, 25, 46];
-        for ($i = 0; $i < 100; $i++) {
+        for ($i = 0; $i < 1000; $i++) {
             $price = $listPrice[array_rand($listPrice)];
             $qty = $listQty[array_rand($listQty)];
             Cost::create([

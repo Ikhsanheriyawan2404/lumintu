@@ -16,6 +16,12 @@ use App\Http\Controllers\PaymentController;
 Route::get('/', function () {
     return view('landing.home');
 });
+Route::get('/profile', function () {
+    return view('landing.pages.detail_perusahaan');
+});
+Route::get('/program', function () {
+    return view('landing.pages.detail_program');
+});
 
 Route::get('/login', function () {
     return view('login');
@@ -26,9 +32,13 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::middleware(['auth', 'active'])->group(function () {
 
+    Route::post('users', [UserController::class, 'store'])->name('users.store');
+    Route::get('users/{user}/edit', [UserController::class, 'edit']);
+
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/dashboard/summary', [DashboardController::class, 'summary'])->name('dashboard.summary');
     Route::get('/dashboard/chart-order', [DashboardController::class, 'chartOrder'])->name('dashboard.chartOrder');
+    Route::get('/dashboard/chart-bar', [DashboardController::class, 'chartBar'])->name('dashboard.chartBar');
     Route::get('/dashboard/customer-ordered', [DashboardController::class, 'customerOrdered'])->name('dashboard.customer-ordered');
 
     Route::group(['middleware' => 'role:superadmin|admin'], function () {
@@ -47,7 +57,8 @@ Route::middleware(['auth', 'active'])->group(function () {
 
         // Nontatikf/Aktif users
         Route::post('users/{userId}/status', [UserController::class, 'changeStatus']);
-        Route::resource('users', UserController::class);
+        Route::get('users', [UserController::class, 'index'])->name('users.index');
+
 
         // Cancel and Approve order payment
         Route::post('orders/{order:id}/approve-payment', [PaymentController::class, 'approvePayment'])
@@ -74,7 +85,7 @@ Route::middleware(['auth', 'active'])->group(function () {
         Route::post('orders/{orderId}/acc-order-proccess', [OrderController::class, 'accOrderByValet'])
             ->name('orders.acc-order-process');
 
-        });
+    });
 
     Route::group(['middleware' => 'role:hotel'], function () {
         Route::post('payments/payment-documents', [PaymentController::class, 'uploadPayment'])
@@ -117,7 +128,7 @@ Route::middleware(['auth', 'active'])->group(function () {
         ->name('orders.export-detail-pdf')
         ->middleware(['role:superadmin|admin|hotel']);
 
-//    Route::resource('valet', ValetController::class);
+    //    Route::resource('valet', ValetController::class);
 
     require_once __DIR__ . '/pegawai/pegawai.php';
 
@@ -140,15 +151,15 @@ Route::middleware(['auth', 'active'])->group(function () {
         return view('admin.orders.invoice.invoice');
     });
 
-   Route::get('invoice/print', function () {
-       return view('admin.orders.invoice.print_invoice');
-   });
-//
+    Route::get('invoice/print', function () {
+        return view('admin.orders.invoice.print_invoice');
+    });
+    //
 //    Route::get('reports/bulanan', function () {
 //        return view('admin.orders.report.bulanan');
 //    });
 
-//    Route::get('reports/harian', function () {
+    //    Route::get('reports/harian', function () {
 //        return view('admin.report.cost.bulanan');
 //    });
 

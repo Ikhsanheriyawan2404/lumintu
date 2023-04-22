@@ -3,68 +3,72 @@
 @section('content')
     <div class="row">
         <div class="col-12">
-            @hasrole('superadmin|admin')
-            <div>
-                <div class="row">
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label for="filterStatus">Status Pembayaran</label>
-                            <select name="filterStatus" id="filterStatus" class="form-control form-control-sm">
-                                <option value="all">Semua</option>
-                                <option value="unpaid">Belum Dibayar</option>
-                                <option value="paid">Sudah Dibayar</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label for="filterCustomer">Customer</label>
-                            <select name="filterCustomer" id="filterCustomer" class="form-control form-control-sm">
-                                <option value="all">Semua</option>
-                                @foreach ($customers as $customer)
-                                    <option value="{{ $customer->id }}">{{ $customer->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label for="filterMonth">Bulan</label>
-                            <select name="filterMonth" id="filterMonth" class="form-control form-control-sm">
-                                <option value="all">Semua</option>
-                                @foreach ($months as $month)
-                                    <option value="{{ $month['key'] }}">{{ $month['name'] }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-13">
-                        <ul>
-                            <li id="resultCustomer" class="text-dark">Customer : </li>
-                            <li id="resultMonth" class="text-dark">Bulan : </li>
-                            <li id="resultStatus" class="text-dark">Status : </li>
-                        </ul>
-                    </div>
-                </div>
-
-                <form id="formExport" method="POST">
-                    @csrf
-                    <button type="submit" class="btn btn-sm btn-success" id="btnExportExcel">Export Excel</button>
-                    <button class="btn btn-sm btn-danger" id="btnExportPDF">Export PDF</button>
-                </form>
-            </div>
-            @endhasrole
             <div class="card h-100">
                 <div class="card-header pb-0 p-3">
                     <div class="row">
                         <div class="col-6 d-flex align-items-center">
-                            <h6 class="mb-0">Order/Pesanan</h6>
+                            <h5 class="mb-0">Order/Pesanan</h5>
                         </div>
                         <div class="col-6 text-end">
-                            @hasrole('superadmin|hotel')
+                            @hasrole('superadmin|admin|hotel')
                                 <a href="{{ route('orders.create', []) }}" class="btn btn-outline-primary btn-sm mb-0">Tambah</a>
                             @endhasrole()
                         </div>
+                        @hasrole('superadmin|admin')
+                            <div class="mt-3">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="filterStatus">Status Pembayaran</label>
+                                            <select name="filterStatus" id="filterStatus" class="form-control form-control-sm">
+                                                <option value="all">Semua</option>
+                                                <option value="unpaid">Belum Dibayar</option>
+                                                <option value="paid">Sudah Dibayar</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="filterCustomer">Customer</label>
+                                            <select name="filterCustomer" id="filterCustomer"
+                                                class="form-control form-control-sm">
+                                                <option value="all">Semua</option>
+                                                @foreach ($customers as $customer)
+                                                    <option value="{{ $customer->id }}">{{ $customer->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="filterMonth">Bulan</label>
+                                            <select name="filterMonth" id="filterMonth" class="form-control form-control-sm">
+                                                <option value="all">Semua</option>
+                                                @foreach ($months as $month)
+                                                    <option value="{{ $month['key'] }}">{{ $month['name'] }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <ul>
+                                            <li id="resultCustomer" class="text-dark">Customer : </li>
+                                            <li id="resultMonth" class="text-dark">Bulan : </li>
+                                            <li id="resultStatus" class="text-dark">Status : </li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-lg-9 text-center text-lg-start">
+                                    <form id="formExport" method="POST">
+                                        @csrf
+                                        <button type="submit" class="btn btn-sm btn-success" id="btnExportExcel">Export
+                                            Excel</button>
+                                        <button class="btn btn-sm btn-danger" id="btnExportPDF">Export PDF</button>
+                                    </form>
+                                </div>
+                            </div>
+                        @endhasrole
                     </div>
                 </div>
                 <div class="card-body">
@@ -82,8 +86,9 @@
 
 @push('custom-styles')
     <!-- DataTables -->
-    <link rel="stylesheet" href="{{ asset('library/http_cdn.datatables.net_1.13.4_css_dataTables.bootstrap5.css')}}">
-    <link rel="stylesheet" href="{{ asset('library/http_cdn.datatables.net_responsive_2.4.1_css_responsive.bootstrap5.css')}}">
+    <link rel="stylesheet" href="{{ asset('library/http_cdn.datatables.net_1.13.4_css_dataTables.bootstrap5.css') }}">
+    <link rel="stylesheet"
+        href="{{ asset('library/http_cdn.datatables.net_responsive_2.4.1_css_responsive.bootstrap5.css') }}">
     <link rel="stylesheet" href="{{ asset('library/http_cdnjs.cloudflare.com_ajax_libs_toastr.js_latest_toastr.css') }}">
 @endpush
 
@@ -135,11 +140,15 @@
                     },
                     type: 'GET',
                     success: function(response) {
-                        var blob = new Blob([response], { type: 'application/pdf' });
+                        var blob = new Blob([response], {
+                            type: 'application/pdf'
+                        });
                         var url = window.URL.createObjectURL(blob);
                         $('#btnExportPDF').html('Export PDF');
                         $('#btnExportPDF').removeAttr('disabled');
-                        var win = window.open(url, 'targetWindow', 'toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=800,height=600');
+                        var win = window.open(url, 'targetWindow',
+                            'toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=800,height=600'
+                        );
                         win.blur();
                         window.focus();
                     },
@@ -152,52 +161,54 @@
             });
 
 
-                $('#btnExportExcel').on('click', function(e) {
-                    e.preventDefault();
+            $('#btnExportExcel').on('click', function(e) {
+                e.preventDefault();
 
-                    $('#btnExportExcel').attr('disabled', 'disabled');
-                    $('#btnExportExcel').html('Loading ...');
+                $('#btnExportExcel').attr('disabled', 'disabled');
+                $('#btnExportExcel').html('Loading ...');
 
-                    // var formData = new FormData($('#formExport')[0]);
-                    // formData.append('filterMonth', $('#filterMonth').val());
-                    // formData.append('filterStatus', $('#filterStatus').val());
-                    // formData.append('filterCustomer', $('#filterCustomer').val());
-                    var csrf_token = $('meta[name="csrf-token"]').attr('content');
+                // var formData = new FormData($('#formExport')[0]);
+                // formData.append('filterMonth', $('#filterMonth').val());
+                // formData.append('filterStatus', $('#filterStatus').val());
+                // formData.append('filterCustomer', $('#filterCustomer').val());
+                var csrf_token = $('meta[name="csrf-token"]').attr('content');
 
-                    $.ajax({
-                        // data: formData,
-                        url: "{{ route('orders.export-excel') }}",
-                        data: {
-                            _token: csrf_token,
-                            filterMonth: $('#filterMonth').val(),
-                            filterStatus: $('#filterStatus').val(),
-                            filterCustomer: $('#filterCustomer').val(),
-                        },
-                        xhrFields: {
-                            responseType: 'blob'
-                        },
-                        type: "POST",
-                        success: function(data) {
-                            var blob = new Blob([data], { type: 'application/vnd.ms-excel' });
-                            var link = document.createElement('a');
-                            link.href = window.URL.createObjectURL(blob);
-                            link.download = Date.now() + 'orders.xlsx';
+                $.ajax({
+                    // data: formData,
+                    url: "{{ route('orders.export-excel') }}",
+                    data: {
+                        _token: csrf_token,
+                        filterMonth: $('#filterMonth').val(),
+                        filterStatus: $('#filterStatus').val(),
+                        filterCustomer: $('#filterCustomer').val(),
+                    },
+                    xhrFields: {
+                        responseType: 'blob'
+                    },
+                    type: "POST",
+                    success: function(data) {
+                        var blob = new Blob([data], {
+                            type: 'application/vnd.ms-excel'
+                        });
+                        var link = document.createElement('a');
+                        link.href = window.URL.createObjectURL(blob);
+                        link.download = Date.now() + 'orders.xlsx';
 
-                            // link.onload = function() {
-                            // };
-                            $('#btnExportExcel').html('Export Excel');
-                            $('#btnExportExcel').removeAttr('disabled');
+                        // link.onload = function() {
+                        // };
+                        $('#btnExportExcel').html('Export Excel');
+                        $('#btnExportExcel').removeAttr('disabled');
 
-                            document.body.appendChild(link);
-                            link.click();
-                        },
-                        error: function(data) {
-                            $('#btnExportExcel').removeAttr('disabled');
-                            $('#btnExportExcel').html('Export Excel');
-                            alert("Error")
-                        }
-                    });
+                        document.body.appendChild(link);
+                        link.click();
+                    },
+                    error: function(data) {
+                        $('#btnExportExcel').removeAttr('disabled');
+                        $('#btnExportExcel').html('Export Excel');
+                        alert("Error")
+                    }
                 });
+            });
 
             // setInterval(() => {
             //     let table = $('#order-table').DataTable();

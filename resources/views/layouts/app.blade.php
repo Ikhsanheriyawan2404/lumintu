@@ -152,6 +152,65 @@
     <!-- JQUERY -->
     <script src="{{ asset('library/http_code.jquery.com_jquery-3.6.4.js') }}"></script>
 
+    <script>
+        $(document).ready(function() {
+            $('body').on('click', '#profile-modal', function () {
+                var item_id = $(this).data('id');
+                $.get("{{ route('users.index') }}" + '/' + item_id + '/edit', function (data) {
+                    $('#modal-profile').modal('show');
+                    setTimeout(function () {
+                        $('#name').focus();
+                    }, 500);
+                    $('.modal-title').html("Edit User");
+                    $('#saveBtn').removeAttr('disabled');
+                    $('#saveBtn').html("Simpan");
+                    $('#item_id').val(data.id);
+                    $('#name').val(data.name);
+                    $('#username').val(data.username);
+                    $('#email').val(data.email);
+                    $('#phone_number').val(data.user_detail.phone_number);
+                    $('#address').html(data.user_detail.address);
+                })
+            });
+
+            $('#updateProfile').click(function(e) {
+                e.preventDefault();
+                $('#updateProfile').attr('disabled', 'disabled');
+                $('#updateProfile').html('Simpan ...');
+                var formData = new FormData($('#itemForm')[0]);
+                $.ajax({
+                    data: formData,
+                    url: "{{ route('users.store') }}",
+                    contentType: false,
+                    processData: false,
+                    type: "POST",
+                    success: function(data) {
+                        $('#itemForm').trigger("reset");
+                        $('#modal-profile').modal('hide');
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success',
+                            text: data.message,
+                        });
+                    },
+                    error: function(data) {
+                        $('#updateProfile').removeAttr('disabled');
+                        $('#updateProfile').html("Simpan");
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oppss',
+                            text: data.responseJSON.message,
+                        });
+                        $.each(data.responseJSON.errors, function(index, value) {
+                            toastr.error(value);
+                        });
+                    }
+                });
+            });
+
+        });
+    </script>
+
     @stack('custom-scripts')
 </body>
 

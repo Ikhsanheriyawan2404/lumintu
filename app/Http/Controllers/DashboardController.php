@@ -6,12 +6,15 @@ use App\Models\User;
 use App\Models\Order;
 use App\Models\Category;
 use App\Models\Cost;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Spatie\Permission\Models\Role;
 
 class DashboardController extends Controller
 {
     public function index()
     {
+
         if (auth()->user()->hasRole('hotel')) {
             return view('admin.dashboard', [
                 'categories' => Category::all(),
@@ -32,7 +35,7 @@ class DashboardController extends Controller
                 'orders' => Order::where('customer_id', '=', auth()->user()->id)->count(),
                 'customers' => User::role('hotel')->count(),
                 'employees' => User::role('pegawai')->count(),
-                ]);
+            ]);
         } else {
             return response()->json([
                 'orders' => Order::count(),
@@ -52,7 +55,7 @@ class DashboardController extends Controller
 
         $orders = [];
         foreach ($days as $value) {
-            $order = Order::where(DB::raw("DATE_FORMAT(created_at, '%d')"), $value)
+            $order = Order::whereDay('created_at', $value)
                 ->whereYear('created_at', date('Y'))
                 ->where('payment_status', 'paid')
                 ->get([
@@ -66,6 +69,52 @@ class DashboardController extends Controller
         return response()->json([
             'labels' => $days,
             'orders' => $orders,
+        ]);
+    }
+
+    public function chartBar()
+    {
+        $sThisMonth = Carbon::now()->startOfMonth()->format('Y-m-');
+        $sLastMonth = Carbon::now()->startOfMonth()->subMonth()->format('Y-m-');
+        $thisMonth = DB::table('users as u')
+            ->join('model_has_roles as m', 'u.id', '=', 'm.model_id')
+            ->leftJoin(DB::raw("(SELECT customer_id, COUNT(*) as orders
+                         FROM orders
+                         WHERE created_at LIKE '$sThisMonth%'
+                         GROUP BY customer_id) as o"), 'u.id', '=', 'o.customer_id')
+            ->where('m.role_id', '=', 3)
+            ->select('u.name as name', DB::raw('COALESCE(o.orders, 0) as orders'))
+            ->get();
+        $lastMonth = DB::table('users as u')
+            ->join('model_has_roles as m', 'u.id', '=', 'm.model_id')
+            ->leftJoin(DB::raw("(SELECT customer_id, COUNT(*) as orders
+                         FROM orders
+                         WHERE created_at LIKE '$sLastMonth%'
+                         GROUP BY customer_id) as o"), 'u.id', '=', 'o.customer_id')
+            ->where('m.role_id', '=', 3)
+            ->select('u.name as name', DB::raw('COALESCE(o.orders, 0) as orders'))
+            ->get();
+
+        $thisMonths = [];
+        foreach ($thisMonth as $data) {
+            $thisMonths[] = $data->orders;
+        }
+
+        $lastMonths = [];
+        foreach ($lastMonth as $data) {
+            $lastMonths[] = $data->orders;
+        }
+
+        $hotel = User::role('hotel')->get();
+        $labels = [];
+        foreach ($hotel as $data) {
+            $labels[] = $data->name;
+        }
+
+        return response()->json([
+            'labels' => $labels,
+            'thisMonth' => $thisMonths,
+            'lastMonth' => $lastMonths,
         ]);
     }
 

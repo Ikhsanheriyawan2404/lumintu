@@ -72,63 +72,63 @@ class OrderSeeder extends Seeder
         ]);
 
         OrderStatus::factory()->count(12)->sequence(
-            ['order_id' => 1, 'status' => 'pending', 'user_id' => random_int(4, 10)],
-            ['order_id' => 1, 'status' => 'approve', 'user_id' => random_int(1, 2)],
-            ['order_id' => 1, 'status' => 'pickup', 'user_id' => random_int(1, 2)],
-            ['order_id' => 1, 'status' => 'process', 'user_id' => random_int(1, 2)],
-            ['order_id' => 1, 'status' => 'delivery', 'user_id' => random_int(1, 2)],
-            ['order_id' => 1, 'status' => 'done', 'user_id' => random_int(1, 2)],
-            ['order_id' => 2, 'status' => 'pending', 'user_id' => random_int(4, 10)],
-            ['order_id' => 2, 'status' => 'approve', 'user_id' => random_int(1, 2)],
-            ['order_id' => 2, 'status' => 'pickup', 'user_id' => random_int(1, 2)],
-            ['order_id' => 2, 'status' => 'process', 'user_id' => random_int(1, 2)],
-            ['order_id' => 2, 'status' => 'delivery', 'user_id' => random_int(1, 2)],
-            ['order_id' => 2, 'status' => 'done', 'user_id' => random_int(1, 2)],
+            ['order_id' => 1, 'status' => 'pending', 'user_id' => random_int(5, 10)],
+            ['order_id' => 1, 'status' => 'pickup', 'user_id' => random_int(1, 3)],
+            ['order_id' => 1, 'status' => 'approve', 'user_id' => random_int(1, 3)],
+            ['order_id' => 1, 'status' => 'process', 'user_id' => random_int(1, 3)],
+            ['order_id' => 1, 'status' => 'delivery', 'user_id' => random_int(1, 3)],
+            ['order_id' => 1, 'status' => 'done', 'user_id' => random_int(1, 3)],
+            ['order_id' => 2, 'status' => 'pending', 'user_id' => random_int(5, 10)],
+            ['order_id' => 2, 'status' => 'pickup', 'user_id' => null, 'created_at' => null],
+            ['order_id' => 2, 'status' => 'approve', 'user_id' => null, 'created_at' => null],
+            ['order_id' => 2, 'status' => 'process', 'user_id' => null, 'created_at' => null],
+            ['order_id' => 2, 'status' => 'delivery', 'user_id' => null, 'created_at' => null],
+            ['order_id' => 2, 'status' => 'done', 'user_id' => null, 'created_at' => null],
         )->create();
 
         for ($i = 0; $i < 100; $i++) {
             $lastOrder = Order::orderBy('id', 'desc')
-                ->first();
+            ->first();
 
-            $orderNumber = $lastOrder ? ++$lastOrder->order_number : 10001;
+        $orderNumber = $lastOrder ? ++$lastOrder->order_number : 10001;
 
-            $order = Order::create([
-                'order_number' => $orderNumber,
-                'customer_id' => random_int(4, 10),
-                'total_price' => 200000,
-                'payment_status' => 'paid',
-                'status' => OrderStatusEnum::PENDING,
-                'created_at' => Carbon::createFromTimestamp(rand(
-                    Carbon::now()->subDays(360)->timestamp,
-                    Carbon::now()->timestamp
-                ))
-            ]);
+        $order = Order::create([
+            'order_number' => $orderNumber,
+            'customer_id' => random_int(4, 10),
+            'total_price' => 200000,
+            'payment_status' => 'paid',
+            'status' => OrderStatusEnum::PENDING,
+            'created_at' => Carbon::createFromTimestamp(rand(
+                Carbon::now()->subDays(360)->timestamp,
+                Carbon::now()->timestamp
+            ))
+        ]);
 
-            $order->order_details()->create([
-                'product_customer_id' => 1,
-                'qty' => random_int(1, 10),
-            ]);
+        $order->order_details()->create([
+            'product_customer_id' => 1,
+            'qty' => random_int(1, 10),
+        ]);
 
-            $order->order_details()->create([
-                'product_customer_id' => 2,
-                'qty' => random_int(1, 10),
-            ]);
+        $order->order_details()->create([
+            'product_customer_id' => 2,
+            'qty' => random_int(1, 10),
+        ]);
 
-            foreach (OrderStatusEnum::values() as $status) {
+        foreach (OrderStatusEnum::values() as $status) {
 
-                if ($status == OrderStatusEnum::PENDING) {
-                    OrderStatus::create([
-                        'order_id' => $order->id,
-                        'status' => $status,
-                        'user_id' => random_int(4, 10),
-                    ]);
-                } else {
-                    OrderStatus::insert([
-                        'order_id' => $order->id,
-                        'status' => $status,
-                    ]);
-                }
+            if ($status == OrderStatusEnum::PENDING) {
+                OrderStatus::create([
+                    'order_id' => $order->id,
+                    'status' => $status,
+                    'user_id' => random_int(5, 10),
+                ]);
+            } else {
+                OrderStatus::insert([
+                    'order_id' => $order->id,
+                    'status' => $status,
+                ]);
             }
+        }
         }
     }
 }
