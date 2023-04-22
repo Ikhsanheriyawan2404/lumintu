@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Cost;
 use Illuminate\Http\Response;
 use PDF;
-use App\Models\User;
-use App\Models\Order;
+use App\Models\{
+    User,
+    Order
+};
 use App\Models\Pickup;
 use App\Models\Delivery;
 use App\Models\OrderStatus;
@@ -60,8 +61,7 @@ class OrderController extends Controller
 
             return view('hotel.orders.index');
 
-        }
-        elseif (auth()->user()->hasRole('valet')) {
+        } elseif (auth()->user()->hasRole('valet')) {
             $orders = Order::with('pickups', 'deliveries', 'customer')
                 ->whereHas('pickups', function ($query) {
                     $query->where('user_id', auth()->user()->id);
@@ -75,8 +75,7 @@ class OrderController extends Controller
                 'query' => $orders
             ])->render('admin.orders.index');
 
-        }
-        else {
+        } else {
             $query = Order::orderBy('orders.created_at', 'desc')
                 ->when(request('filterStatus') && request('filterStatus') !== 'all', function ($query) {
                     return $query->where('payment_status', request('filterStatus'));
@@ -101,8 +100,6 @@ class OrderController extends Controller
                 $months[] = $month;
             }
 
-            // return response()->json($query->get());
-
             return $dataTable->with([
                 'query' => $query
             ])->render('admin.orders.index', [
@@ -114,7 +111,13 @@ class OrderController extends Controller
 
     public function show($orderId)
     {
-        $order = Order::with('order_details.product_customer.product', 'order_status', 'customer', 'pickups.valet', 'deliveries.valet')
+        $order = Order::with(
+            'order_details.product_customer.product',
+            'order_status',
+            'customer',
+            'pickups.valet',
+            'deliveries.valet'
+            )
             ->findOrFail($orderId);
 
         $currentOrderStatus = $order->status;
@@ -124,7 +127,6 @@ class OrderController extends Controller
         if ($currentIndex !== false && isset($statuses[$currentIndex + 1])) {
             $nextStatus = $statuses[$currentIndex + 1];
         }
-
 
         if ($order->customer_id != auth()->user()->id && auth()->user()->hasRole('hotel')) {
             abort(403, "Forbidden");
@@ -265,9 +267,12 @@ class OrderController extends Controller
                     $totalPrice = 0;
                     for ($i = 0; $i < count($totalRequestItem); $i++) {
 
-                        $product = ProductCustomer::where('user_id', $order->customer_id)
-                            ->where('product_id', request('product_id')[$i])
-                            ->first();
+                        // ini dulu yang error
+                        // $product = ProductCustomer::where('user_id', $order->customer_id)
+                        //     ->where('product_id', request('product_id')[$i])
+                        //     ->first();
+
+                        $product = ProductCustomer::find(request('product_id')[$i]);
 
                         $data = [
                             'order_id' => $order->id,
@@ -347,9 +352,7 @@ class OrderController extends Controller
                     $order->order_details()->delete();
                     for ($i = 0; $i < count($totalRequestItem); $i++) {
 
-                        $product = ProductCustomer::where('user_id', $order->customer_id)
-                            ->where('product_id', request('product_id')[$i])
-                            ->first();
+                        $product = ProductCustomer::find(request('product_id')[$i]);
 
                         $data = [
                             'order_id' => $order->id,
@@ -476,15 +479,15 @@ class OrderController extends Controller
                 $order = Order::findOrFail($orderId);
 
                 $order->update([
-                    'status' => OrderStatusEnum::APPROVE,
-                    'user_id' => auth()->user()->id,
+                    'status' => OrderStatusEnum::PROCESS,
                 ]);
 
                 // Change Order Status
                 OrderStatus::where('order_id', $order->id)
-                    ->where('status', OrderStatusEnum::APPROVE)
+                    ->where('status', OrderStatusEnum::PROCESS)
                     ->update([
                         'created_at' => now(),
+                        'user_id' => auth()->user()->id,
                     ]);
 
                 // Add new order details
@@ -496,12 +499,7 @@ class OrderController extends Controller
                     $order->order_details()->delete();
                     for ($i = 0; $i < count($totalRequestItem); $i++) {
 
-                        $product = ProductCustomer::where('user_id', $order->customer_id)
-                            ->where('product_id', request('product_id')[$i])
-                            ->first();
-                        // dd($order->customer_id);
-                        // dd($product);
-                        // dd(request('product_id')[$i]);
+                        $product = ProductCustomer::find(request('product_id')[$i]);
 
                         $data = [
                             'order_id' => $order->id,
@@ -593,13 +591,12 @@ class OrderController extends Controller
     }
     public function exportDetailPdf($orderId)
     {
-        $order = Order::with('order_status', 'order_details.product_customer.product', 'customer', 'customer.user_detail')
+        $order = Order::with('order_status', 'order_details.product_customer.product', 'customer', 'customer.user_detail', 'pickups.valet', 'deliveries.valet')
             ->findOrFail($orderId);
 //
 //        $pdf = PDF::loadView('admin.orders.invoice.print_invoice', compact('order'))->setOptions(['defaultFont' => 'sans-serif']);
 //        $pdf->setPaper('a4', 'potrait');
 //        return $pdf->stream();
-//        dd($order->order_status);
         return view('admin.orders.invoice.invoice', ['order' => $order]);
     }
 
@@ -610,13 +607,13 @@ class OrderController extends Controller
 
         $row = [];
 
-        $row[] = '<input name="product_id[]" type="hidden" value="' . $product->product_id . '" class="form-control">' . $product->product->name;
+        $row[] = '<input name="product_id[]" type="hidden" value="' . $product->id . '" class="form-control">' . $product->product->name;
 
-        $row[] = '<input type="text" name="price[]" data-id="' . $product->product_id . '" class="form-control price" value="' . number_format($product->price, 0, ',', '.') . '" disabled>';
+        $row[] = '<input type="text" name="price[]" data-id="' . $product->id . '" class="form-control price" value="' . number_format($product->price, 0, ',', '.') . '" disabled>';
 
-        $row[] = '<input type="number" name="qty[]" data-id="' . $product->product_id . '" class="form-control qty" value="0">';
+        $row[] = '<input type="number" name="qty[]" data-id="' . $product->id . '" class="form-control qty" value="0">';
 
-        $row[] = '<input type="text" name="subtotal[]" class="form-control subtotal" data-id="' . $product->product_id . '" value="0" disabled>';
+        $row[] = '<input type="text" name="subtotal[]" class="form-control subtotal" data-id="' . $product->id . '" value="0" disabled>';
 
         $row[] = '<a class="btn btn-sm btn-outline-danger btn-icon removeProduct"><em class="fa fa-trash"></em></a>';
 

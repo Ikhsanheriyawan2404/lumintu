@@ -126,6 +126,7 @@
                     </div>
                     <div class="card-body p-3">
                         <div class="chart">
+
                             <canvas id="chart-line" class="chart-canvas" height="300"></canvas>
                         </div>
                     </div>
@@ -350,6 +351,11 @@
 
     <script>
         $(document).ready(function() {
+            setTimeout(function(){
+                if (route('dashboard.summary')) {
+                    location.reload();
+                }
+            }, 100);
             $.get("{{ route('dashboard.summary') }}", function(data) {
                 $('#orders').html(data.orders)
                 $('#costs').html(data.costs)
@@ -435,8 +441,10 @@
                 });
             });
 
+
             $.get("{{ route('dashboard.chartBar') }}", function(data) {
-                var ctx1 = document.getElementById("chart-bar");
+                var ctx1 = document.getElementById("chart-bar").getContext("2d");
+                const allValues = data.thisMonth.concat(data.lastMonth);
                 new Chart(ctx1, {
                     type: "bar",
                     data: {
@@ -445,13 +453,13 @@
                             {
                                 label: "Bulan Sekarang",
                                 data: data.thisMonth,
-                                backgroundColor: 'rgba(99, 132, 0, 0.6)',
-                                borderColor: 'rgba(99, 132, 0, 1)',
+                                backgroundColor: '#0000CC',
+
                             },
                             {
                                 label: "Bulan Lalu",
                                 data: data.lastMonth,
-                                backgroundColor: 'rgba(0, 99, 132, 0.6)',
+                                backgroundColor: '#FFFF00',
                                 borderColor: 'rgba(0, 99, 132, 1)',
                             },
                         ],
@@ -466,11 +474,17 @@
                         responsive: true,
                         scales: {
                             xAxes: [{
-                                stacked: true
+                                stacked: true,
+                                // stepSize: 1,
                             }],
-                            yAxes: [{
-                                stacked: true
-                            }]
+                            y: {
+
+                                max: Math.max(...allValues) + 1,
+                                min: 0,
+                                ticks: {
+                                    stepSize: 1
+                                }
+                            }
                         }
                     },
                 });

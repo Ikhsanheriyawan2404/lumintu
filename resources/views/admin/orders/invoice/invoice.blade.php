@@ -4,8 +4,8 @@
     <div class="card mb-3">
         <div class="d-flex flex-row-reverse">
             <div class="px-5 py-3">
-                <button class="btn btn-secondary">Kembali</button>
-                <button class="btn btn-primary"><i class="bi bi-printer me-3"></i>Print</button>
+                <a href="{{ route('orders.index') }}" class="btn btn-secondary" >Kembali</a>
+                <button class="btn btn-primary" id="print-keun"><i class="bi bi-printer"></i> Print</button>
             </div>
         </div>
         <div class="card-header">
@@ -87,14 +87,14 @@
                             </p>
                         </div>
                     </div>
-                    <div class="row mb-2">
-                        <div class="col-md-4">
-                            <h6 class="card-title">Penanggungjawab</h6>
-                        </div>
-                        <div class="col-md-8">
-                            <p class="card-text">asik</p>
-                        </div>
-                    </div>
+{{--                    <div class="row mb-2">--}}
+{{--                        <div class="col-md-4">--}}
+{{--                            <h6 class="card-title">Penanggungjawab</h6>--}}
+{{--                        </div>--}}
+{{--                        <div class="col-md-8">--}}
+{{--                            <p class="card-text">asik</p>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
                     <div class="row">
                         <div class="col-md-4">
                             <h6 class="card-title">Nomor Telepon</h6>
@@ -135,10 +135,26 @@
                 <div class="col-6">
                     <div class="row">
                         <div class="col-md-4">
-                            <h6 class="card-title">Penanggungjawab Valet</h6>
+                            <h6 class="card-title">Penanggung Jawab Penjemputan</h6>
                         </div>
                         <div class="col-md-8">
-                            Valet2
+                            @if($order->pickups)
+                                {{ $order->pickups->valet->name }}
+                            @else
+                                -
+                            @endif
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <h6 class="card-title">Penanggung Jawab Pengantaran</h6>
+                        </div>
+                        <div class="col-md-8">
+                            @if($order->deliveries)
+                                {{ $order->deliveries->valet->name }}
+                            @else
+                                -
+                            @endif
                         </div>
                     </div>
                     <div class="row bukti">
@@ -221,4 +237,17 @@
             }
         }
     </style>
+@endpush
+
+@push('custom-styles')
+    <!-- Option 1: Include in HTML -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css" integrity="sha384-b6lVK+yci+bfDmaY1u0zE8YYJt0TZxLEAFyYSLHId4xoVvsrQu3INevFKo+Xir8e" crossorigin="anonymous">
+@endpush
+
+@push('custom-scripts')
+    <script>
+        $('#print-keun').click(function(){
+            window.print();
+        });
+    </script>
 @endpush

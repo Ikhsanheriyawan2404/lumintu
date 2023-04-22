@@ -124,7 +124,7 @@ Route::middleware(['auth', 'active'])->group(function () {
 
     Route::get('orders/{orderId}/edit', [OrderController::class, 'edit'])->name('orders.edit');
 
-    Route::post('orders/{orderId}/export-pdf', [OrderController::class, 'exportDetailPdf'])
+    Route::get('orders/{orderId}/export-pdf', [OrderController::class, 'exportDetailPdf'])
         ->name('orders.export-detail-pdf')
         ->middleware(['role:superadmin|admin|hotel']);
 

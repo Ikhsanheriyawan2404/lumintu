@@ -162,8 +162,8 @@
                         $('#name').focus();
                     }, 500);
                     $('.modal-title').html("Edit User");
-                    $('#saveBtn').removeAttr('disabled');
-                    $('#saveBtn').html("Simpan");
+                    $('#updateProfile').removeAttr('disabled');
+                    $('#updateProfile').html("Simpan");
                     $('#item_id').val(data.id);
                     $('#name').val(data.name);
                     $('#username').val(data.username);
@@ -177,7 +177,7 @@
                 e.preventDefault();
                 $('#updateProfile').attr('disabled', 'disabled');
                 $('#updateProfile').html('Simpan ...');
-                var formData = new FormData($('#itemForm')[0]);
+                var formData = new FormData($('#FormTio')[0]);
                 $.ajax({
                     data: formData,
                     url: "{{ route('users.store') }}",
@@ -185,7 +185,7 @@
                     processData: false,
                     type: "POST",
                     success: function(data) {
-                        $('#itemForm').trigger("reset");
+                        $('#FormTio').trigger("reset");
                         $('#modal-profile').modal('hide');
                         Swal.fire({
                             icon: 'success',

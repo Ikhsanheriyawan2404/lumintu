@@ -100,7 +100,7 @@
                     <span>&times;</span>
                 </button>
             </div>
-            <form id="itemForm" name="itemForm" method="post">
+            <form id="FormTio" name="FormTio" method="post">
                 @csrf
                 <input type="hidden" name="item_id" id="item_id">
                 <div class="modal-body">
