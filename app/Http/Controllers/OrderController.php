@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Response;
+use PDF;
 use App\Models\{
     User,
     Order
@@ -590,13 +591,12 @@ class OrderController extends Controller
     }
     public function exportDetailPdf($orderId)
     {
-        $order = Order::with('order_status', 'order_details.product_customer.product', 'customer', 'customer.user_detail')
+        $order = Order::with('order_status', 'order_details.product_customer.product', 'customer', 'customer.user_detail', 'pickups.valet', 'deliveries.valet')
             ->findOrFail($orderId);
 //
 //        $pdf = PDF::loadView('admin.orders.invoice.print_invoice', compact('order'))->setOptions(['defaultFont' => 'sans-serif']);
 //        $pdf->setPaper('a4', 'potrait');
 //        return $pdf->stream();
-//        dd($order->order_status);
         return view('admin.orders.invoice.invoice', ['order' => $order]);
     }
 

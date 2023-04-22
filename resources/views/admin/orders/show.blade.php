@@ -18,10 +18,7 @@
                         <div>
                             <a href="{{ route('orders.index', []) }}" class="btn bg-gradient-secondary ms-auto mb-0">Kembali</a>
                             @role('superadmin|hotel|admin')
-                            <form action="{{ route('orders.export-detail-pdf', $order->id) }}" method="post">
-                                @csrf
-                                <button type="submit" class="btn bg-gradient-danger ms-auto mb-0">Cetak</button>
-                            </form>
+                                <a class="btn bg-gradient-danger ms-auto mb-0" href="{{ route('orders.export-detail-pdf', $order->id) }}">Cetak</a>
                             @endrole
                         </div>
                     </div>
