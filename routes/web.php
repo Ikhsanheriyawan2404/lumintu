@@ -1,5 +1,6 @@
 <?php
 
+use App\Mail\OrderNotification;
 use App\Http\Controllers\TestController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
@@ -15,6 +16,10 @@ use App\Http\Controllers\PaymentController;
 
 Route::get('/', function () {
     return view('landing.home');
+});
+//mail
+Route::get('/mail', function () {
+    return new OrderNotification();
 });
 Route::get('/profile', function () {
     return view('landing.pages.detail_perusahaan');

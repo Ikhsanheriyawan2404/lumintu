@@ -44,7 +44,7 @@ class OrderNotification extends Mailable
     public function content()
     {
         return new Content(
-            markdown: 'emails.order-notifications',
+            markdown: 'emails.invoice-order',
         );
     }
 
@@ -60,6 +60,6 @@ class OrderNotification extends Mailable
 
     public function build()
     {
-        return $this->markdown('emails.order-notifications');
+        return $this->markdown('emails.invoice-order');
     }
 }
