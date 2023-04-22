@@ -5,7 +5,7 @@
         <div class="d-flex flex-row-reverse">
             <div class="px-5 py-3">
                 <a href="{{ route('orders.index') }}" class="btn btn-secondary" >Kembali</a>
-                <button class="btn btn-primary"><i class="bi bi-printer"></i> Print</button>
+                <button class="btn btn-primary" id="print-keun"><i class="bi bi-printer"></i> Print</button>
             </div>
         </div>
         <div class="card-header">
@@ -242,4 +242,12 @@
 @push('custom-styles')
     <!-- Option 1: Include in HTML -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css" integrity="sha384-b6lVK+yci+bfDmaY1u0zE8YYJt0TZxLEAFyYSLHId4xoVvsrQu3INevFKo+Xir8e" crossorigin="anonymous">
+@endpush
+
+@push('custom-scripts')
+    <script>
+        $('#print-keun').click(function(){
+            window.print();
+        });
+    </script>
 @endpush
