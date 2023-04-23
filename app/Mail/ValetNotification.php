@@ -10,41 +10,41 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class OrderNotification extends Mailable
+class ValetNotification extends Mailable
 {
     use Queueable, SerializesModels;
 
+    public $order;
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(
-        public Order $order
-    ) {
+    public function __construct(Order $order) {
+        $this->order = $order;
     }
 
     /**
      * Get the message envelope.
      *
-     * @return \Illuminate\Mail\Mailables\Envelope
+     * @return Envelope
      */
     public function envelope()
     {
         return new Envelope(
-            subject: 'Order Notification',
+            subject: 'Valet Notification',
         );
     }
 
     /**
      * Get the message content definition.
      *
-     * @return \Illuminate\Mail\Mailables\Content
+     * @return Content
      */
     public function content()
     {
         return new Content(
-            markdown: 'emails.admin-notifications',
+            markdown: 'emails.valet-notifications',
         );
     }
 

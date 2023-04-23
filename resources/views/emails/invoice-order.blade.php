@@ -1,40 +1,39 @@
 <x-mail::message>
 # Invoice dan hasil transaksi Pemesanan(menyesuaikan)
- 
-Hai, (Nama Pemesan)!
+
+Hai, {{ $order->customer->name }}!
 
 <x-mail::panel>
 <table border="0">
     <tr>
         <td>ID Pesanan</td>
         <td>:</td>
-        <td>123123</td>
+        <td>ORD#{{ $order->order_number }}</td>
     </tr>
     <tr>
         <td>Tanggal</td>
         <td>:</td>
-        <td></td>
+        <td>{{ $order->created_at }}</td>
     </tr>
     <tr>
         <td>Valet</td>
         <td>:</td>
-        <td>Valet</td>
-    </tr>
-    <tr>
-        <td>Pemesan</td>
-        <td>:</td>
-        <td>Agung</td>
+        @if($order->status = 'pickup')
+        <td>{{ $order->pickups->valet->name }}</td>
+        @else
+        <td>{{ $order->deliveries->valet->name }}</td>
+        @endif
     </tr>
     <tr>
         <td>Status</td>
         <td>:</td>
-        <td>Pemesanan</td>
+        <td>{{ $order->status }}</td>
     </tr>
 </table>
 
 </x-mail::panel>
- 
-<x-mail::button :url="''">
+
+<x-mail::button :url="route('orders.index').'/'.$order->id">
 View Order
 </x-mail::button>
 
@@ -42,13 +41,14 @@ View Order
 
 <x-mail::table>
 | No        |    Nama         | Harga       | Jumlah | Subtotal  |
-| :--------:| :-------------  | :-----------: | :-----:| :-------- |
-| 1         | Bath Math (BM)  | Rp. 1,800   | 1      | Rp. 1,800 |
-| 2         | Bath Math (BM)  | Rp. 1,800   | 1      | Rp. 1,800 |
+| :--------:| :-------------  | :-----------: | :-----:| :---------- |
+@foreach($order->order_details as $data )
+| {{  $loop->iteration }}         | {{ $data->product_customer->product->name }}  | {{ number_format($data->product_customer->price, 2) }}   | {{ $data->qty }}      | Rp. {{ $data->product_customer->price*$data->qty }} |
+@endforeach
 
 | Total     |
 | :--------: |
-| Rp. 3,600 |
+| Rp. {{  number_format($order->total_price, 2) }} |
 </x-mail::table>
 
 Tetimakasih,<br>

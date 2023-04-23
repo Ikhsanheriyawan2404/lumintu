@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\HotelNotification;
+use App\Mail\ValetNotification;
 use Illuminate\Http\Response;
 use PDF;
 use App\Models\{
@@ -309,7 +311,8 @@ class OrderController extends Controller
                 $users = collect($listUsersWhoGetNotifications);
 
                 Notification::send($users, new OrderStatusNotif($order));
-                Mail::to($order->customer->email)->queue(new OrderNotification($order));
+
+                Mail::to('ininantiemaillaundrynya@example.com')->queue(new OrderNotification($order));
             });
 
         } catch (InvalidArgumentException $e) {
@@ -447,14 +450,15 @@ class OrderController extends Controller
                             'date' => date('Y-m-d')
                         ]);
                     }
+
                     $listUsersWhoGetNotifications[] = User::find(request('chooseValet'));
-                    Mail::to(User::find(request('chooseValet'))->email)->queue(new OrderNotification($order));
+                    Mail::to(User::find(request('chooseValet'))->email)->queue(new ValetNotification($order));
                 }
 
                 $order = Order::with('order_status')->find($order->id);
                 $users = collect($listUsersWhoGetNotifications);
                 Notification::send($users, new OrderStatusNotif($order));
-                Mail::to(request($order->customer_id))->queue(new OrderNotification($order));
+                Mail::to($order->customer->email)->queue(new HotelNotification($order));
             });
         } catch (\InvalidArgumentException $e) {
             return response()->json([

@@ -4,24 +4,25 @@ namespace App\Mail;
 
 use App\Models\Order;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
-use Illuminate\Queue\SerializesModels;
 use Illuminate\Mail\Mailables\Envelope;
-use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Queue\SerializesModels;
 
-class OrderNotification extends Mailable
+class HotelNotification extends Mailable
 {
     use Queueable, SerializesModels;
+    public $order;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(
-        public Order $order
-    ) {
+    public function __construct(Order $order)
+    {
+        $this->order = $order;
     }
 
     /**
@@ -32,7 +33,7 @@ class OrderNotification extends Mailable
     public function envelope()
     {
         return new Envelope(
-            subject: 'Order Notification',
+            subject: 'Hotel Notification',
         );
     }
 
@@ -44,7 +45,7 @@ class OrderNotification extends Mailable
     public function content()
     {
         return new Content(
-            markdown: 'emails.admin-notifications',
+            view: 'emails.invoice-order',
         );
     }
 
@@ -57,9 +58,8 @@ class OrderNotification extends Mailable
     {
         return [];
     }
-
     public function build()
     {
-        return $this->markdown('emails.admin-notifications');
+        return $this->markdown('emails.invoice-order');
     }
 }

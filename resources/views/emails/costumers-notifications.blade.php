@@ -1,6 +1,6 @@
 <x-mail::message>
 # Notifikasi Pemesanan(menyesuaikan)
- 
+
 Hai, (Nama Pemesan)!
 
 <x-mail::panel>
@@ -28,11 +28,11 @@ Hai, (Nama Pemesan)!
 </table>
 
 </x-mail::panel>
- 
+
 <x-mail::button :url="''">
 View Order
 </x-mail::button>
- 
+
 Terimakasih,<br>
 Laundry Lumintu SIP
 </x-mail::message>

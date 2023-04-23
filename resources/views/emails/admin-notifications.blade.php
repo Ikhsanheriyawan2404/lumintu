@@ -1,7 +1,8 @@
 <x-mail::message>
-# Notifikasi Pemesanan(menyesuaikan)
- 
-Hai, (Nama Admin)! <br>
+# Notifikasi Pemesanan
+{{--    (menyesuaikan)--}}
+
+{{--Hai, (Nama Admin)! <br>--}}
 <br>
 Pesanan baru telah masuk, silahkan untuk terima pesanan dan memilih valet untuk menjemput!
 
@@ -10,36 +11,36 @@ Pesanan baru telah masuk, silahkan untuk terima pesanan dan memilih valet untuk 
     <tr>
         <td>ID Pesanan</td>
         <td>:</td>
-        <td>123123</td>
+        <td>ORD#{{$order->order_number}}</td>
     </tr>
     <tr>
         <td>Tanggal</td>
         <td>:</td>
-        <td></td>
+        <td>{{ $order->created_at }}</td>
     </tr>
     <tr>
         <td>Pemesan</td>
         <td>:</td>
-        <td>Agung</td>
+        <td>{{ $order->customer->name }}</td>
     </tr>
     <tr>
         <td>Alamat</td>
         <td>:</td>
-        <td>Alamat</td>
+        <td>{{ $order->customer->user_detail->address }}</td>
     </tr>
-    <tr>
-        <td>Status</td>
-        <td>:</td>
-        <td>Pemesanan</td>
-    </tr>
+{{--    <tr>--}}
+{{--        <td>Status</td>--}}
+{{--        <td>:</td>--}}
+{{--        <td>Pemesanan</td>--}}
+{{--    </tr>--}}
 </table>
 
 </x-mail::panel>
- 
-<x-mail::button :url="''">
+
+<x-mail::button :url="route('orders.index').'/'.$order->id">
 View Order
 </x-mail::button>
- 
+
 Terimakasih,<br>
 Laundry Lumintu SIP
 </x-mail::message>
