@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
+ * @extends Factory<User>
  */
 class UserFactory extends Factory
 {
@@ -18,11 +18,11 @@ class UserFactory extends Factory
      */
     public function definition()
     {
-        $name = fake()->name();
+        $name = fake('id_ID')->name();
         return [
             'name' => $name,
             'username' => $name,
-            'email' => fake()->unique()->safeEmail(),
+            'email' => fake('id_ID')->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
             'remember_token' => Str::random(10),
@@ -37,8 +37,25 @@ class UserFactory extends Factory
     public function configure()
     {
         return $this->afterCreating(function (User $user) {
-            $roles = User::role('hotel')->get()->count();
-            ($roles < 5) ?  $user->assignrole('hotel') : $user->assignrole('valet');
+            if ($user->id == 1) {
+                $user->assignrole('superadmin');
+            } elseif ($user->id == 2) {
+                $user->assignRole('owner');
+            } elseif ($user->id == 3) {
+                $user->assignRole('admin');
+            } elseif ($user->id == 4) {
+                $user->assignRole('valet');
+            } elseif ($user->id == 5) {
+                $user->assignRole('valet');
+            } elseif ($user->id == 6) {
+                $user->assignRole('pegawai');
+            } else {
+                $user->assignRole('hotel');
+            }
+            $user->user_detail()->create([
+                'address' => fake('id_ID')->address(),
+                'phone_number' => fake('id_ID')->phoneNumber(),
+            ]);
         });
     }
 }

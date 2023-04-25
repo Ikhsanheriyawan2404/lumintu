@@ -2,10 +2,11 @@
 
 namespace Database\Factories;
 
+use App\Models\ProductCustomer;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\ProductCustomer>
+ * @extends Factory<ProductCustomer>
  */
 class ProductCustomerFactory extends Factory
 {
@@ -17,8 +18,6 @@ class ProductCustomerFactory extends Factory
     public function definition()
     {
         return [
-            'product_id' => 1,
-            'user_id' => 1,
             'price' => fake()->randomNumber(),
         ];
     }

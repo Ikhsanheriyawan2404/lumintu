@@ -5,7 +5,6 @@ namespace Database\Seeders;
 use App\Models\Product;
 use App\Models\ProductCustomer;
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class ProductCustomerSeeder extends Seeder
@@ -17,17 +16,23 @@ class ProductCustomerSeeder extends Seeder
      */
     public function run()
     {
-//        ProductCustomer::factory()->count(500)->create();
-        $products = Product::get();
+        $products = Product::get(['id', 'price']);
         $users = User::role('hotel')->get(['id']);
-        foreach ($users as $user) {
-            foreach ($products as $product) {
-                ProductCustomer::create([
-                    'product_id' => $product->id,
-                    'user_id' => $user->id,
-                    'price' => $product->price,
-                ]);
+        $data = [];
+        for ($i = 0; $i < $users->count(); $i++) {
+            for ($j = 0; $j < $products->count(); $j++) {
+                $data[] = [
+                    'user_id' => $users[$i]->id,
+                    'product_id' => $products[$j]->id,
+                    'price' => fake()->numberBetween(4000, 15000),
+                    'created_at' => now()->toDateString(),
+                    'updated_at' => now()->toDateString(),
+                ];
+
             }
+        }
+        foreach (array_chunk($data, $products->count()) as $chunk) {
+            ProductCustomer::insert($chunk);
         }
     }
 }

@@ -2,12 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
 use App\Models\Product;
-use App\Models\Category;
-use App\Models\ProductCustomer;
 use Illuminate\Database\Seeder;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class ProductSeeder extends Seeder
 {
@@ -69,18 +65,5 @@ class ProductSeeder extends Seeder
             ['name' => 'Velvet / Laken', 'price' => 6000, 'unit' => 'meter persegi', 'category_id' => 2],
             ['name' => 'Cover Chair', 'price' => 6000, 'unit' => 'pcs', 'category_id' => 2],
         )->create();
-
-
-//        $products = Product::get();
-//        $users = User::role('hotel')->get(['id']);
-//        foreach ($users as $user) {
-//            foreach ($products as $product) {
-//                ProductCustomer::create([
-//                    'product_id' => $product->id,
-//                    'user_id' => $user->id,
-//                    'price' => $product->price,
-//                ]);
-//            }
-//        }
     }
 }
