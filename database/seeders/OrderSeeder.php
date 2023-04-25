@@ -2,6 +2,12 @@
 
 namespace Database\Seeders;
 
+use App\Enums\OrderStatusEnum;
+use App\Models\Delivery;
+use App\Models\Order;
+use App\Models\OrderStatus;
+use App\Models\Pickup;
+use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 
 class OrderSeeder extends Seeder
