@@ -20,6 +20,8 @@
                             @role('superadmin|hotel|admin')
                             <a class="btn bg-gradient-danger ms-auto mb-0"
                                href="{{ route('orders.export-detail-pdf', $order->id) }}">Cetak</a>
+                            <a class="btn bg-gradient-dark ms-auto mb-0"
+                               href="{{ route('orders.download-detail-pdf', $order->id) }}">Download</a>
                             @endrole
                         </div>
                     </div>
