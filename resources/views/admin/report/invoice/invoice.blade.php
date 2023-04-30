@@ -192,12 +192,6 @@
                     <td class="text-center">35.000</td>
                 </tr>
                 <tr>
-                    <th scope="row">Food & Beverage</th>
-                    <td class="text-center">7.000</td>
-                    <td class="text-center">5</td>
-                    <td class="text-center">35.000</td>
-                </tr>
-                <tr>
                     <th scope="row" colspan="3" class="text-center">TOTAL</th>
                     <th scope="row" class="text-center">47.000</th>
                 </tr>
