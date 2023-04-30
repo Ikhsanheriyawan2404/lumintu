@@ -21,14 +21,14 @@
                         <div class="row">
                             <div class="col-md-6">
                                 @hasrole('superadmin|admin')
-                                    <div class="form-group">
-                                        <select class="form-control select2" name="customer" id="customer">
-                                            <option selected disabled>Pilih Pelanggan</option>
-                                            @foreach ($customers as $customer)
-                                                <option value="{{ $customer->id }}">{{ $customer->name }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
+                                <div class="form-group">
+                                    <select class="form-control select2" name="customer" id="customer">
+                                        <option selected disabled>Pilih Pelanggan</option>
+                                        @foreach ($customers as $customer)
+                                            <option value="{{ $customer->id }}">{{ $customer->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
                                 @endhasrole
                             </div>
                             <div class="col-md-6">
@@ -44,15 +44,15 @@
                             <div class="col-md-12">
                                 <div class="table-responsive">
                                     <table class="table my-3 table-sm table-hover table-striped table-bordered"
-                                        id="table-order">
+                                           id="table-order">
                                         <thead>
-                                            <tr>
-                                                <th class="text-center">Nama</th>
-                                                <th class="text-center">Harga</th>
-                                                <th class="text-center">Kuantitas</th>
-                                                <th class="text-center">Jumlah</th>
-                                                <th class="text-center"><i class="fa fa-cog"></i></th>
-                                            </tr>
+                                        <tr>
+                                            <th class="text-center">Nama</th>
+                                            <th class="text-center">Harga</th>
+                                            <th class="text-center">Kuantitas</th>
+                                            <th class="text-center">Jumlah</th>
+                                            <th class="text-center"><i class="fa fa-cog"></i></th>
+                                        </tr>
                                         </thead>
                                         <tbody>
 
@@ -65,15 +65,17 @@
                         <div class="row mt-3">
                             <div class="col-md-6">
                                 <ul class="list-group mb-2">
-                                    <li class="list-group-item">Nomor Order : <i id="order_number">{{ $orderNumber }}</i>
+                                    <li class="list-group-item">Nomor Order : <i
+                                            id="order_number">{{ $orderNumber }}</i>
                                     </li>
                                     <li class="list-group-item">Total : Rp <i id="total_price"></i></li>
                                 </ul>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <textarea class="form-control form-control-sm" name="description" id="description" rows="3"
-                                        placeholder="Catatan..."></textarea>
+                                    <textarea class="form-control form-control-sm" name="description" id="description"
+                                              rows="3"
+                                              placeholder="Catatan..."></textarea>
                                 </div>
                             </div>
                         </div>
@@ -92,10 +94,11 @@
     </div>
 
     <!-- Modal -->
-    <div class="modal fade" id="modalProduct" tabindex="-1" role="dialog" aria-labelledby="detailsModalLabel"
-        style="display: none;" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
+    <div class="modal fade" id="modalProduct" tabindex="-1" role="dialog"
+         aria-labelledby="detailsModalLabel"
+         style="display: none;" aria-hidden="true">
+        <div class="modal-dialog modal-lg " role="document">
+            <div class="modal-content mx-lg-8">
                 <div class="modal-header">
                     <h5 class="modal-title" id="detailsModalLabel">Product Modal</h5>
                     <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
@@ -105,14 +108,14 @@
                 <div class="modal-body">
                     <div class="table-responsive">
                         <table class="table table-sm table-hover table-striped table-bordered" id="table-product"
-                            width="100%">
+                               width="100%">
                             <thead>
-                                <tr>
-                                    <th width="5%">No</th>
-                                    <th>Nama</th>
-                                    <th>Harga</th>
-                                    <th><i class="fa fa-cogs"></i></th>
-                                </tr>
+                            <tr>
+                                <th width="5%">No</th>
+                                <th>Nama</th>
+                                <th>Harga</th>
+                                <th><i class="fa fa-cogs"></i></th>
+                            </tr>
                             </thead>
                             <tbody>
 
@@ -131,8 +134,9 @@
     <!-- DataTables -->
     <link rel="stylesheet" href="{{ asset('library/http_cdn.datatables.net_1.13.4_css_dataTables.bootstrap5.css') }}">
     <link rel="stylesheet"
-        href="{{ asset('library/http_cdn.datatables.net_responsive_2.4.1_css_responsive.bootstrap5.css') }}">
-    <link rel="stylesheet" href="{{ asset('library/http_cdnjs.cloudflare.com_ajax_libs_toastr.js_latest_toastr.css') }}">
+          href="{{ asset('library/http_cdn.datatables.net_responsive_2.4.1_css_responsive.bootstrap5.css') }}">
+    <link rel="stylesheet"
+          href="{{ asset('library/http_cdnjs.cloudflare.com_ajax_libs_toastr.js_latest_toastr.css') }}">
 @endpush
 
 @push('custom-scripts')
@@ -151,7 +155,7 @@
 
 
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
 
             let loggedInUser = "{{ auth()->user()->id }}"
             let selectedUser = $('#customer').val();
@@ -167,9 +171,9 @@
                 responsive: true,
                 ajax: "{{ route('orders.index') }}" + "/product-datatables/" + userId,
                 columns: [{
-                        data: 'DT_RowIndex',
-                        orderable: false
-                    },
+                    data: 'DT_RowIndex',
+                    orderable: false
+                },
                     {
                         data: 'product.name'
                     },
@@ -183,17 +187,16 @@
                 ]
             });
 
-            $('#customer').on('change', function() {
+            $('#customer').on('change', function () {
                 selectedUser = $(this).val();
-                tableListProductOnModal.ajax.
-                url("{{ route('orders.index') }}" + "/product-datatables/" + selectedUser).load();
+                tableListProductOnModal.ajax.url("{{ route('orders.index') }}" + "/product-datatables/" + selectedUser).load();
 
                 $('.removeProduct').parents('tr').remove();
 
                 calculateAll()
             });
 
-            $('body').on('click', '#createOrder', function(e) {
+            $('body').on('click', '#createOrder', function (e) {
                 e.preventDefault();
                 $('#createOrder').attr('disabled', 'disabled');
                 $('#createOrder').html('Simpan Pembelian ...');
@@ -206,7 +209,7 @@
                     contentType: false,
                     processData: false,
                     type: "POST",
-                    success: function(data) {
+                    success: function (data) {
                         $('#createOrder').removeAttr('disabled');
                         $('#createOrder').html("Simpan");
                         Swal.fire({
@@ -216,7 +219,7 @@
                         });
                         window.location.href = "{{ route('orders.index') }}";
                     },
-                    error: function(response) {
+                    error: function (response) {
                         const data = response.responseJSON;
                         $('#createOrder').removeAttr('disabled');
                         $('#createOrder').html("Simpan");
@@ -225,7 +228,7 @@
                             title: 'Oppss',
                             text: data.message,
                         });
-                        $.each(data.errors, function(index, value) {
+                        $.each(data.errors, function (index, value) {
                             toastr.error(value);
                         });
                     }
@@ -237,15 +240,15 @@
             $('#table-order tbody').append(dataKosong);
 
             // Choose item on modals to select in table orders
-            $('body').on('click', '.chooseProduct', function(e) {
+            $('body').on('click', '.chooseProduct', function (e) {
                 e.preventDefault();
                 hideProduct();
                 var id = $(this).data('id');
-                $.get("{{ route('orders.index') }}" + "/" + id + '/product', function(data) {
+                $.get("{{ route('orders.index') }}" + "/" + id + '/product', function (data) {
 
                     // Get All Item list record on the table orders
                     let allProductId = [];
-                    $("input[name='product_id[]']").each(function() {
+                    $("input[name='product_id[]']").each(function () {
                         allProductId.push($(this).val());
                     });
                     // Condition if item has arrived on the list tables
@@ -279,7 +282,7 @@
             })
 
             // Remove Item on list table
-            $('body').on('click', '.removeProduct', function(e) {
+            $('body').on('click', '.removeProduct', function (e) {
                 e.preventDefault();
                 $(this).parents('tr').remove();
 
@@ -287,7 +290,7 @@
             });
 
             // When Column Qty Per Item Change
-            $('body').on('input', '.qty', function() {
+            $('body').on('input', '.qty', function () {
                 let id = $(this).data('id');
                 let qty = parseInt($(this).val());
 
@@ -309,16 +312,16 @@
             let priceArr = [];
             let qtyArr = [];
 
-            $('.subtotal').each(function() {
+            $('.subtotal').each(function () {
                 subtotalPrice += parseInt($(this).val().replace(/\./g, ''));
                 subtotalArr.push($(this).val().replace(/\./g, ''))
             });
 
-            $('.qty').each(function() {
+            $('.qty').each(function () {
                 qtyArr.push(parseInt($(this).val()))
             })
 
-            $('.price').each(function() {
+            $('.price').each(function () {
                 priceArr.push($(this).val().replace(/\./g, ''))
             })
 

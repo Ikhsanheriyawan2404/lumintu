@@ -15,28 +15,32 @@
                     </div>
                 </div>
                 <form id="itemForm" method="post">
-                @csrf
-                <div class="card-body p-3 pb-0">
+                    @csrf
+                    <div class="card-body p-3 pb-0">
 
-                    <div class="row">
-                        <div class="col-md-6">
-                            <ul class="list-group mb-2">
-                                <li class="list-group-item">Nomor Order : <i id="order_no"></i></li>
-                                <li class="list-group-item">Total : Rp <i id="total_price">{{ number_format($order->total_price, 0, ',', '.') }}</i></li>
-                            </ul>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <textarea class="form-control form-control-sm" name="description" id="description" rows="3" placeholder="Catatan...">{{ $order->description }}</textarea>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <ul class="list-group mb-2">
+                                    <li class="list-group-item">Nomor Order : <i id="order_no"></i></li>
+                                    <li class="list-group-item">Total : Rp <i
+                                            id="total_price">{{ number_format($order->total_price, 0, ',', '.') }}</i>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <textarea class="form-control form-control-sm" name="description" id="description"
+                                              rows="3" placeholder="Catatan...">{{ $order->description }}</textarea>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="table-responsive">
-                                <table class="table my-3 table-sm table-hover table-striped table-bordered" id="table-order">
-                                    <thead>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="table-responsive">
+                                    <table class="table my-3 table-sm table-hover table-striped table-bordered"
+                                           id="table-order">
+                                        <thead>
                                         <tr>
                                             <th class="text-center">Nama</th>
                                             <th class="text-center">Harga</th>
@@ -44,69 +48,80 @@
                                             <th class="text-center">Jumlah</th>
                                             <th class="text-center"><i class="fa fa-cog"></i></th>
                                         </tr>
-                                    </thead>
-                                    <tbody>
+                                        </thead>
+                                        <tbody>
 
-                                    </tbody>
-                                </table>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                </div>
-                <div class="card-footer">
-                    <div class="d-flex justify-content-end">
-                        <button type="reset" class="btn btn-sm btn-secondary float-right">Cancel</button>
-                        <button
-                            type="submit"
-                            class="btn btn-sm btn-primary float-right"
-                            id="createOrder">Simpan
-                        </button>
                     </div>
-                </div>
+                    <div class="card-footer">
+                        <div class="d-flex justify-content-end">
+                            @if(auth()->user()->getRoleNames()[0] == 'valet')
+                                <a href="{{ url('orders') }}" class="btn btn-sm btn-secondary float-right">Cancel</a>
+                            @else
+                                <button type="reset" class="btn btn-sm btn-secondary float-right">
+                                    Cancel
+                                </button>
+
+                            @endif
+                            <button
+                                type="submit"
+                                class="btn btn-sm btn-primary float-right"
+                                id="createOrder">Simpan
+                            </button>
+                        </div>
+                    </div>
                 </form>
             </div>
         </div>
     </div>
 
-<!-- Modal -->
-<div class="modal fade" id="modalProduct" tabindex="-1" role="dialog" aria-labelledby="detailsModalLabel" style="display: none;" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="detailsModalLabel">Product Modal</h5>
-                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="table-responsive">
-                    <table class="table table-sm table-hover table-striped table-bordered" id="table-product" width="100%">
-                        <thead>
+    <!-- Modal -->
+    <div class="modal fade" id="modalProduct" tabindex="-1" role="dialog" aria-labelledby="detailsModalLabel"
+         style="display: none;" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="detailsModalLabel">Product Modal</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="table-responsive">
+                        <table class="table table-sm table-hover table-striped table-bordered" id="table-product"
+                               width="100%">
+                            <thead>
                             <tr>
                                 <th width="5%">No</th>
                                 <th>Nama</th>
                                 <th>Harga</th>
                                 <th><i class="fa fa-cogs"></i></th>
                             </tr>
-                        </thead>
-                        <tbody>
+                            </thead>
+                            <tbody>
 
-                        </tbody>
-                    </table>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
 @endsection
 
 @push('custom-styles')
     <!-- DataTables -->
     <link rel="stylesheet" href="{{ asset('library/http_cdn.datatables.net_1.13.4_css_dataTables.bootstrap5.css')}}">
-    <link rel="stylesheet" href="{{asset('library/http_cdn.datatables.net_responsive_2.4.1_css_responsive.bootstrap5.css')}}">
-    <link rel="stylesheet" href="{{ asset('library/http_cdnjs.cloudflare.com_ajax_libs_toastr.js_latest_toastr.css') }}">
+    <link rel="stylesheet"
+          href="{{asset('library/http_cdn.datatables.net_responsive_2.4.1_css_responsive.bootstrap5.css')}}">
+    <link rel="stylesheet"
+          href="{{ asset('library/http_cdnjs.cloudflare.com_ajax_libs_toastr.js_latest_toastr.css') }}">
 @endpush
 
 @push('custom-scripts')
@@ -126,7 +141,7 @@
         $(document).ready(function () {
 
             let orderId = "{{ $order->id }}"
-            $.get("{{ route('orders.index') }}" + "/" + orderId + '/product-edit', function(data) {
+            $.get("{{ route('orders.index') }}" + "/" + orderId + '/product-edit', function (data) {
 
                 // Put every column input in tables
                 $('#table-order tbody tr.empty_data').remove();
@@ -142,7 +157,7 @@
                 });
             });
 
-            $('body').on('click', '#createOrder', function(e) {
+            $('body').on('click', '#createOrder', function (e) {
                 e.preventDefault();
                 $('#createOrder').attr('disabled', 'disabled');
                 $('#createOrder').html('Simpan Pembelian ...');
@@ -155,7 +170,7 @@
                     contentType: false,
                     processData: false,
                     type: "POST",
-                    success: function(data) {
+                    success: function (data) {
                         $('#createOrder').removeAttr('disabled');
                         $('#createOrder').html("Simpan");
                         Swal.fire({
@@ -165,7 +180,7 @@
                         });
                         window.location.href = "{{ route('orders.index') }}";
                     },
-                    error: function(response) {
+                    error: function (response) {
                         const data = response.responseJSON;
                         $('#createOrder').removeAttr('disabled');
                         $('#createOrder').html("Simpan");
@@ -174,7 +189,7 @@
                             title: 'Oppss',
                             text: data.message,
                         });
-                        $.each(data.errors, function(index, value) {
+                        $.each(data.errors, function (index, value) {
                             toastr.error(value);
                         });
                     }
@@ -186,7 +201,7 @@
             $('#table-order tbody').append(tr);
 
             // Remove Item on list table
-            $('body').on('click', '.removeProduct', function(e) {
+            $('body').on('click', '.removeProduct', function (e) {
                 e.preventDefault();
                 $(this).parents('tr').remove();
 
@@ -194,7 +209,7 @@
             });
 
             // When Column Qty Per Item Change
-            $('body').on('input', '.qty', function() {
+            $('body').on('input', '.qty', function () {
                 let id = $(this).data('id');
                 let qty = parseInt($(this).val());
 
@@ -216,16 +231,16 @@
             let priceArr = [];
             let qtyArr = [];
 
-            $('.subtotal').each(function() {
+            $('.subtotal').each(function () {
                 subtotalPrice += parseInt($(this).val().replace(/\./g, ''));
                 subtotalArr.push($(this).val().replace(/\./g, ''))
             });
 
-            $('.qty').each(function() {
+            $('.qty').each(function () {
                 qtyArr.push(parseInt($(this).val()))
             })
 
-            $('.price').each(function() {
+            $('.price').each(function () {
                 priceArr.push($(this).val().replace(/\./g, ''))
             })
 
