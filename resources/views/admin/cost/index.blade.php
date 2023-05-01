@@ -122,7 +122,9 @@
             });
 
             $('.select2').select2({
-                width: '100%',
+                // aktifkan search input
+                tags: true
+
             });
 
             $('#btnExportExcel').on('click', function(e) {
@@ -281,7 +283,7 @@
 
                 let arrayData = {!! json_encode($master_cost) !!};
 
-                let listOptions = '<option selected disable>Pilih Pengeluaran</option>';
+                let listOptions = '<option selected disabled>Pilih Pengeluaran</option>';
                 $.each(arrayData, function(key, value) {
                     listOptions += `<option value="${value.name}">${value.name}</option>`;
                 });

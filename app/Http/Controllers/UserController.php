@@ -48,7 +48,7 @@ class UserController extends Controller
                     $user->email = request('email');
                     $user->username = request('username');
                     $user->password = request('password') ? password_hash(request('password'), PASSWORD_DEFAULT) : $user->password;
-                    (request('role') )? $user->syncRoles(request('role')) : 'berari bukan admin';
+                    (request('role') ) ? $user->syncRoles(request('role')) : 'berari bukan admin';
                     $user->save();
 
                     $userDetail = UserDetail::where('user_id', $user->id)->first();
