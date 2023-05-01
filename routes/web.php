@@ -1,18 +1,18 @@
 <?php
 
-use App\Mail\OrderNotification;
-use App\Http\Controllers\TestController;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\HotelController;
-use App\Http\Controllers\OrderController;
-use App\Http\Controllers\PegawaiController;
-use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CostController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\HotelController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\PegawaiController;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\TestController;
+use App\Http\Controllers\UserController;
+use App\Mail\OrderNotification;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('landing.home');
@@ -131,6 +131,10 @@ Route::middleware(['auth', 'active'])->group(function () {
 
     Route::get('orders/{orderId}/export-pdf', [OrderController::class, 'exportDetailPdf'])
         ->name('orders.export-detail-pdf')
+        ->middleware(['role:superadmin|admin|hotel']);
+
+    Route::get('orders/{orderId}/download-pdf', [OrderController::class, 'donwloadInvoice'])
+        ->name('orders.download-detail-pdf')
         ->middleware(['role:superadmin|admin|hotel']);
 
     //    Route::resource('valet', ValetController::class);

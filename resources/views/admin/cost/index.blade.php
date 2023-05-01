@@ -30,8 +30,10 @@
                             <form id="formExport" method="POST">
                                 @csrf
                                 <button type="submit" class="btn btn-sm btn-success" id="btnExportExcel">Export
-                                    Excel</button>
-                                <button type="button" class="btn btn-sm btn-danger" id="btnExportPDF">Export PDF</button>
+                                    Excel
+                                </button>
+                                <button type="button" class="btn btn-sm btn-danger" id="btnExportPDF">Export PDF
+                                </button>
                             </form>
                         </div>
                     </div>
@@ -50,12 +52,14 @@
 
 @push('custom-styles')
     <!-- Select2 -->
-    <link rel="stylesheet" href="{{ asset('library/http_cdn.jsdelivr.net_npm_select2@4.1.0-rc.0_dist_css_select2.css') }}">
+    <link rel="stylesheet"
+          href="{{ asset('library/http_cdn.jsdelivr.net_npm_select2@4.1.0-rc.0_dist_css_select2.css') }}">
     <!-- DataTables -->
     <link rel="stylesheet" href="{{ asset('library/http_cdn.datatables.net_1.13.4_css_dataTables.bootstrap5.css') }}">
     <link rel="stylesheet"
-        href="{{ asset('library/http_cdn.datatables.net_responsive_2.4.1_css_responsive.bootstrap5.css') }}">
-    <link rel="stylesheet" href="{{ asset('library/http_cdnjs.cloudflare.com_ajax_libs_toastr.js_latest_toastr.css') }}">
+          href="{{ asset('library/http_cdn.datatables.net_responsive_2.4.1_css_responsive.bootstrap5.css') }}">
+    <link rel="stylesheet"
+          href="{{ asset('library/http_cdnjs.cloudflare.com_ajax_libs_toastr.js_latest_toastr.css') }}">
 @endpush
 
 @push('custom-scripts')
@@ -81,7 +85,7 @@
             }
         });
 
-        const format = function(num) {
+        const format = function (num) {
             let str = num.toString().replace("", ""),
                 parts = false,
                 output = [],
@@ -107,9 +111,9 @@
             return ("" + formatted + ((parts) ? "." + parts[1].substr(0, 2) : ""));
         };
 
-        $(document).ready(function() {
+        $(document).ready(function () {
 
-            $('#filterDate').on('change', function() {
+            $('#filterDate').on('change', function () {
 
                 let table = $('#cost-table').DataTable();
                 table.ajax.url(`
@@ -117,7 +121,7 @@
                 `).draw();
             });
 
-            $('body').on('keyup', '#harga', function(e) {
+            $('body').on('keyup', '#harga', function (e) {
                 $(this).val(format($(this).val()));
             });
 
@@ -127,7 +131,7 @@
 
             });
 
-            $('#btnExportExcel').on('click', function(e) {
+            $('#btnExportExcel').on('click', function (e) {
                 e.preventDefault();
 
                 $('#btnExportExcel').attr('disabled', 'disabled');
@@ -144,13 +148,13 @@
                         responseType: 'blob'
                     },
                     type: "POST",
-                    success: function(data) {
+                    success: function (data) {
                         var blob = new Blob([data], {
                             type: 'application/vnd.ms-excel'
                         });
                         var link = document.createElement('a');
                         link.href = window.URL.createObjectURL(blob);
-                        link.download = Date.now() + 'orders.xlsx';
+                        link.download = Date.now() + 'pengeluaran.xlsx';
 
                         // link.onload = function() {
                         // };
@@ -160,7 +164,7 @@
                         document.body.appendChild(link);
                         link.click();
                     },
-                    error: function(data) {
+                    error: function (data) {
                         $('#btnExportExcel').removeAttr('disabled');
                         $('#btnExportExcel').html('Export Excel');
                         alert("Error")
@@ -168,7 +172,7 @@
                 });
             });
 
-            $('#btnExportPDF').on('click', function() {
+            $('#btnExportPDF').on('click', function () {
                 var csrf_token = $('meta[name="csrf-token"]').attr('content');
                 $('#btnExportPDF').attr('disabled', 'disabled');
                 $('#btnExportPDF').html('Loading ...');
@@ -181,7 +185,7 @@
                         responseType: 'blob'
                     },
                     type: 'GET',
-                    success: function(response) {
+                    success: function (response) {
                         var blob = new Blob([response], {
                             type: 'application/pdf'
                         });
@@ -194,7 +198,7 @@
                         win.blur();
                         window.focus();
                     },
-                    error: function(data) {
+                    error: function (data) {
                         $('#btnExportPDF').removeAttr('disabled');
                         $('#btnExportPDF').html('Export PDF');
                         alert("Error")
@@ -203,8 +207,8 @@
             });
 
 
-            $('#createNewItem').click(function() {
-                setTimeout(function() {
+            $('#createNewItem').click(function () {
+                setTimeout(function () {
                     $('#name').focus();
                 }, 500);
                 $('#saveBtn').removeAttr('disabled');
@@ -215,11 +219,11 @@
                 $('#modal-create').modal('show');
             });
 
-            $('body').on('click', '#editItem', function() {
+            $('body').on('click', '#editItem', function () {
                 var item_id = $(this).data('id');
-                $.get("{{ route('cost.index') }}" + '/' + item_id + '/edit', function(data) {
+                $.get("{{ route('cost.index') }}" + '/' + item_id + '/edit', function (data) {
                     $('#modal-md').modal('show');
-                    setTimeout(function() {
+                    setTimeout(function () {
                         $('#name').focus();
                     }, 500);
                     $('.modal-title').html("Edit Jenis");
@@ -234,7 +238,7 @@
                 })
             });
 
-            $('body').on('click', '.deleteBtn', function(e) {
+            $('body').on('click', '.deleteBtn', function (e) {
                 e.preventDefault();
                 var confirmation = confirm("Apakah yakin untuk menghapus?");
                 if (confirmation) {
@@ -248,12 +252,12 @@
                         contentType: false,
                         processData: false,
                         type: "POST",
-                        success: function(data) {
+                        success: function (data) {
                             $('#deleteDoc').trigger("reset");
                             $('#cost-table').DataTable().draw();
                             toastr.success(data.message);
                         },
-                        error: function(data) {
+                        error: function (data) {
                             $('.deleteBtn').removeAttr('disabled');
                             $('.deleteBtn').html('Hapus');
                             // toastr.error(data.responseJSON.message)
@@ -263,22 +267,22 @@
                 }
             });
 
-            $('#saveBtn').click(function(e) {
+            $('#saveBtn').click(function (e) {
                 e.preventDefault();
                 save('#saveBtn', '#createForm', '#modal-create')
             });
 
-            $('#updateBtn').click(function(e) {
+            $('#updateBtn').click(function (e) {
                 e.preventDefault();
                 save('#updateBtn', '#updateForm', '#modal-md')
             });
 
-            $('body').on('click', '.removeRow', function(e) {
+            $('body').on('click', '.removeRow', function (e) {
                 e.preventDefault();
                 $(this).parents('tr').remove();
             });
 
-            $('body').on('click', '#createRow', function(e) {
+            $('body').on('click', '#createRow', function (e) {
                 e.preventDefault();
 
                 let arrayData = {!! json_encode($master_cost) !!};
@@ -328,7 +332,7 @@
                 contentType: false,
                 processData: false,
                 type: "POST",
-                success: function(data) {
+                success: function (data) {
                     $('#itemForm').trigger("reset");
                     $(modal).modal('hide');
                     $('#cost-table').DataTable().draw();
@@ -338,7 +342,7 @@
                         text: data.message,
                     });
                 },
-                error: function(data) {
+                error: function (data) {
                     $(btn).removeAttr('disabled');
                     $(btn).html("Simpan");
                     Swal.fire({
@@ -346,7 +350,7 @@
                         title: 'Oppss',
                         text: data.responseJSON.message,
                     });
-                    $.each(data.responseJSON.errors, function(index, value) {
+                    $.each(data.responseJSON.errors, function (index, value) {
                         toastr.error(value);
                     });
                 }

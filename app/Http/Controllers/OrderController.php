@@ -2,31 +2,28 @@
 
 namespace App\Http\Controllers;
 
+use App\DataTables\OrderDataTable;
+use App\Enums\OrderStatusEnum;
+use App\Exports\OrdersMultipleSheet;
+use App\Http\Requests\OrderStoreRequest;
 use App\Mail\HotelNotification;
+use App\Mail\OrderNotification;
 use App\Mail\ValetNotification;
-use Illuminate\Http\Response;
-use PDF;
-use App\Models\{
-    User,
-    Order
-};
-use App\Models\Pickup;
+use App\Models\{Order, User};
+use App\Models\BridgeOrderProduct;
 use App\Models\Delivery;
 use App\Models\OrderStatus;
-use InvalidArgumentException;
-use App\Enums\OrderStatusEnum;
-use App\Mail\OrderNotification;
+use App\Models\Pickup;
 use App\Models\ProductCustomer;
-use App\DataTables\OrderDataTable;
-use App\Exports\OrdersMultipleSheet;
-use App\Models\BridgeOrderProduct;
+use App\Notifications\OrderStatusNotif;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
-use Maatwebsite\Excel\Facades\Excel;
-use App\Notifications\OrderStatusNotif;
-use App\Http\Requests\OrderStoreRequest;
-use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Notification;
+use InvalidArgumentException;
+use Maatwebsite\Excel\Facades\Excel;
+use Yajra\DataTables\Facades\DataTables;
 
 class OrderController extends Controller
 {
@@ -43,12 +40,12 @@ class OrderController extends Controller
                 return DataTables::of($orders)
                     ->addIndexColumn()
                     ->editColumn('created_at', function ($row) {
-                        return '<a href="javascript:void()" data-id="' .$row->id. '" id="showItem">'
-                        .$row->created_at.
-                        '</a>';
+                        return '<a href="javascript:void()" data-id="' . $row->id . '" id="showItem">'
+                            . $row->created_at .
+                            '</a>';
                     })
                     ->editColumn('status', function ($row) {
-                        return '<span class="badge badge-sm bg-gradient-primary">'.$row->status->value.'</span>';
+                        return '<span class="badge badge-sm bg-gradient-primary">' . $row->status->value . '</span>';
                     })
                     ->editColumn('payment_status', function ($row) {
                         return view('hotel.orders.datatables.payment_status', compact('row'));
@@ -119,7 +116,7 @@ class OrderController extends Controller
             'customer',
             'pickups.valet',
             'deliveries.valet'
-            )
+        )
             ->findOrFail($orderId);
 
         $currentOrderStatus = $order->status;
@@ -164,7 +161,7 @@ class OrderController extends Controller
     {
 
         $order = Order::with('order_details.product_customer.product', 'order_status', 'customer')
-        ->findOrFail($orderId);
+            ->findOrFail($orderId);
 
         if ($order->status !== OrderStatusEnum::PICKUP) {
             abort(403, 'Order sedang diproses');
@@ -188,7 +185,7 @@ class OrderController extends Controller
     public function create()
     {
         $lastOrder = Order::orderBy('id', 'desc')
-                ->first();
+            ->first();
 
         $orderNumber = $lastOrder ? ++$lastOrder->order_number : 10001;
 
@@ -231,7 +228,7 @@ class OrderController extends Controller
             DB::transaction(function () {
 
                 $lastOrder = Order::orderBy('id', 'desc')
-                ->first();
+                    ->first();
 
                 $orderNumber = $lastOrder ? ++$lastOrder->order_number : 10001;
 
@@ -300,9 +297,9 @@ class OrderController extends Controller
                 $order = Order::with('order_status')->find($order->id);
                 $listUsersWhoGetNotifications = [];
                 foreach (User::whereHas('roles', function ($q) {
-                        $q->where('name', 'superadmin');
-                        $q->orWhere('name', 'admin');
-                    })->get() as $user) {
+                    $q->where('name', 'superadmin');
+                    $q->orWhere('name', 'admin');
+                })->get() as $user) {
                     $listUsersWhoGetNotifications[] = $user;
                 }
 
@@ -414,9 +411,9 @@ class OrderController extends Controller
 
                 $listUsersWhoGetNotifications = [];
                 foreach (User::whereHas('roles', function ($q) {
-                        $q->where('name', 'superadmin');
-                        $q->orWhere('name', 'admin');
-                    })->get() as $user) {
+                    $q->where('name', 'superadmin');
+                    $q->orWhere('name', 'admin');
+                })->get() as $user) {
                     $listUsersWhoGetNotifications[] = $user;
                 }
 
@@ -460,7 +457,7 @@ class OrderController extends Controller
                 Notification::send($users, new OrderStatusNotif($order));
                 Mail::to($order->customer->email)->queue(new HotelNotification($order));
             });
-        } catch (\InvalidArgumentException $e) {
+        } catch (InvalidArgumentException $e) {
             return response()->json([
                 'message' => $e->getMessage(),
             ], $e->getCode());
@@ -527,9 +524,9 @@ class OrderController extends Controller
                 $order = Order::with('order_status')->find($order->id);
                 $listUsersWhoGetNotifications = [];
                 foreach (User::whereHas('roles', function ($q) {
-                        $q->where('name', 'superadmin');
-                        $q->orWhere('name', 'admin');
-                    })->get() as $user) {
+                    $q->where('name', 'superadmin');
+                    $q->orWhere('name', 'admin');
+                })->get() as $user) {
                     $listUsersWhoGetNotifications[] = $user;
                 }
 
@@ -584,15 +581,16 @@ class OrderController extends Controller
             ->where('orders.payment_status', '=', 'paid')
             ->select(['users.name as name', 'orders.total_price as total'])
             ->get();
-        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('admin.report.order.harian', ['order' => $data]);
+        $pdf = Pdf::loadView('admin.report.order.harian', ['order' => $data]);
         $pdfContent = $pdf->output();
         $headers = [
             'Content-Type' => 'application/pdf',
             'Content-Disposition' => 'inline; filename="invoice.pdf"',
-            'Cache-Control'=> 'public, max-age=60'
+            'Cache-Control' => 'public, max-age=60'
         ];
         return new Response($pdfContent, 200, $headers);
     }
+
     public function exportDetailPdf($orderId)
     {
         $order = Order::with('order_status', 'order_details.product_customer.product', 'customer', 'customer.user_detail', 'pickups.valet', 'deliveries.valet')
@@ -638,9 +636,9 @@ class OrderController extends Controller
 
             $row[] = '<input type="text" name="price[]" data-id="' . $product->product_customer_id . '" class="form-control price" value="' . number_format($product->product_customer->price, 0, ',', '.') . '" disabled>';
 
-            $row[] = '<input type="number" name="qty[]" data-id="' . $product->product_customer_id . '" class="form-control qty" value="'.$product->qty.'">';
+            $row[] = '<input type="number" name="qty[]" data-id="' . $product->product_customer_id . '" class="form-control qty" value="' . $product->qty . '">';
 
-            $row[] = '<input type="text" name="subtotal[]" class="form-control subtotal" data-id="' . $product->product_customer_id . '" value="'.number_format($product->qty * $product->product_customer->price, 0, ',', '.').'" disabled>';
+            $row[] = '<input type="text" name="subtotal[]" class="form-control subtotal" data-id="' . $product->product_customer_id . '" value="' . number_format($product->qty * $product->product_customer->price, 0, ',', '.') . '" disabled>';
 
             $row[] = '<a class="btn btn-sm btn-outline-danger btn-icon removeProduct"><em class="fa fa-trash"></em></a>';
             $data[] = $row;
@@ -671,6 +669,16 @@ class OrderController extends Controller
         return response()->json([
             'message' => 'Pesanan Berhasil di cancel',
         ]);
+    }
+
+    public function donwloadInvoice($orderId)
+    {
+        $order = Order::with('order_status', 'order_details.product_customer.product', 'customer', 'customer.user_detail', 'pickups.valet', 'deliveries.valet')
+            ->findOrFail($orderId);
+
+        $pdf = Pdf::loadView('admin.report.invoice.invoice', ['order' => $order]);
+        $name = "{$order->customer->name}-{$order->created_at->format('d-M-Y')}-ORD#{$order->order_number}.pdf";
+        return $pdf->download($name);
     }
 
 }

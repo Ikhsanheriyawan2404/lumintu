@@ -18,7 +18,10 @@
                         <div>
                             <a href="{{ route('orders.index', []) }}" class="btn bg-gradient-secondary ms-auto mb-0">Kembali</a>
                             @role('superadmin|hotel|admin')
-                                <a class="btn bg-gradient-danger ms-auto mb-0" href="{{ route('orders.export-detail-pdf', $order->id) }}">Cetak</a>
+                            <a class="btn bg-gradient-danger ms-auto mb-0"
+                               href="{{ route('orders.export-detail-pdf', $order->id) }}">Cetak</a>
+                            <a class="btn bg-gradient-dark ms-auto mb-0"
+                               href="{{ route('orders.download-detail-pdf', $order->id) }}">Download</a>
                             @endrole
                         </div>
                     </div>
@@ -42,7 +45,8 @@
                         </div>
                         <div class="col-lg-6 col-md-6 col-12 my-auto text-end">
                             <p class="text-sm mt-2 mb-0">Order Pickup oleh {{ $order->pickups?->valet?->name }}</p>
-                            <p class="text-sm mt-2 mb-0">Order Delivery oleh {{ $order->deliveries?->valet?->name }} </p>
+                            <p class="text-sm mt-2 mb-0">Order Delivery
+                                oleh {{ $order->deliveries?->valet?->name }} </p>
                         </div>
                     </div>
 
@@ -68,14 +72,17 @@
                                                 {{ $status?->created_at ?? 'Belum tahap ini' }}</p>
 
                                             <p class="text-secondary font-weight-bold text-xs mt-1 mb-0">
-                                                Dibuat oleh :   {{ $status?->user?->name ?? '' }}</p>
+                                                Dibuat oleh : {{ $status?->user?->name ?? '' }}</p>
 
-
-                                            @if (
-                                                $status->status == $order->status &&
+                                            @if($order->status->value != 'pickup')
+                                                @if (
+                                                    $status->status == $order->status &&
                                                     $order->status->value != 'done' &&
-                                                    auth()->user()->hasRole('superadmin|admin'))
-                                                <button class="btn btn-sm btn-primary" id="btnProcessStatus">Proses</button>
+                                                    auth()->user()->hasRole('superadmin|admin')
+                                                    )
+                                                    <button class="btn btn-sm btn-primary" id="btnProcessStatus">Proses
+                                                    </button>
+                                                @endif
                                             @endif
                                         </div>
                                     </div>
@@ -84,31 +91,32 @@
                         </div>
                         <div class="col-lg-9 col-md-6 col-12">
                             <h6 class="mb-3">Barang detail</h6>
-                            <div class="card card-body border card-plain border-radius-lg d-flex flex-row table-responsive">
+                            <div
+                                class="card card-body border card-plain border-radius-lg d-flex flex-row table-responsive">
                                 <table class="table">
                                     <thead>
-                                        <tr>
-                                            <th class="text-sm font-weight-normal" width="5%">No</th>
-                                            <th class="text-sm font-weight-normal">Nama</th>
-                                            <th class="text-sm font-weight-normal">Harga</th>
-                                            <th class="text-sm font-weight-normal">Kuantiti</th>
-                                            <th class="text-sm font-weight-normal">Subtotal</th>
-                                        </tr>
+                                    <tr>
+                                        <th class="text-sm font-weight-normal" width="5%">No</th>
+                                        <th class="text-sm font-weight-normal">Nama</th>
+                                        <th class="text-sm font-weight-normal">Harga</th>
+                                        <th class="text-sm font-weight-normal">Kuantiti</th>
+                                        <th class="text-sm font-weight-normal">Subtotal</th>
+                                    </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($order->order_details as $row)
-                                            <tr>
-                                                <td class="text-sm font-weight-normal text-center">{{ $loop->iteration }}
-                                                </td>
-                                                <td class="text-sm font-weight-normal">
-                                                    {{ $row->product_customer->product->name }}</td>
-                                                <td class="text-sm font-weight-normal">
-                                                    {{ number_format($row->product_customer->price) }}</td>
-                                                <td class="text-sm font-weight-normal">{{ number_format($row->qty) }}</td>
-                                                <td class="text-sm font-weight-normal">
-                                                    {{ number_format($row->qty * $row->product_customer->price) }}</td>
-                                            </tr>
-                                        @endforeach
+                                    @foreach ($order->order_details as $row)
+                                        <tr>
+                                            <td class="text-sm font-weight-normal text-center">{{ $loop->iteration }}
+                                            </td>
+                                            <td class="text-sm font-weight-normal">
+                                                {{ $row->product_customer->product->name }}</td>
+                                            <td class="text-sm font-weight-normal">
+                                                {{ number_format($row->product_customer->price) }}</td>
+                                            <td class="text-sm font-weight-normal">{{ number_format($row->qty) }}</td>
+                                            <td class="text-sm font-weight-normal">
+                                                {{ number_format($row->qty * $row->product_customer->price) }}</td>
+                                        </tr>
+                                    @endforeach
                                     </tbody>
                                 </table>
                             </div>
@@ -116,20 +124,23 @@
                             <hr>
 
                             @if(auth()->user()->hasRole('hotel'))
-                                <button type="submit" class="btn btn-sm btn-primary" id="uploadVerifPayment">Upload Bukti Pembayaran</button>
+                                <button type="submit" class="btn btn-sm btn-primary" id="uploadVerifPayment">Upload
+                                    Bukti Pembayaran
+                                </button>
                                 @include('admin.orders.partials.table-payments')
                             @elseif (auth()->user()->hasRole('superadmin|admin'))
                                 @if ($order->payment_status == 'unpaid')
                                     <form action="{{ route('orders.paid', $order->id) }}" method="post">
                                         @csrf
-                                        <button type="submit" class="btn btn-sm btn-primary" >Approve Pembayaran</button>
+                                        <button type="submit" class="btn btn-sm btn-primary">Approve Pembayaran</button>
                                     </form>
                                 @else
                                     @if(auth()->user()->hasRole('superadmin'))
-                                    <form action="{{ route('orders.unpaid', $order->id) }}" method="post">
-                                        @csrf
-                                        <button type="submit" class="btn btn-sm btn-danger" >Cancel Pembayaran</button>
-                                    </form>
+                                        <form action="{{ route('orders.unpaid', $order->id) }}" method="post">
+                                            @csrf
+                                            <button type="submit" class="btn btn-sm btn-danger">Cancel Pembayaran
+                                            </button>
+                                        </form>
                                     @endif
                                 @endif
                                 @include('admin.orders.partials.table-payments')
@@ -168,7 +179,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             let tableDocs = $('#datatables-payment').DataTable({
                 processing: true,
                 serverSide: true,
@@ -189,7 +200,7 @@
             let status = $('#currentStatus').val();
             let nextStatus = $('#nextStatus').val();
 
-            $('#btnProcessStatus').click(function() {
+            $('#btnProcessStatus').click(function () {
                 if (status == 'approve' || status == 'done' || status == 'pickup' || status == 'delivery') {
                     $('#chooseValet').hide();
                     $('#labelValet').hide();
@@ -201,7 +212,7 @@
                 $('.modal-title').html(`Apakah yakin ingin meneruskan ke proses ${nextStatus}?`);
             });
 
-            $('#saveBtn').click(function(e) {
+            $('#saveBtn').click(function (e) {
                 e.preventDefault();
                 $('#saveBtn').attr('disabled', 'disabled');
                 $('#saveBtn').html('Simpan ...');
@@ -212,7 +223,7 @@
                     contentType: false,
                     processData: false,
                     type: "POST",
-                    success: function(data) {
+                    success: function (data) {
                         $('#itemForm').trigger("reset");
                         $('#modalProcessStatus').modal('hide');
                         Swal.fire({
@@ -222,7 +233,7 @@
                         });
                         window.location.reload();
                     },
-                    error: function(data) {
+                    error: function (data) {
                         $('#saveBtn').removeAttr('disabled');
                         $('#saveBtn').html("Simpan");
                         Swal.fire({
@@ -230,15 +241,15 @@
                             title: 'Oppss',
                             text: data.responseJSON.message,
                         });
-                        $.each(data.responseJSON.errors, function(index, value) {
+                        $.each(data.responseJSON.errors, function (index, value) {
                             toastr.error(value);
                         });
                     }
                 });
             });
 
-            $('#uploadVerifPayment').on('click', function() {
-                setTimeout(function() {
+            $('#uploadVerifPayment').on('click', function () {
+                setTimeout(function () {
                     $('#name').focus();
                 }, 500);
                 $('#modal-upload-docs').modal('show');
@@ -247,7 +258,7 @@
                 $('#uploadForm').trigger("reset");
             });
 
-            $('#btnUploadDoc').click(function(e) {
+            $('#btnUploadDoc').click(function (e) {
                 e.preventDefault();
                 var formData = new FormData($('#uploadForm')[0]);
                 $('#btnUploadDoc').attr('disabled', 'disabled');
@@ -258,13 +269,13 @@
                     contentType: false,
                     processData: false,
                     type: "POST",
-                    success: function(data) {
+                    success: function (data) {
                         $('#uploadForm').trigger("reset");
                         $('#modal-upload-docs').modal('hide');
                         tableDocs.draw();
                         toastr.success(data.message);
                     },
-                    error: function(data) {
+                    error: function (data) {
                         $('#btnUploadDoc').removeAttr('disabled');
                         $('#btnUploadDoc').html("Upload");
                         Swal.fire({
