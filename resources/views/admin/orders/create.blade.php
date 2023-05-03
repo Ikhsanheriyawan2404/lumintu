@@ -22,7 +22,7 @@
                             <div class="col-md-6">
                                 @hasrole('superadmin|admin')
                                 <div class="form-group">
-                                    <select class="form-control select2" name="customer" id="customer">
+                                    <select class="form-control select2" name="customer" id="customer" required>
                                         <option selected disabled>Pilih Pelanggan</option>
                                         @foreach ($customers as $customer)
                                             <option value="{{ $customer->id }}">{{ $customer->name }}</option>
