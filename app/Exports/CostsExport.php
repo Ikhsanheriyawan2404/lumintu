@@ -33,6 +33,7 @@ class CostsExport implements
         foreach ($categoryCost as $val) {
             $this->header[] = $val->name;
         }
+        $this->header[] = 'Total';
     }
 
     public function headings(): array
@@ -42,14 +43,19 @@ class CostsExport implements
 
     public function collection()
     {
+        // Pilih tahun ini
         $year = now()->year;
+        // Pilih bulan berdasarkan sheet
         $month = $this->month['key'];
+        // Pilih jumlah hari pada bulan terpilih
         $numDays = Carbon::create($year, $month)->daysInMonth;
 
+        // Buat array dari 1 sampai jumlah hari
         $days = array_map(function ($day) {
             return (int)$day;
         }, range(1, $numDays));
 
+        // Ambil data cost berdasarkan bulan dan tahun
         $costs = Cost::selectRaw('DAY(created_at) as day, name, SUM(total) as total')
             ->whereYear('date', $year)
             ->whereMonth('date', $month)
@@ -58,29 +64,48 @@ class CostsExport implements
             ->get()
             ->toArray();
 
+        // mapping data cost berdasarkan hari
         $result = collect($days)
             ->map(function ($day) use ($costs) {
                 $filtered = array_filter($costs, function ($cost) use ($day) {
                     return $cost['day'] == $day;
                 });
                 return ['day' => $day] + array_reduce($filtered, function ($acc, $cost) {
-                        return $acc + [$cost['name'] => $cost['total']];
-                    }, []);
+                    return $acc + [$cost['name'] => $cost['total']];
+                }, []);
             })
             ->toArray();
 
+        // Buat array dari data cost
         $rows = [];
+        $totals = array_fill(0, count($this->header), 0);
         foreach ($result as $values) {
             $row = [$values['day']];
-            foreach ($this->header as $name) {
+            $dailyTotal = 0; // inisialisasi variabel untuk menyimpan total nominal per hari
+            foreach ($this->header as $index => $name) {
                 if ($name == 'Tanggal') {
                     continue;
                 }
-                $row[] = isset($values[$name]) ? $values[$name] : 0;
+
+                if ($name == 'Total') {
+                    continue;
+                }
+                
+                $value = isset($values[$name]) ? $values[$name] : 0;
+                $totals[$index] += $value;
+                $row[] = $value;
+                $dailyTotal += $value; // tambahkan nilai cost ke variabel dailyTotal
             }
+            $row[] = $dailyTotal; // tambahkan nilai total nominal per hari ke dalam array $row
+            $totals[count($this->header)-1] += $dailyTotal; // tambahkan nilai total nominal per hari ke dalam array $totals
             $rows[] = $row;
         }
 
+        // Tambahkan kolom total per kategori/nama pada baris terakhir
+        $totals[0] = 'Total';
+        $rows[] = $totals;
+
+        // Return data cost
         return collect(array_merge($rows));
     }
 
