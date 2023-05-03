@@ -23,19 +23,20 @@ class CostSeeder extends Seeder
         for ($i = 0; $i < 1000; $i++) {
             $price = $listPrice[array_rand($listPrice)];
             $qty = $listQty[array_rand($listQty)];
+            $randomDate = Carbon::createFromTimestamp(rand(
+                Carbon::now()->subDays(360)->timestamp,
+                Carbon::now()->timestamp
+            ));
             $data [] = [
                 'name' => MasterCost::all()->random()->name,
                 'price' => $price,
                 'qty' => $qty,
                 'total' => $price * $qty,
                 'description' => 'Pengeluaran ' . $i,
-                'date' => Carbon::createFromTimestamp(rand(
-                    Carbon::now()->subDays(360)->timestamp,
-                    Carbon::now()->timestamp
-                )),
+                'date' => $randomDate,
                 'user_id' => 1,
-                'created_at' => now()->toDateString(),
-                'updated_at' => now()->toDateString(),
+                'created_at' => $randomDate,
+                'updated_at' => $randomDate,
             ];
         }
         foreach (array_chunk($data, 1000) as $chunk) {

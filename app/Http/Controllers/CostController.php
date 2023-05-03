@@ -21,7 +21,6 @@ class CostController extends Controller
 
     public function index(CostDataTable $dataTable)
     {
-
         $query = Cost::orderBy('date', 'desc')
             ->when(!request('filterDate'), function ($query) {
                 return $query->where('date', '=', Carbon::now()->format('Y-m-d'));

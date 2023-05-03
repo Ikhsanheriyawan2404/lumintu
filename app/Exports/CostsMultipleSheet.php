@@ -16,8 +16,7 @@ class CostsMultipleSheet implements
     WithMultipleSheets,
     WithStyles,
     ShouldAutoSize,
-    WithColumnWidths,
-    WithEvents
+    WithColumnWidths
 {
     public function sheets(): array
     {
@@ -49,22 +48,4 @@ class CostsMultipleSheet implements
             'B' => 45,
         ];
     }
-
-
-    public function registerEvents(): array
-    {
-        return [
-            AfterSheet::class => function (AfterSheet $event) {
-                $event->sheet->getStyle('C8:W25')->applyFromArray([
-                    'borders' => [
-                        'allBorders' => [
-                            'borderStyle' => Border::BORDER_THIN,
-                            'color' => ['argb' => 'FFFF0000'],
-                        ],
-                    ],
-                ]);
-            },
-        ];
-    }
-
 }
