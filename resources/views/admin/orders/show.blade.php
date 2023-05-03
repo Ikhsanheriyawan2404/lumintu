@@ -132,13 +132,13 @@
                                 @if ($order->payment_status == 'unpaid')
                                     <form action="{{ route('orders.paid', $order->id) }}" method="post">
                                         @csrf
-                                        <button type="submit" class="btn btn-sm btn-primary">Approve Pembayaran</button>
+                                        <button type="submit" class="btn btn-sm btn-primary" onclick="return confirm('Yakin ingin approve pembayaran order ini?')">Approve Pembayaran</button>
                                     </form>
                                 @else
                                     @if(auth()->user()->hasRole('superadmin'))
                                         <form action="{{ route('orders.unpaid', $order->id) }}" method="post">
                                             @csrf
-                                            <button type="submit" class="btn btn-sm btn-danger">Cancel Pembayaran
+                                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Yakin ingin cancelc pembayaran order ini?')">Cancel Pembayaran
                                             </button>
                                         </form>
                                     @endif
