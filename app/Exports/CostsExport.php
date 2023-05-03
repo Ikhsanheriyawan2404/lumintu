@@ -23,6 +23,7 @@ class CostsExport implements
     WithStyles,
     WithEvents
 {
+    private $alphabet;
 
     public function __construct(
         protected $month,
@@ -34,6 +35,7 @@ class CostsExport implements
             $this->header[] = $val->name;
         }
         $this->header[] = 'Total';
+        $this->alphabet = range('A', 'Z');
     }
 
     public function headings(): array
@@ -90,7 +92,7 @@ class CostsExport implements
                 if ($name == 'Total') {
                     continue;
                 }
-                
+
                 $value = isset($values[$name]) ? $values[$name] : 0;
                 $totals[$index] += $value;
                 $row[] = $value;
@@ -114,6 +116,7 @@ class CostsExport implements
         return [
             // Style the first row as bold text.
             1 => ['font' => ['bold' => true]],
+            count($this->collection()) + 1 => ['font' => ['bold' => true]],
         ];
     }
 
@@ -126,7 +129,10 @@ class CostsExport implements
     {
         return [
             AfterSheet::class => function (AfterSheet $event) {
-                $event->sheet->getStyle('A1:W32')->applyFromArray([
+                $event->sheet->getStyle(
+                    'A1:' . $this->alphabet[count($this->header) - 1] . count($this->collection()) + 1
+                )
+                ->applyFromArray([
                     'borders' => [
                         'allBorders' => [
                             'borderStyle' => Border::BORDER_THIN,
