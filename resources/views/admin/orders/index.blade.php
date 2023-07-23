@@ -11,63 +11,66 @@
                         </div>
                         <div class="col-6 text-end">
                             @hasrole('superadmin|admin|hotel')
-                                <a href="{{ route('orders.create', []) }}" class="btn btn-outline-primary btn-sm mb-0">Tambah</a>
+                            <a href="{{ route('orders.create', []) }}" class="btn btn-outline-primary btn-sm mb-0">Tambah</a>
                             @endhasrole()
                         </div>
-                        @hasrole('superadmin|admin')
-                            <div class="mt-3">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label for="filterStatus">Status Pembayaran</label>
-                                            <select name="filterStatus" id="filterStatus" class="form-control form-control-sm">
-                                                <option value="all">Semua</option>
-                                                <option value="unpaid">Belum Dibayar</option>
-                                                <option value="paid">Sudah Dibayar</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label for="filterCustomer">Customer</label>
-                                            <select name="filterCustomer" id="filterCustomer"
+                        @hasrole('superadmin|admin|owner')
+                        <div class="mt-3">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="filterStatus">Status Pembayaran</label>
+                                        <select name="filterStatus" id="filterStatus"
                                                 class="form-control form-control-sm">
-                                                <option value="all">Semua</option>
-                                                @foreach ($customers as $customer)
-                                                    <option value="{{ $customer->id }}">{{ $customer->name }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label for="filterMonth">Bulan</label>
-                                            <select name="filterMonth" id="filterMonth" class="form-control form-control-sm">
-                                                <option value="all">Semua</option>
-                                                @foreach ($months as $month)
-                                                    <option value="{{ $month['key'] }}">{{ $month['name'] }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <ul>
-                                            <li id="resultCustomer" class="text-dark">Customer : </li>
-                                            <li id="resultMonth" class="text-dark">Bulan : </li>
-                                            <li id="resultStatus" class="text-dark">Status : </li>
-                                        </ul>
+                                            <option value="all">Semua</option>
+                                            <option value="unpaid">Belum Dibayar</option>
+                                            <option value="paid">Sudah Dibayar</option>
+                                        </select>
                                     </div>
                                 </div>
-
-                                <div class="col-12 col-lg-9 text-center text-lg-start">
-                                    <form id="formExport" method="POST">
-                                        @csrf
-                                        <button type="submit" class="btn btn-sm btn-success" id="btnExportExcel">Export
-                                            Excel</button>
-                                        <button class="btn btn-sm btn-danger" id="btnExportPDF">Export PDF</button>
-                                    </form>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="filterCustomer">Customer</label>
+                                        <select name="filterCustomer" id="filterCustomer"
+                                                class="form-control form-control-sm">
+                                            <option value="all">Semua</option>
+                                            @foreach ($customers as $customer)
+                                                <option value="{{ $customer->id }}">{{ $customer->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="filterMonth">Bulan</label>
+                                        <select name="filterMonth" id="filterMonth"
+                                                class="form-control form-control-sm">
+                                            <option value="all">Semua</option>
+                                            @foreach ($months as $month)
+                                                <option value="{{ $month['key'] }}">{{ $month['name'] }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <ul>
+                                        <li id="resultCustomer" class="text-dark">Customer :</li>
+                                        <li id="resultMonth" class="text-dark">Bulan :</li>
+                                        <li id="resultStatus" class="text-dark">Status :</li>
+                                    </ul>
                                 </div>
                             </div>
+
+                            <div class="col-12 col-lg-9 text-center text-lg-start">
+                                <form id="formExport" method="POST">
+                                    @csrf
+                                    <button type="submit" class="btn btn-sm btn-success" id="btnExportExcel">Export
+                                        Excel
+                                    </button>
+                                    <button class="btn btn-sm btn-danger" id="btnExportPDF">Export PDF</button>
+                                </form>
+                            </div>
+                        </div>
                         @endhasrole
                     </div>
                 </div>
@@ -88,8 +91,9 @@
     <!-- DataTables -->
     <link rel="stylesheet" href="{{ asset('library/http_cdn.datatables.net_1.13.4_css_dataTables.bootstrap5.css') }}">
     <link rel="stylesheet"
-        href="{{ asset('library/http_cdn.datatables.net_responsive_2.4.1_css_responsive.bootstrap5.css') }}">
-    <link rel="stylesheet" href="{{ asset('library/http_cdnjs.cloudflare.com_ajax_libs_toastr.js_latest_toastr.css') }}">
+          href="{{ asset('library/http_cdn.datatables.net_responsive_2.4.1_css_responsive.bootstrap5.css') }}">
+    <link rel="stylesheet"
+          href="{{ asset('library/http_cdnjs.cloudflare.com_ajax_libs_toastr.js_latest_toastr.css') }}">
 @endpush
 
 @push('custom-scripts')
@@ -114,9 +118,9 @@
             }
         });
 
-        $(document).ready(function() {
+        $(document).ready(function () {
 
-            $('#filterMonth, #filterStatus, #filterCustomer').on('change', function() {
+            $('#filterMonth, #filterStatus, #filterCustomer').on('change', function () {
                 $('#resultCustomer').html('Customer : ' + $('#filterCustomer option:selected').text());
                 $('#resultMonth').html('Bulan : ' + $('#filterMonth option:selected').text());
                 $('#resultStatus').html('Status : ' + $('#filterStatus option:selected').text());
@@ -126,7 +130,7 @@
                     {{ route('orders.index') }}?filterMonth=${$('#filterMonth').val()}&filterStatus=${$('#filterStatus').val()}&filterCustomer=${$('#filterCustomer').val()}
                 `).draw();
             });
-            $('#btnExportPDF').on('click', function() {
+            $('#btnExportPDF').on('click', function () {
                 var csrf_token = $('meta[name="csrf-token"]').attr('content');
                 $('#btnExportPDF').attr('disabled', 'disabled');
                 $('#btnExportPDF').html('Loading ...');
@@ -139,7 +143,7 @@
                         responseType: 'blob'
                     },
                     type: 'GET',
-                    success: function(response) {
+                    success: function (response) {
                         var blob = new Blob([response], {
                             type: 'application/pdf'
                         });
@@ -152,7 +156,7 @@
                         win.blur();
                         window.focus();
                     },
-                    error: function(data) {
+                    error: function (data) {
                         $('#btnExportPDF').removeAttr('disabled');
                         $('#btnExportPDF').html('Export PDF');
                         alert("Error")
@@ -161,7 +165,7 @@
             });
 
 
-            $('#btnExportExcel').on('click', function(e) {
+            $('#btnExportExcel').on('click', function (e) {
                 e.preventDefault();
 
                 $('#btnExportExcel').attr('disabled', 'disabled');
@@ -186,7 +190,7 @@
                         responseType: 'blob'
                     },
                     type: "POST",
-                    success: function(data) {
+                    success: function (data) {
                         var blob = new Blob([data], {
                             type: 'application/vnd.ms-excel'
                         });
@@ -202,7 +206,7 @@
                         document.body.appendChild(link);
                         link.click();
                     },
-                    error: function(data) {
+                    error: function (data) {
                         $('#btnExportExcel').removeAttr('disabled');
                         $('#btnExportExcel').html('Export Excel');
                         alert("Error")
@@ -223,9 +227,9 @@
             //     }
             // }, 2000);
 
-            $('body').on('click', '#showItem', function() {
+            $('body').on('click', '#showItem', function () {
                 var item_id = $(this).data('id');
-                $.get("{{ route('orders.index') }}" + '/' + item_id + '/details', function(data) {
+                $.get("{{ route('orders.index') }}" + '/' + item_id + '/details', function (data) {
                     $('#modal-md').modal('show');
                     $('#total_price').html(`Total : ${data.total_price}`);
                     $('#order_date').html(`Tgl Order : ${data.order_date}`);
